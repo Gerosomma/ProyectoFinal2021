@@ -3,10 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EntidadesCompartidas;
 
 namespace Persistencia.interfaces
 {
-    class IPersistenciaEmpleado
+    public interface IPersistenciaEmpleado
     {
+        Empleado BuscarEmpleado(string logueo, Usuario usLog);
+        void AltaEmpleado(Empleado empleado, Usuario usLog);
+        void ModificarEmpleado(Empleado empleado, Usuario usLog);
+        void BajaEmpleado(Empleado empleado, Usuario usLog);
     }
 }
