@@ -6,7 +6,29 @@ using System.Threading.Tasks;
 
 namespace EntidadesCompartidas
 {
-    class Empleado
+    public class Empleado : Usuario
     {
+        private string _horaInicio;
+        private string _horaFin;
+
+        public string HoraInicio
+        {
+            get { return _horaInicio; }
+            set { _horaInicio = value; }
+        }
+
+        public string HoraFin
+        {
+            get { return _horaFin; }
+            set { _horaFin = value; }
+        }
+
+        public Empleado(string logueo, string contrasenia, string nombreCompleto,
+            string horaInicio, string horaFin)
+            :base(logueo, contrasenia, nombreCompleto)
+        {
+            HoraInicio = horaInicio;
+            HoraFin = horaFin;
+        }
     }
 }
