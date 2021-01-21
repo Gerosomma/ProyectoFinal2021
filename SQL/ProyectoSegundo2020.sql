@@ -658,3 +658,14 @@ BEGIN
 	SELECT *
 	FROM Solicitud
 END
+
+GO
+
+CREATE PROCEDURE listadoPaquetesSolicitud
+@numeroSolicitud INT
+AS
+BEGIN
+	SELECT *
+	FROM PaquetesSolicitud
+	WHERE numeroSolicitud = @ numeroSolicitud
+END

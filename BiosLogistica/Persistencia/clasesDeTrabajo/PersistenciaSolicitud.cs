@@ -326,8 +326,8 @@ namespace Persistencia
                 while (drSolicitud.Read())
                 { 
                     listaPaquetes = PersistenciaPaquete.getInstancia().paquetesSolicitud(conexion, (int)drSolicitud["numeroSolicitud"], usLog);
-                    solicitud = new Solicitud((int)drSolicitud["numeroSolicitud"], (DateTime)drSolicitud[""], (string)drSolicitud[""],
-                        (string)drSolicitud[""], (string)drSolicitud[""], (Empleado)usLog, listaPaquetes);
+                    solicitud = new Solicitud((int)drSolicitud["numero"], (DateTime)drSolicitud["fechaEntrega"], (string)drSolicitud["nombreDestinatario"],
+                        (string)drSolicitud["direccionDestinatario"], (string)drSolicitud["estado"], (Empleado)usLog, listaPaquetes);
                     listaSolicitudes.Add(solicitud);
                 }
 
