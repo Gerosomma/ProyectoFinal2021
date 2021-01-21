@@ -7,6 +7,7 @@ using EntidadesCompartidas;
 using Persistencia.interfaces;
 using System.Data.SqlClient;
 using System.Data;
+using System.Xml;
 
 namespace Persistencia
 {
@@ -29,7 +30,7 @@ namespace Persistencia
         {
             SqlConnection conexion = null;
             SqlTransaction trn = null;
-            
+
             try
             {
                 conexion = new SqlConnection(Conexion.ObtenerCadenaConexion(usLog.Logueo, usLog.Contrasena));
@@ -181,6 +182,156 @@ namespace Persistencia
             }
             finally
             {
+                if (conexion != null)
+                {
+                    conexion.Close();
+                }
+            }
+        }
+
+        public string listadoSolicitudes(Usuario usLog)
+        {
+            XmlDocument doc = new XmlDocument();
+            List<Solicitud> listaSolicitudes = new List<Solicitud>();
+
+            try
+            {
+                listaSolicitudes = solicitudes(usLog);
+
+                XmlElement raiz = doc.CreateElement(string.Empty, "solicitudes", string.Empty);
+                doc.AppendChild(raiz);
+
+                foreach (Solicitud s in listaSolicitudes)
+                {
+                    XmlElement eSolicitud = doc.CreateElement(string.Empty, "solicitud", string.Empty);
+                    raiz.AppendChild(eSolicitud);
+
+                    XmlElement nodNumero = doc.CreateElement(string.Empty, "numero", string.Empty);
+                    XmlText numeroSolicitud = doc.CreateTextNode(s.Numero.ToString());
+                    nodNumero.AppendChild(numeroSolicitud);
+                    eSolicitud.AppendChild(nodNumero);
+
+                    XmlElement nodFechaEntrega = doc.CreateElement(string.Empty, "fechaEntrega", string.Empty);
+                    XmlText fechaEntrega = doc.CreateTextNode(s.FechaEntrega.ToShortDateString());
+                    nodFechaEntrega.AppendChild(fechaEntrega);
+                    eSolicitud.AppendChild(nodFechaEntrega);
+
+                    XmlElement nodNombreDestinatario = doc.CreateElement(string.Empty, "nombreDestinatario", string.Empty);
+                    XmlText nombreDestinatario = doc.CreateTextNode(s.NombreDestinatario);
+                    nodNombreDestinatario.AppendChild(nombreDestinatario);
+                    eSolicitud.AppendChild(nodNombreDestinatario);
+
+                    XmlElement nodDireccionDestinatario = doc.CreateElement(string.Empty, "direccionDestinatario", string.Empty);
+                    XmlText direccionDestinatario = doc.CreateTextNode(s.DireccionDestinatario);
+                    nodDireccionDestinatario.AppendChild(direccionDestinatario);
+                    eSolicitud.AppendChild(nodDireccionDestinatario);
+
+                    XmlElement nodEstado = doc.CreateElement(string.Empty, "estado", string.Empty);
+                    XmlText estado = doc.CreateTextNode(s.Estado);
+                    nodEstado.AppendChild(estado);
+                    eSolicitud.AppendChild(nodEstado);
+
+                    XmlElement ePaquetesSolicitud = doc.CreateElement(string.Empty, "paquetesSolicitud", string.Empty);
+                    eSolicitud.AppendChild(ePaquetesSolicitud);
+
+                    foreach (Paquete p in s.PaquetesSolicitud)
+                    {
+                        XmlElement ePaquete = doc.CreateElement(string.Empty, "paquete", string.Empty);
+                        eSolicitud.AppendChild(ePaquete);
+
+                        XmlElement nodCodigo = doc.CreateElement(string.Empty, "codigo", string.Empty);
+                        XmlText codDoc = doc.CreateTextNode(p.Codigo.ToString());
+                        nodCodigo.AppendChild(codDoc);
+                        ePaquete.AppendChild(nodCodigo);
+
+                        XmlElement nodTipo = doc.CreateElement(string.Empty, "tipo", string.Empty);
+                        XmlText tipo = doc.CreateTextNode(p.Tipo);
+                        nodTipo.AppendChild(tipo);
+                        ePaquete.AppendChild(nodTipo);
+
+                        XmlElement nodDescripcion = doc.CreateElement(string.Empty, "descripcion", string.Empty);
+                        XmlText descripcion = doc.CreateTextNode(p.Descripcion);
+                        nodDescripcion.AppendChild(descripcion);
+                        ePaquete.AppendChild(nodDescripcion);
+
+                        XmlElement nodPeso = doc.CreateElement(string.Empty, "peso", string.Empty);
+                        XmlText peso = doc.CreateTextNode(p.Descripcion);
+                        nodPeso.AppendChild(peso);
+                        ePaquete.AppendChild(nodPeso);
+
+                        // nodo empresa
+                        XmlElement eEmpresa = doc.CreateElement(string.Empty, "empresa", string.Empty);
+                        ePaquete.AppendChild(eEmpresa);
+
+                        XmlElement nodLogueo = doc.CreateElement(string.Empty, "logueo", string.Empty);
+                        XmlText logueo = doc.CreateTextNode(p.EmpresaOrigen.Logueo);
+                        nodLogueo.AppendChild(logueo);
+                        ePaquete.AppendChild(nodLogueo);
+                        
+                        XmlElement nodNombreCompleto = doc.CreateElement(string.Empty, "nombreCompleto", string.Empty);
+                        XmlText nombreCompleto = doc.CreateTextNode(p.EmpresaOrigen.NombreCompleto);
+                        nodNombreCompleto.AppendChild(nombreCompleto);
+                        ePaquete.AppendChild(nodNombreCompleto);
+
+                        XmlElement nodTelefono = doc.CreateElement(string.Empty, "telefono", string.Empty);
+                        XmlText telefono = doc.CreateTextNode(p.EmpresaOrigen.Telefono);
+                        nodTelefono.AppendChild(telefono);
+                        ePaquete.AppendChild(nodTelefono);
+
+                        XmlElement nodDireccion = doc.CreateElement(string.Empty, "direccion", string.Empty);
+                        XmlText direccion = doc.CreateTextNode(p.EmpresaOrigen.Direccion);
+                        nodDireccion.AppendChild(direccion);
+                        ePaquete.AppendChild(nodDireccion);
+
+                        XmlElement nodEmail = doc.CreateElement(string.Empty, "email", string.Empty);
+                        XmlText email = doc.CreateTextNode(p.EmpresaOrigen.Email);
+                        nodEmail.AppendChild(email);
+                        ePaquete.AppendChild(nodEmail);
+                        
+                    }
+                }
+                return doc.InnerXml;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        internal List<Solicitud> solicitudes(Usuario usLog)
+        {
+            SqlConnection conexion = null;
+            SqlDataReader drSolicitud = null;
+            Solicitud solicitud = null;
+            List<Solicitud> listaSolicitudes = new List<Solicitud>();
+
+            try
+            {
+                conexion = new SqlConnection(Conexion.ObtenerCadenaConexion(usLog.Logueo, usLog.Contrasena));
+                SqlCommand cmdListadoSolicitues = new SqlCommand("listadoSolicitudes", conexion);
+                cmdListadoSolicitues.CommandType = CommandType.StoredProcedure;
+
+                conexion.Open();
+                drSolicitud = cmdListadoSolicitues.ExecuteReader();
+                while (drSolicitud.Read())
+                {
+                    solicitud = new Solicitud((int)drSolicitud[""], (DateTime)drSolicitud[""], (string)drSolicitud[""],
+                        (string)drSolicitud[""], (string)drSolicitud[""], (Empleado)usLog, new List<Paquete>());
+                    listaSolicitudes.Add(solicitud);
+                }
+
+                return listaSolicitudes;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                if (drSolicitud != null)
+                {
+                    drSolicitud.Close();
+                }
                 if (conexion != null)
                 {
                     conexion.Close();
