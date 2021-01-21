@@ -1,0 +1,156 @@
+﻿body 
+{
+    font-family:Calibri;
+}
+
+div.title-bar #lblTitulo
+{
+    font-size:50px;
+    vertical-align:middle;
+    margin-left: 35px;
+}
+    
+div.title-bar #lblMensaje
+{
+    float: right;
+    vertical-align:bottom;
+    margin-left: 35px;
+}
+
+div.title-bar #lblPagina
+{
+    float:left;
+    margin-left:44%;
+}
+
+div.title-bar #btnLogout
+{
+    float: right;
+    vertical-align:bottom;
+    margin-left: 35px;
+    margin-right: 2%;
+}
+
+div.title-bar #logo
+{
+    margin-left:2%;
+}
+
+div.title-bar
+{
+    background-color: #455054;
+    color: #308695;
+    height: auto;
+    width: 100%;
+    padding-bottom: 20px;
+    padding-top: 20px;
+    text-align: left;
+    font-size:20px;
+    vertical-align:middle;
+    border-bottom-color:black;
+    border-bottom-style:groove;
+    border-bottom-width:3px;
+}
+div.content-bar
+{
+    margin-left:261px;
+    padding-left:1%;
+    height: auto;
+    width:auto ;
+    padding-bottom: 20px;
+    padding-top: 20px;
+    text-align: center;
+    top: 141px;
+    background-color:#D4CFC9;
+    color: #308695;
+}
+
+div.side-bar
+{
+    position: absolute;
+    display: inline;
+    width: 261px;
+    height: 1080px;
+    background-color: #D45769;
+    float: left;
+    top: 136px;
+    left: 10px;
+}
+
+div.note-bar
+{
+   position: absolute;
+   display: inline;
+   width: 261px;
+   height: 1080px;
+   background-color: #2F3A56;
+   float: right;
+    top: 187px;
+    left: 854px;
+}
+
+
+a #TreeView1 
+{
+    padding-left:50px;
+    width: 25%;
+    width: 100%;    
+    margin-top: 0px; 
+}
+div.cont 
+{
+    text-align: -webkit-center;
+    height:1080px;
+}
+
+#rpRepeater 
+{
+    width:30%;
+}
+table.tabRepeater 
+{
+    font-size: 17px;
+    color: black;
+    border:1px solid black;
+    width: 100%;
+}
+.tabTr
+{
+    border:1px solid black;
+}
+.tabTh 
+{
+    border:1px solid black;
+}
+
+.derecha 
+{
+    float: right;
+}
+
+.mediaIzquierda
+{
+    width: 35%;
+    margin-left: 8%;
+    height: 100%;
+    float:left;    
+}
+.mediaDerecha
+{
+    width: 35%;
+    margin-left: 5%;
+    height: 100%; 
+    float: left;
+}
+table.tabLogin 
+{
+    border: black 1px solid; padding: 10px;
+}
+.general 
+{
+    height: 981px; 
+    width: 85%; 
+    text-align: -webkit-center;
+}
+
+

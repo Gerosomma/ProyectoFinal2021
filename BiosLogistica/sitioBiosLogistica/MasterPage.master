@@ -1,0 +1,44 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="MasterPage.master.cs" Inherits="MasterPage" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Bios Logistica</title>
+    <link rel="icon" href="img/favicon.ico" type="image/ico" />
+    <link href="CSS/estilos.css" rel="stylesheet" />
+    <asp:ContentPlaceHolder id="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+    <div class="title-bar">
+        <asp:ImageButton ID="logo" runat="server" PostBackUrl="~/Default.aspx" ImageUrl="~/img/red.png" EnableTheming="False" />
+        <br />
+        <asp:Label ID="lblPagina" runat="server"></asp:Label>
+        <asp:Button ID="btnLogout" runat="server" Text="Logout" Width="70px" />
+        <asp:Label ID="lblMensaje" runat="server"></asp:Label>
+    </div>
+    <div class="side-bar">
+        <asp:TreeView ID="TreeView1" runat="server" Width="100%" HoverNodeStyle-BorderStyle="Outset" BackColor="#E69D45" Font-Bold="True" ShowExpandCollapse="False">
+            <HoverNodeStyle BorderColor="ActiveBorder" BorderStyle="Outset" Font-Bold="True" />
+            <Nodes>
+                <asp:TreeNode NavigateUrl="~/default.aspx" Text="Inicio" 
+                    Value="Inicio" ImageUrl="img/casa.png"></asp:TreeNode>
+                <asp:TreeNode NavigateUrl="~/Login.aspx" Text="Login" 
+                    Value="Inicio" ImageUrl="img/casa.png"></asp:TreeNode>
+                
+            </Nodes>
+            <NodeStyle BorderStyle="None" Font-Bold="True" NodeSpacing="1px" VerticalPadding="9px" Width="100%" />
+            <SelectedNodeStyle BackColor="#3F5BCD" />
+        </asp:TreeView>
+    </div>
+    <div class="content-bar">
+        <asp:ContentPlaceHolder id="ContentPlaceHolder1" runat="server">
+        
+        </asp:ContentPlaceHolder>
+    </div>
+    </form>
+</body>
+</html>
