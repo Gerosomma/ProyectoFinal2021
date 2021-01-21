@@ -452,6 +452,15 @@ END
 GO
 
 --------------------------------------------SP Paquete------------------------------------------
+CREATE PROCEDURE BuscarPaquete
+@codigo int
+AS
+BEGIN
+	select *
+	from Paquete
+	where codigo = @codigo
+END
+
 CREATE PROCEDURE AltaPaquete
 @codigo INT,
 @tipo VARCHAR(6),
@@ -476,6 +485,54 @@ BEGIN
 END
 
 GO
+
+CREATE PROCEDURE ModificarPaquete
+@codigo INT,
+@tipo VARCHAR(6),
+@descripcion VARCHAR(100),
+@peso DECIMAL,
+@empresa VARCHAR(50)
+AS
+BEGIN
+	IF NOT EXISTS (SELECT * FROM Empresa WHERE logueo = @empresa)	
+	BEGIN
+		RETURN -1
+	END
+	IF EXISTS (SELECT * FROM Paquete WHERE codigo = @codigo)	
+	BEGIN
+		RETURN -2
+	END
+
+	UPDATE Paquete 
+	SET tipo = @tipo, descripcion = @descripcion,
+	peso = @peso, empresa = @empresa
+	WHERE codigo = @codigo
+
+	IF (@@ERROR <> 0)
+	BEGIN
+		RETURN -3
+	END
+END
+
+GO
+
+CREATE PROCEDURE BajaPaquete
+@codigo INT
+AS
+BEGIN
+	IF EXISTS (SELECT * FROM Paquete WHERE codigo = @codigo)	
+	BEGIN
+		RETURN -1
+	END
+
+	DELETE FROM Paquete 
+	WHERE codigo = @codigo
+
+	IF (@@ERROR <> 0)
+	BEGIN
+		RETURN -2
+	END
+END
 
 CREATE PROCEDURE ListarPaquetes
 AS
@@ -504,4 +561,59 @@ BEGIN
 		RETURN -2
 	END
 	RETURN @@IDENTITY
+END
+
+GO 
+
+CREATE PROCEDURE BajaSolicitud
+@numero int
+AS
+BEGIN
+	IF NOT EXISTS (SELECT * FROM Solicitud WHERE numero = @numero)	
+	BEGIN
+		RETURN -1
+	END
+
+	DELETE FROM Solicitud
+	WHERE numero = @numero
+
+	IF (@@ERROR <> 0)
+	BEGIN
+		RETURN -2
+	END
+END
+
+GO
+
+CREATE PROCEDURE ModificarSolicitud
+@numero INT,
+@fechaEntrega DATETIME, 
+@nombreDestinatario VARCHAR(50), 
+@direccionDestinatario VARCHAR(50),
+@estado VARCHAR(11),
+@empleado VARCHAR(50)
+AS
+BEGIN
+	IF NOT EXISTS (SELECT * FROM Empleado WHERE logueo = @empleado)	
+	BEGIN
+		RETURN -1
+	END
+
+	IF NOT EXISTS (SELECT * FROM Solicitud WHERE numero = @numero)	
+	BEGIN
+		RETURN -2
+	END
+
+	UPDATE Solicitud 
+	SET fechaEntrega = @fechaEntrega,
+	nombreDestinatario = @nombreDestinatario,
+	direccionDestinatario = @direccionDestinatario,
+	estado = @estado,
+	empleado = @empleado
+	WHERE numero = @numero
+
+	IF (@@ERROR <> 0)
+	BEGIN
+		RETURN -3
+	END
 END
