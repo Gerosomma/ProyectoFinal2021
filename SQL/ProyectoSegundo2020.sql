@@ -54,7 +54,7 @@ CREATE TABLE Solicitud (
 	empleado VARCHAR(50) NOT NULL FOREIGN KEY REFERENCES Empleado(logueo)
 )
 
-CREATE TABLE Contienen (
+CREATE TABLE PaquetesSolicitud (
 	numeroSolicitud INT NOT NULL FOREIGN KEY REFERENCES Solicitud(numero),
 	codigoPaquete INT NOT NULL FOREIGN KEY REFERENCES Paquete(codigo)
 	PRIMARY KEY (numeroSolicitud, codigoPaquete)
@@ -563,6 +563,38 @@ BEGIN
 	RETURN @@IDENTITY
 END
 
+GO
+
+CREATE PROCEDURE AltaPaqueteSolicitud
+@numeroSolicitud INT,
+@codigoPaquete INT
+AS
+BEGIN
+	IF NOT EXISTS (SELECT * FROM Solicitud WHERE numero = @numeroSolicitud)	
+	BEGIN
+		RETURN -1
+	END
+
+	IF NOT EXISTS (SELECT * FROM Paquete WHERE numero = @codigoPaquete)	
+	BEGIN
+		RETURN -2
+	END
+
+	IF EXISTS (SELECT * FROM PaquetesSolicitud 
+		WHERE numeroSolicitud = @numeroSolicitud AND codigoPaquete = @codigoPaquete)	
+	BEGIN
+		RETURN -3
+	END
+
+	INSERT INTO PaquetesSolicitud
+	VALUES (@numeroSolicitud, @codigoPaquete)
+
+	IF (@@ERROR <> 0)
+	BEGIN
+		RETURN -4
+	END
+END
+
 GO 
 
 CREATE PROCEDURE BajaSolicitud
@@ -616,4 +648,13 @@ BEGIN
 	BEGIN
 		RETURN -3
 	END
+END
+
+GO
+
+CREATE PROCEDURE listadoSolicitudes
+AS
+BEGIN
+	SELECT *
+	FROM Solicitud
 END

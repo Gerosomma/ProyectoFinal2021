@@ -48,11 +48,16 @@ namespace Persistencia
                 valorRetorno.Direction = ParameterDirection.ReturnValue;
                 cmdAltaSolicitud.Parameters.Add(valorRetorno);
                 //tenemos que retornar el idsolicitud generado.
+                SqlParameter idSolicitud = new SqlParameter("@@IDENTITY", SqlDbType.Int);
+                idSolicitud.Direction = ParameterDirection.ReturnValue;
+                cmdAltaSolicitud.Parameters.Add(idSolicitud);
 
                 conexion.Open();
 
                 trn = conexion.BeginTransaction();
                 cmdAltaSolicitud.ExecuteNonQuery();
+
+                solicitud.Numero = Convert.ToInt32(idSolicitud.Value);
 
                 switch ((int)valorRetorno.Value)
                 {
@@ -65,7 +70,11 @@ namespace Persistencia
                 }
 
                 //deberiamos insertar los paquetes de la solicitud.
-
+                foreach (Paquete paquete in solicitud.PaquetesSolicitud)
+                {
+                    PersistenciaPaquete.AltaPaqueteSolicitud(conexion, solicitud, paquete, usLog);
+                }
+                
                 trn.Commit();
 
             }
@@ -304,6 +313,7 @@ namespace Persistencia
             SqlDataReader drSolicitud = null;
             Solicitud solicitud = null;
             List<Solicitud> listaSolicitudes = new List<Solicitud>();
+            List<Paquete> listaPaquetes = new List<Paquete>();
 
             try
             {
@@ -314,9 +324,10 @@ namespace Persistencia
                 conexion.Open();
                 drSolicitud = cmdListadoSolicitues.ExecuteReader();
                 while (drSolicitud.Read())
-                {
-                    solicitud = new Solicitud((int)drSolicitud[""], (DateTime)drSolicitud[""], (string)drSolicitud[""],
-                        (string)drSolicitud[""], (string)drSolicitud[""], (Empleado)usLog, new List<Paquete>());
+                { 
+                    listaPaquetes = PersistenciaPaquete.getInstancia().paquetesSolicitud(conexion, (int)drSolicitud["numeroSolicitud"], usLog);
+                    solicitud = new Solicitud((int)drSolicitud["numeroSolicitud"], (DateTime)drSolicitud[""], (string)drSolicitud[""],
+                        (string)drSolicitud[""], (string)drSolicitud[""], (Empleado)usLog, listaPaquetes);
                     listaSolicitudes.Add(solicitud);
                 }
 
