@@ -25,6 +25,46 @@ namespace Persistencia
             return _instancia;
         }
 
+        public Empresa LoguearEmpresa(string logueo, string contrasenia)
+        {
+            SqlConnection conexion = null;
+            SqlDataReader drEmpresa = null;
+            Empresa empresa = null;
+
+            try
+            {
+                conexion = new SqlConnection(Conexion.ObtenerCadenaConexion(logueo, contrasenia));
+                SqlCommand cmdBuscarEpresa = new SqlCommand("BuscarEmpresa", conexion);
+                cmdBuscarEpresa.CommandType = CommandType.StoredProcedure;
+
+                cmdBuscarEpresa.Parameters.AddWithValue("@logueo", logueo);
+
+                conexion.Open();
+                drEmpresa = cmdBuscarEpresa.ExecuteReader();
+
+                if (drEmpresa.Read())
+                {
+                    empresa = new Empresa((string)drEmpresa["logueo"], (string)drEmpresa["contrasena"], (string)drEmpresa["nombreCompleto"], (string)drEmpresa["telefono"], (string)drEmpresa["direccion"], (string)drEmpresa["email"]);
+                }
+                return empresa;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                if (drEmpresa != null)
+                {
+                    drEmpresa.Close();
+                }
+                if (conexion != null)
+                {
+                    conexion.Close();
+                }
+            }
+        }
+
         public Empresa BuscarEmpresa(string logueo, Usuario usLog)
         {
             SqlConnection conexion = null;
@@ -34,6 +74,44 @@ namespace Persistencia
             try
             {
                 conexion = new SqlConnection(Conexion.ObtenerCadenaConexion(usLog.Logueo, usLog.Contrasena));
+                SqlCommand cmdBuscarEpresa = new SqlCommand("BuscarEmpresa", conexion);
+                cmdBuscarEpresa.CommandType = CommandType.StoredProcedure;
+
+                cmdBuscarEpresa.Parameters.AddWithValue("@logueo", logueo);
+
+                conexion.Open();
+                drEmpresa = cmdBuscarEpresa.ExecuteReader();
+
+                if (drEmpresa.Read())
+                {
+                    empresa = new Empresa((string)drEmpresa["logueo"], (string)drEmpresa["contrasena"], (string)drEmpresa["nombreCompleto"], (string)drEmpresa["telefono"], (string)drEmpresa["direccion"], (string)drEmpresa["email"]);
+                }
+                return empresa;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                if (drEmpresa != null)
+                {
+                    drEmpresa.Close();
+                }
+                if (conexion != null)
+                {
+                    conexion.Close();
+                }
+            }
+        }
+
+        public Empresa interBuscarEmpresa(SqlConnection conexion, string logueo)
+        {
+            SqlDataReader drEmpresa = null;
+            Empresa empresa = null;
+
+            try
+            {
                 SqlCommand cmdBuscarEpresa = new SqlCommand("BuscarEmpresa", conexion);
                 cmdBuscarEpresa.CommandType = CommandType.StoredProcedure;
 
@@ -107,7 +185,7 @@ namespace Persistencia
                 }
             }
         }
-        public void ModificarEmpresa(Empresa empresa, Empresa empLog)
+        public void ModificarEmpresa(Empresa empresa, Usuario empLog)
         {
             SqlConnection conexion = null;
 
@@ -158,7 +236,7 @@ namespace Persistencia
             }
         }
 
-        public void BajaEmpresa(Empresa empresa, Empleado empLog)
+        public void BajaEmpresa(Empresa empresa, Usuario empLog)
         {
             SqlConnection conexion = null;
 

@@ -25,6 +25,46 @@ namespace Persistencia
             return _instancia;
         }
 
+        public Empleado LoguearEmpleado(string logueo, string contrasenia)
+        {
+            SqlConnection conexion = null;
+            SqlDataReader drEmpleado = null;
+            Empleado empleado = null;
+
+            try
+            {
+                conexion = new SqlConnection(Conexion.ObtenerCadenaConexion(logueo, contrasenia));
+                SqlCommand cmdBuscarEmpresa = new SqlCommand("BuscarEmpleado", conexion);
+                cmdBuscarEmpresa.CommandType = CommandType.StoredProcedure;
+
+                cmdBuscarEmpresa.Parameters.AddWithValue("@logueo", logueo);
+
+                conexion.Open();
+                drEmpleado = cmdBuscarEmpresa.ExecuteReader();
+
+                if (drEmpleado.Read())
+                {
+                    empleado = new Empleado((string)drEmpleado["logueo"], (string)drEmpleado["contrasena"], (string)drEmpleado["nombreCompleto"], Convert.ToString((TimeSpan)drEmpleado["horaInicio"]), Convert.ToString((TimeSpan)drEmpleado["horaFin"]));
+                }
+                return empleado;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                if (drEmpleado != null)
+                {
+                    drEmpleado.Close();
+                }
+                if (conexion != null)
+                {
+                    conexion.Close();
+                }
+            }
+        }
+
         public Empleado BuscarEmpleado(string logueo, Usuario usLog)
         {
             SqlConnection conexion = null;

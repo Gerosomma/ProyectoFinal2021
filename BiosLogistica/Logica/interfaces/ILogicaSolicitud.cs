@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EntidadesCompartidas;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,9 @@ namespace Logica.interfaces
 {
     public interface ILogicaSolicitud
     {
+        Solicitud BuscarSolicitud(int codigo, Usuario usLog);
+        void AltaSolicitud(Solicitud solicitud, Usuario usLog);
+        void ModificarSolicitud(Solicitud solicitud, Usuario usLog);
+        void BajaSolicitud(Solicitud solicitud, Usuario usLog);
     }
 }
