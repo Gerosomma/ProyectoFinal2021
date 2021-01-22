@@ -94,7 +94,7 @@ AS
 BEGIN
 	DECLARE @VarSentencia VARCHAR(200)
 	SET @VarSentencia = 'CREATE USER [' + @nombre + '] FROM LOGIN [' + @logueo + ']'
-	EXEC @VarSentencia
+	EXEC (@VarSentencia)
 
 	IF (@@ERROR <> 0)
 		RETURN -1
@@ -177,13 +177,13 @@ BEGIN
 					RETURN -3
 				END	
 	BEGIN TRANSACTION 
-		INSERT INTO Usuario VALUES (@logueo, @contrasena, @nombreCompleto)
+		INSERT INTO Usuario VALUES (@logueo, @contrasena, @nombreCompleto, 1)
 		IF (@@ERROR <> 0)
 			BEGIN
 				ROLLBACK TRANSACTION
 				RETURN -4
 			END
-		INSERT INTO Empleado VALUES (@logueo, @horaInicio, @horaFin)
+		INSERT INTO Empleado VALUES (@logueo, @horaInicio, @horaFin, 1)
 		IF (@@ERROR <> 0)
 			BEGIN
 				ROLLBACK TRANSACTION
@@ -340,13 +340,13 @@ BEGIN
 					RETURN -3
 				END
 	BEGIN TRANSACTION 
-		INSERT INTO Usuario VALUES (@logueo, @contrasena, @nombreCompleto)
+		INSERT INTO Usuario VALUES (@logueo, @contrasena, @nombreCompleto, 1)
 		IF (@@ERROR <> 0)
 			BEGIN
 				ROLLBACK TRANSACTION
 				RETURN -4
 			END
-		INSERT INTO Empresa VALUES (@logueo, @telefono, @direccion, @email)
+		INSERT INTO Empresa VALUES (@logueo, @telefono, @direccion, @email, 1)
 		IF (@@ERROR <> 0)
 			BEGIN
 				ROLLBACK TRANSACTION
@@ -461,6 +461,8 @@ BEGIN
 	where codigo = @codigo
 END
 
+GO
+
 CREATE PROCEDURE AltaPaquete
 @codigo INT,
 @tipo VARCHAR(6),
@@ -534,6 +536,8 @@ BEGIN
 	END
 END
 
+GO
+
 CREATE PROCEDURE ListarPaquetes
 AS
 BEGIN
@@ -575,7 +579,7 @@ BEGIN
 		RETURN -1
 	END
 
-	IF NOT EXISTS (SELECT * FROM Paquete WHERE numero = @codigoPaquete)	
+	IF NOT EXISTS (SELECT * FROM Paquete WHERE codigo = @codigoPaquete)	
 	BEGIN
 		RETURN -2
 	END
@@ -667,5 +671,29 @@ AS
 BEGIN
 	SELECT *
 	FROM PaquetesSolicitud
-	WHERE numeroSolicitud = @ numeroSolicitud
+	WHERE numeroSolicitud = @numeroSolicitud
 END
+
+
+
+
+---------------DATOS-DE-PRUEBA----------------------------------------------------
+/*
+CREATE USER [gero] FROM LOGIN [gero]
+
+EXEC AltaEmpleado 'gero', '123456', 'Gero 1', '09:00:00.0000', '18:00:0.0000';
+
+EXEC AltaEmpresa 'jero', '123456', 'Gero 2', 091654252, '18 de julio y rio negro', 'geronimo.somma@gsoft.com.uy';
+
+
+select * from Usuario;
+
+select * from Empleado;
+select * from Empresa;
+
+
+delete from Empleado
+delete from Usuario
+
+exec NuevoUsuarioBD 'gero', 'db_securityadmin', 'gero'
+*/

@@ -8,7 +8,7 @@ namespace Persistencia
 {
     internal class Conexion
     {
-        private static string autenticacion = "data source = .; initial catalog = ProyectoSegundo2019;";
+        private static string autenticacion = "data source = .\\SQLEXPRESS; initial catalog = ProyectoSegundo2020;";
 
         public static string ObtenerCadenaConexion(string us, string pw)
         {
