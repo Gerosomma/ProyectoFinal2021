@@ -16,4 +16,12 @@ public partial class MasterPage : System.Web.UI.MasterPage
             lblMensaje.Text = us.Logueo;
         }
     }
+
+    protected void btnLogout_Click(object sender, EventArgs e)
+    {
+        Session.Remove("Usuario");
+        Session.Remove("Mensaje");
+        lblMensaje.Text = "Usuario desconectado";
+        Response.Redirect("~/Default.aspx");
+    }
 }
