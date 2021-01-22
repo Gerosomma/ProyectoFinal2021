@@ -116,8 +116,7 @@ namespace Persistencia
                 cmdBuscarEpresa.CommandType = CommandType.StoredProcedure;
 
                 cmdBuscarEpresa.Parameters.AddWithValue("@logueo", logueo);
-
-                conexion.Open();
+                
                 drEmpresa = cmdBuscarEpresa.ExecuteReader();
 
                 if (drEmpresa.Read())

@@ -145,7 +145,7 @@ namespace Persistencia
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw ex;
             }
             finally
             {
@@ -172,8 +172,7 @@ namespace Persistencia
                 cmdBuscarPaquete.CommandType = CommandType.StoredProcedure;
 
                 cmdBuscarPaquete.Parameters.AddWithValue("@codigo", codigo);
-
-                conexion.Open();
+                
                 drPaquete = cmdBuscarPaquete.ExecuteReader();
                 if (drPaquete.Read())
                 {
@@ -186,17 +185,13 @@ namespace Persistencia
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw ex;
             }
             finally
             {
                 if (drPaquete != null)
                 {
                     drPaquete.Close();
-                }
-                if (conexion != null)
-                {
-                    conexion.Close();
                 }
             }
         }
@@ -307,8 +302,7 @@ namespace Persistencia
                 SqlCommand cmdListadoSolicitues = new SqlCommand("listadoPaquetesSolicitud", conexion);
                 cmdListadoSolicitues.CommandType = CommandType.StoredProcedure;
                 cmdListadoSolicitues.Parameters.AddWithValue("@numeroSolicitud", solicitud);
-
-                conexion.Open();
+                
                 drPaquetes = cmdListadoSolicitues.ExecuteReader();
                 while (drPaquetes.Read())
                 {
@@ -323,17 +317,13 @@ namespace Persistencia
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw ex;
             }
             finally
             {
                 if (drPaquetes != null)
                 {
                     drPaquetes.Close();
-                }
-                if (conexion != null)
-                {
-                    conexion.Close();
                 }
             }
         }
