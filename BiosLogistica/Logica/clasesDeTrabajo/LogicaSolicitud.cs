@@ -47,6 +47,11 @@ namespace Logica.clasesDeTrabajo
             return FabricaPersistencia.GetPersistenciaSolicitud().BuscarSolicitud(codigo, usLog);
         }
 
+        public string listadoSolicitudes(Usuario usLog)
+        {
+            return FabricaPersistencia.GetPersistenciaSolicitud().listadoSolicitudes(usLog);
+        }
+
         public void ModificarSolicitud(Solicitud solicitud, Usuario usLog)
         {
             validarSolicitud(solicitud);

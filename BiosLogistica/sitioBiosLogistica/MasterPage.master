@@ -17,7 +17,7 @@
         <asp:ImageButton ID="logo" runat="server" PostBackUrl="~/Default.aspx" ImageUrl="~/img/red.png" EnableTheming="False" />
         <br />
         <asp:Label ID="lblPagina" runat="server"></asp:Label>
-        <asp:Button ID="btnLogout" runat="server" Text="Logout" Width="70px" />
+        <asp:Button ID="btnLogout" runat="server" Text="Logout" Width="70px" OnClick="btnLogout_Click" />
         <asp:Label ID="lblMensaje" runat="server"></asp:Label>
     </div>
     <div class="side-bar">
@@ -25,9 +25,16 @@
             <HoverNodeStyle BorderColor="ActiveBorder" BorderStyle="Outset" Font-Bold="True" />
             <Nodes>
                 <asp:TreeNode NavigateUrl="~/default.aspx" Text="Inicio" 
-                    Value="Inicio" ImageUrl="img/casa.png"></asp:TreeNode>
+                    Value="Inicio" ImageUrl="~/img/casa2.png"></asp:TreeNode>
+                <asp:TreeNode ImageUrl="~/img/mas.png" NavigateUrl="~/AltaPaquetes.aspx" Text="Alta de Paquete" Value="Alta de Paquete"></asp:TreeNode>
+                <asp:TreeNode ImageUrl="~/img/calendario.png" NavigateUrl="~/AltaSolicitud.aspx" Text="Generar solicitud de Entrega" Value="Generar solicitud de Entrega"></asp:TreeNode>
+                <asp:TreeNode ImageUrl="~/img/garrapata.png" NavigateUrl="~/CambioEstadoSolicitud.aspx" Text="Cambiar estado solicitud" Value="Cambiar estado solicitud"></asp:TreeNode>
+                <asp:TreeNode ImageUrl="~/img/mantenimiento2.png" Text="Mantenimiento" Value="Mantenimiento">
+                    <asp:TreeNode ImageUrl="~/img/empresav1.png" NavigateUrl="~/MantenimientoEmpresa.aspx" Text="Mantenimiento de Empresa" Value="Mantenimiento de Empresa"></asp:TreeNode>
+                    <asp:TreeNode ImageUrl="~/img/empleadov1.png" NavigateUrl="~/MantenimientoEmpleado.aspx" Text="Mantenimiento de Empleado" Value="Mantenimiento de Empleado"></asp:TreeNode>
+                </asp:TreeNode>
                 <asp:TreeNode NavigateUrl="~/Login.aspx" Text="Login" 
-                    Value="Inicio" ImageUrl="img/casa.png"></asp:TreeNode>
+                    Value="Inicio" ImageUrl="~/img/usuario.png"></asp:TreeNode>
                 
             </Nodes>
             <NodeStyle BorderStyle="None" Font-Bold="True" NodeSpacing="1px" VerticalPadding="9px" Width="100%" />
