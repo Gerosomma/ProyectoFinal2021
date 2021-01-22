@@ -248,5 +248,95 @@ namespace Persistencia
                 }
             }
         }
+
+        internal static void AltaPaqueteSolicitud(SqlConnection conexion, Solicitud solicitud, Paquete paquete, Usuario usLog)
+        {
+            try
+            {
+                SqlCommand cmdAltaPaquete = new SqlCommand("AltaPaqueteSolicitud", conexion);
+                cmdAltaPaquete.CommandType = CommandType.StoredProcedure;
+
+                cmdAltaPaquete.Parameters.AddWithValue("@codigoPaquete", paquete.Codigo);
+                cmdAltaPaquete.Parameters.AddWithValue("@numeroSolicitud", solicitud.Numero);
+
+                SqlParameter valorRetorno = new SqlParameter("@valorRetorno", SqlDbType.Int);
+                valorRetorno.Direction = ParameterDirection.ReturnValue;
+                cmdAltaPaquete.Parameters.Add(valorRetorno);
+
+                conexion.Open();
+
+                cmdAltaPaquete.ExecuteNonQuery();
+
+                switch ((int)valorRetorno.Value)
+                {
+                    case -1:
+                        throw new Exception("error -1");
+                        break;
+                    case -2:
+                        throw new Exception("error -2");
+                        break;
+                    case -3:
+                        throw new Exception("error -3");
+                        break;
+                    case -4:
+                        throw new Exception("error -4");
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                if (conexion != null)
+                {
+                    conexion.Close();
+                }
+            }
+        }
+
+        public List<Paquete> paquetesSolicitud(SqlConnection conexion, int solicitud, Usuario usLog)
+        {
+            SqlDataReader drPaquetes = null;
+            Paquete paquete = null;
+            List<Paquete> listaPaquetes = new List<Paquete>();
+
+            try
+            {
+                SqlCommand cmdListadoSolicitues = new SqlCommand("listadoPaquetesSolicitud", conexion);
+                cmdListadoSolicitues.CommandType = CommandType.StoredProcedure;
+                cmdListadoSolicitues.Parameters.AddWithValue("@numeroSolicitud", solicitud);
+
+                conexion.Open();
+                drPaquetes = cmdListadoSolicitues.ExecuteReader();
+                while (drPaquetes.Read())
+                {
+
+                    paquete = interBuscarPaquete((int)drPaquetes["codigoPaquete"], conexion);
+                    //paquete = new Paquete((int)drPaquetes["codigo"], (string)drPaquetes["tipo"], (string)drPaquetes["descripcion"],
+                    //    (double)drPaquetes["peso"], (Empresa)usLog);
+                    listaPaquetes.Add(paquete);
+                }
+
+                return listaPaquetes;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                if (drPaquetes != null)
+                {
+                    drPaquetes.Close();
+                }
+                if (conexion != null)
+                {
+                    conexion.Close();
+                }
+            }
+        }
+
     }
 }

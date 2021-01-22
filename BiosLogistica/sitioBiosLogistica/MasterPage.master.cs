@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EntidadesCompartidas;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -9,6 +10,10 @@ public partial class MasterPage : System.Web.UI.MasterPage
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-
+        Usuario us = (Usuario)Session["Usuario"];
+        if (us != null)
+        {
+            lblMensaje.Text = us.Logueo;
+        }
     }
 }

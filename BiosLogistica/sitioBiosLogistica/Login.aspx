@@ -7,8 +7,8 @@
         <h2>Login</h2>
         <table class="tabLogin">
             <tr class="tabTr">
-                <th>Documento: </th>
-                <th><asp:TextBox ID="txtDocumento" runat="server"></asp:TextBox></th>
+                <th>Usuario: </th>
+                <th><asp:TextBox ID="txtUsuario" runat="server"></asp:TextBox></th>
             </tr>
             <tr class="tabTr">
                 <th>Contraseña: </th>
@@ -16,7 +16,7 @@
             </tr>
             <tr class="tabTr">
                 <th></th>
-                <th><asp:Button ID="btnLog" runat="server" Text="Login" /></th>
+                <th><asp:Button ID="btnLog" runat="server" Text="Login" OnClick="btnLog_Click" /></th>
             </tr>
         </table>
         <asp:Label id="lblError" runat="server"></asp:Label>

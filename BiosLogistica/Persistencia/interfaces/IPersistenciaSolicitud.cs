@@ -13,5 +13,6 @@ namespace Persistencia.interfaces
         void AltaSolicitud(Solicitud solicitud, Usuario usLog);
         void ModificarSolicitud(Solicitud solicitud, Usuario usLog);
         void BajaSolicitud(Solicitud solicitud, Usuario usLog);
+        string listadoSolicitudes(Usuario usLog);
     }
 }
