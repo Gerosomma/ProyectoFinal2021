@@ -50,7 +50,7 @@ namespace Persistencia
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw ex;
             }
             finally
             {
@@ -90,7 +90,7 @@ namespace Persistencia
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw ex;
             }
             finally
             {
@@ -107,7 +107,6 @@ namespace Persistencia
 
         public Empresa interBuscarEmpresa(SqlConnection conexion, string logueo)
         {
-            SqlDataReader drEmpresa = null;
             Empresa empresa = null;
 
             try
@@ -117,28 +116,21 @@ namespace Persistencia
 
                 cmdBuscarEpresa.Parameters.AddWithValue("@logueo", logueo);
                 
-                drEmpresa = cmdBuscarEpresa.ExecuteReader();
+                DataTable dtEmpresa = new DataTable("Empresa");
+                dtEmpresa.Load(cmdBuscarEpresa.ExecuteReader());
 
-                if (drEmpresa.Read())
+                if (dtEmpresa.Rows.Count > 0)
                 {
-                    empresa = new Empresa((string)drEmpresa["logueo"], (string)drEmpresa["contrasena"], (string)drEmpresa["nombreCompleto"], (string)drEmpresa["telefono"], (string)drEmpresa["direccion"], (string)drEmpresa["email"]);
+                    empresa = new Empresa(dtEmpresa.Rows[0]["logueo"].ToString(), dtEmpresa.Rows[0]["contrasena"].ToString(),
+                        dtEmpresa.Rows[0]["nombreCompleto"].ToString(), dtEmpresa.Rows[0]["telefono"].ToString(),
+                        dtEmpresa.Rows[0]["direccion"].ToString(), dtEmpresa.Rows[0]["email"].ToString());
                 }
+                
                 return empresa;
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
-            }
-            finally
-            {
-                if (drEmpresa != null)
-                {
-                    drEmpresa.Close();
-                }
-                if (conexion != null)
-                {
-                    conexion.Close();
-                }
+                throw ex;
             }
         }
 
@@ -174,7 +166,7 @@ namespace Persistencia
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                 throw ex;
             }
             finally
             {
@@ -224,7 +216,7 @@ namespace Persistencia
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw ex;
             }
             finally
             {
@@ -270,7 +262,7 @@ namespace Persistencia
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw ex;
             }
             finally
             {
