@@ -451,6 +451,16 @@ END
 
 GO
 
+CREATE PROCEDURE ListarEmpresas
+AS
+BEGIN
+	SELECT Usuario.*, Empresa.telefono, Empresa.direccion, Empresa.email 
+	FROM Usuario INNER JOIN Empresa
+	ON Usuario.logueo = Empresa.logueo
+END
+
+GO
+
 --------------------------------------------SP Paquete------------------------------------------
 CREATE PROCEDURE BuscarPaquete
 @codigo int

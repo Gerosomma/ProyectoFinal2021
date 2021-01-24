@@ -14,5 +14,6 @@ namespace Logica.interfaces
         void AltaUsuario(Usuario usuario, Usuario usLog);
         void ModificarUsuario(Usuario usuario, Usuario usLog);
         void BajaUsuario(Usuario usuario, Usuario usLog);
+        List<Empresa> ListarEmpresas(Usuario usuarioLogueado);
     }
 }

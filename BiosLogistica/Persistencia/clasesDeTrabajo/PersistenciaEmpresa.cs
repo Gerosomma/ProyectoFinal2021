@@ -280,5 +280,47 @@ namespace Persistencia
                 }
             }
         }
+
+        public List<Empresa> ListarEmpresas(Usuario usuarioLogueado)
+        {
+            SqlConnection conexion = null;
+            SqlDataReader drEmpresas = null;
+            List<Empresa> empresas = new List<Empresa>();
+            Empresa empresa = null;
+
+            try
+            {
+                conexion = new SqlConnection(Conexion.ObtenerCadenaConexion(usuarioLogueado.Logueo, usuarioLogueado.Contrasena));
+
+                SqlCommand cmdListarEmpresas = new SqlCommand("ListarEmpresas", conexion);
+                cmdListarEmpresas.CommandType = CommandType.StoredProcedure;
+
+                conexion.Open();
+                drEmpresas = cmdListarEmpresas.ExecuteReader();
+
+                while (drEmpresas.Read())
+                {
+                    empresa = new Empresa((string)drEmpresas["logueo"], (string)drEmpresas["contrasena"], (string)drEmpresas["nombreCompleto"], (string)drEmpresas["telefono"], (string)drEmpresas["direccion"], (string)drEmpresas["email"]);
+                    empresas.Add(empresa);
+                }
+
+                return empresas;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+                if (drEmpresas != null)
+                {
+                    drEmpresas.Close();
+                }
+                if (conexion != null)
+                {
+                    conexion.Close();
+                }
+            }
+        }
     }
 }
