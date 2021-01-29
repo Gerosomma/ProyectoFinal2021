@@ -81,7 +81,7 @@ namespace Persistencia
             catch (Exception ex)
             {
                 trn.Rollback();
-                throw new Exception(ex.Message);
+                throw ex;
             }
             finally
             {
@@ -125,7 +125,7 @@ namespace Persistencia
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw ex;
             }
             finally
             {
@@ -187,7 +187,7 @@ namespace Persistencia
             catch (Exception ex)
             {
                 trn.Rollback();
-                throw new Exception(ex.Message);
+                throw ex;
             }
             finally
             {
@@ -275,27 +275,27 @@ namespace Persistencia
                         XmlElement nodLogueo = doc.CreateElement(string.Empty, "logueo", string.Empty);
                         XmlText logueo = doc.CreateTextNode(p.EmpresaOrigen.Logueo);
                         nodLogueo.AppendChild(logueo);
-                        ePaquete.AppendChild(nodLogueo);
+                        eEmpresa.AppendChild(nodLogueo);
                         
                         XmlElement nodNombreCompleto = doc.CreateElement(string.Empty, "nombreCompleto", string.Empty);
                         XmlText nombreCompleto = doc.CreateTextNode(p.EmpresaOrigen.NombreCompleto);
                         nodNombreCompleto.AppendChild(nombreCompleto);
-                        ePaquete.AppendChild(nodNombreCompleto);
+                        eEmpresa.AppendChild(nodNombreCompleto);
 
                         XmlElement nodTelefono = doc.CreateElement(string.Empty, "telefono", string.Empty);
                         XmlText telefono = doc.CreateTextNode(p.EmpresaOrigen.Telefono);
                         nodTelefono.AppendChild(telefono);
-                        ePaquete.AppendChild(nodTelefono);
+                        eEmpresa.AppendChild(nodTelefono);
 
                         XmlElement nodDireccion = doc.CreateElement(string.Empty, "direccion", string.Empty);
                         XmlText direccion = doc.CreateTextNode(p.EmpresaOrigen.Direccion);
                         nodDireccion.AppendChild(direccion);
-                        ePaquete.AppendChild(nodDireccion);
+                        eEmpresa.AppendChild(nodDireccion);
 
                         XmlElement nodEmail = doc.CreateElement(string.Empty, "email", string.Empty);
                         XmlText email = doc.CreateTextNode(p.EmpresaOrigen.Email);
                         nodEmail.AppendChild(email);
-                        ePaquete.AppendChild(nodEmail);
+                        eEmpresa.AppendChild(nodEmail);
                         
                     }
                 }
@@ -310,7 +310,6 @@ namespace Persistencia
         internal List<Solicitud> solicitudes(Usuario usLog)
         {
             SqlConnection conexion = null;
-            SqlDataReader drSolicitud = null;
             Solicitud solicitud = null;
             List<Solicitud> listaSolicitudes = new List<Solicitud>();
             List<Paquete> listaPaquetes = new List<Paquete>();
@@ -322,27 +321,33 @@ namespace Persistencia
                 cmdListadoSolicitues.CommandType = CommandType.StoredProcedure;
 
                 conexion.Open();
-                drSolicitud = cmdListadoSolicitues.ExecuteReader();
-                while (drSolicitud.Read())
+                DataTable dtSolicitures = new DataTable("Solicitud");
+                dtSolicitures.Load(cmdListadoSolicitues.ExecuteReader());
+
+                foreach (DataRow r in dtSolicitures.Rows)
+                {
+                    listaPaquetes = PersistenciaPaquete.getInstancia().paquetesSolicitud(conexion, Convert.ToInt32(r["numero"]), usLog);
+                    solicitud = new Solicitud(Convert.ToInt32(r["numero"]), Convert.ToDateTime(r["fechaEntrega"]), r["nombreDestinatario"].ToString(),
+                        r["direccionDestinatario"].ToString(), r["estado"].ToString(), (Empleado)usLog, listaPaquetes);
+                    listaSolicitudes.Add(solicitud);
+                }
+
+                /*while (drSolicitud.Read())
                 { 
                     listaPaquetes = PersistenciaPaquete.getInstancia().paquetesSolicitud(conexion, (int)drSolicitud["numero"], usLog);
                     solicitud = new Solicitud((int)drSolicitud["numero"], (DateTime)drSolicitud["fechaEntrega"], (string)drSolicitud["nombreDestinatario"],
                         (string)drSolicitud["direccionDestinatario"], (string)drSolicitud["estado"], (Empleado)usLog, listaPaquetes);
                     listaSolicitudes.Add(solicitud);
-                }
+                }*/
 
                 return listaSolicitudes;
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw ex;
             }
             finally
             {
-                if (drSolicitud != null)
-                {
-                    drSolicitud.Close();
-                }
                 if (conexion != null)
                 {
                     conexion.Close();

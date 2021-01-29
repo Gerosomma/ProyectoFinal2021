@@ -19,32 +19,37 @@ public partial class _Default : System.Web.UI.Page
         Usuario us = (Usuario)Session["Usuario"];
         if (us != null)
         {
-            try
+            lblUsuario.Text = "Bienvenido! " + us.Logueo;
+            if (!IsPostBack)
             {
-
-                lblUsuario.Text = "Bienvenido! " + us.Logueo;
-
-                documento = FabricaLogica.GetLogicaSolicitud().listadoSolicitudes(us);
-                doc.LoadXml(documento);
-
-                XElement element = XElement.Parse(doc.OuterXml);
-                var res = (from node in element.Elements("Solicitud")
-                           select new
-                           {
-                               Nombre = node.Elements("nombre").First().Value
-                           }).ToList();
-
-                gvSolicitudes.DataSource = res;
-                gvSolicitudes.DataBind();
-
-                if (doc == null)
+                try
                 {
-                    lblMensaje.Text = "No hay solicitudes pendientes de entrega";
+                    documento = FabricaLogica.GetLogicaSolicitud().listadoSolicitudes(us);
+                    doc.LoadXml(documento);
+
+                    XElement element = XElement.Parse(doc.OuterXml);
+                    var res = (from node in element.Elements("solicitud")
+                               select new
+                               {
+                                   Numero = node.Elements("numero").First().Value,
+                                   FechaEntrega = node.Elements("fechaEntrega").First().Value,
+                                   NombreDestinatario = node.Elements("nombreDestinatario").First().Value,
+                                   direccionDestinatario = node.Elements("direccionDestinatario").First().Value,
+                                   Estado = node.Elements("estado").First().Value
+                               }).ToList();
+
+                    gvSolicitudes.DataSource = res;
+                    gvSolicitudes.DataBind();
+
+                    if (doc == null)
+                    {
+                        lblMensaje.Text = "No hay solicitudes pendientes de entrega";
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                lblMensaje.Text = "Error: " + ex.Message;
+                catch (Exception ex)
+                {
+                    lblMensaje.Text = "Error: " + ex.Message;
+                }
             }
         }
         else

@@ -62,7 +62,7 @@ namespace Persistencia
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw ex;
             }
             finally
             {
@@ -106,7 +106,7 @@ namespace Persistencia
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw ex;
             }
             finally
             {
@@ -162,7 +162,6 @@ namespace Persistencia
 
         public Paquete interBuscarPaquete(int codigo, SqlConnection conexion)
         {
-            SqlDataReader drPaquete = null;
             Paquete paquete = null;
             Empresa empresa = null;
 
@@ -173,26 +172,28 @@ namespace Persistencia
 
                 cmdBuscarPaquete.Parameters.AddWithValue("@codigo", codigo);
                 
-                drPaquete = cmdBuscarPaquete.ExecuteReader();
+                DataTable dtPaquete = new DataTable("Paquete");
+                dtPaquete.Load(cmdBuscarPaquete.ExecuteReader());
+
+                if (dtPaquete.Rows.Count > 0)
+                {
+                    empresa = PersistenciaEmpresa.getInstancia().interBuscarEmpresa(conexion, dtPaquete.Rows[0]["empresa"].ToString());
+                    paquete = new Paquete(Convert.ToInt32(dtPaquete.Rows[0]["codigo"]), dtPaquete.Rows[0]["tipo"].ToString(),
+                        dtPaquete.Rows[0]["descripcion"].ToString(), Convert.ToDouble(dtPaquete.Rows[0]["peso"]), empresa);
+                }
+                /*
                 if (drPaquete.Read())
                 {
                     empresa = PersistenciaEmpresa.getInstancia().interBuscarEmpresa(conexion, (string)drPaquete["empresa"]);
                     paquete = new Paquete((int)drPaquete["codigo"], (string)drPaquete["tipo"],
                         (string)drPaquete["descripcion"], (double)drPaquete["peso"], empresa);
-                }
+                }*/
 
                 return paquete;
             }
             catch (Exception ex)
             {
                 throw ex;
-            }
-            finally
-            {
-                if (drPaquete != null)
-                {
-                    drPaquete.Close();
-                }
             }
         }
 
@@ -233,7 +234,7 @@ namespace Persistencia
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw ex;
             }
             finally
             {
@@ -280,7 +281,7 @@ namespace Persistencia
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw ex;
             }
             finally
             {
@@ -293,7 +294,6 @@ namespace Persistencia
 
         public List<Paquete> paquetesSolicitud(SqlConnection conexion, int solicitud, Usuario usLog)
         {
-            SqlDataReader drPaquetes = null;
             Paquete paquete = null;
             List<Paquete> listaPaquetes = new List<Paquete>();
 
@@ -303,28 +303,29 @@ namespace Persistencia
                 cmdListadoSolicitues.CommandType = CommandType.StoredProcedure;
                 cmdListadoSolicitues.Parameters.AddWithValue("@numeroSolicitud", solicitud);
                 
-                drPaquetes = cmdListadoSolicitues.ExecuteReader();
-                while (drPaquetes.Read())
+                DataTable dtPaquetesSolicitud = new DataTable("PaquetesSolicitud");
+                dtPaquetesSolicitud.Load(cmdListadoSolicitues.ExecuteReader());
+
+                foreach (DataRow r in dtPaquetesSolicitud.Rows)
+                {
+                    paquete = interBuscarPaquete(Convert.ToInt32(r["codigoPaquete"]), conexion);
+                    listaPaquetes.Add(paquete);
+                }
+
+                /*while (drPaquetes.Read())
                 {
 
                     paquete = interBuscarPaquete((int)drPaquetes["codigoPaquete"], conexion);
                     //paquete = new Paquete((int)drPaquetes["codigo"], (string)drPaquetes["tipo"], (string)drPaquetes["descripcion"],
                     //    (double)drPaquetes["peso"], (Empresa)usLog);
                     listaPaquetes.Add(paquete);
-                }
+                }*/
 
                 return listaPaquetes;
             }
             catch (Exception ex)
             {
                 throw ex;
-            }
-            finally
-            {
-                if (drPaquetes != null)
-                {
-                    drPaquetes.Close();
-                }
             }
         }
 
