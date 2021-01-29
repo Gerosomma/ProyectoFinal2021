@@ -96,5 +96,10 @@ namespace Logica.clasesDeTrabajo
                 FabricaPersistencia.GetPersistenciaEmpresa().ModificarEmpresa((Empresa)usuario, usLog);
             }
         }
+
+        public List<Empresa> ListarEmpresas(Usuario usuarioLogueado)
+        {
+            return FabricaPersistencia.GetPersistenciaEmpresa().ListarEmpresas(usuarioLogueado);
+        }
     }
 }

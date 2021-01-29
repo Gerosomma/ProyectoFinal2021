@@ -16,6 +16,6 @@ namespace Persistencia.interfaces
         void AltaEmpresa(Empresa empresa, Usuario usLog);
         void ModificarEmpresa(Empresa empresa, Usuario usLog);
         void BajaEmpresa(Empresa empresa, Usuario usLog);
-        
+        List<Empresa> ListarEmpresas(Usuario usuarioLogueado);
     }
 }
