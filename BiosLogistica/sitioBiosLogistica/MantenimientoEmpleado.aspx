@@ -16,10 +16,10 @@
         <asp:TextBox ID="txtNombre" runat="server" Enabled="False"></asp:TextBox>
         <br />
         <asp:Label ID="lblHoraInicio" runat="server" Text="Hora de entrada: "></asp:Label>
-        <asp:TextBox ID="txtHoraInicio" runat="server" Enabled="False"></asp:TextBox>
+        <asp:TextBox ID="txtHoraInicio" runat="server" Enabled="False" TextMode="Time"></asp:TextBox>
         <br />
         <asp:Label ID="lblHoraFin" runat="server" Text="Hora de salida: "></asp:Label>
-        <asp:TextBox ID="txtHoraFin" runat="server" Enabled="False"></asp:TextBox>
+        <asp:TextBox ID="txtHoraFin" runat="server" Enabled="False" TextMode="Time"></asp:TextBox>
         <br />
         <asp:Button ID="btnAgregar" runat="server" Text="Agregar" Enabled="False" OnClick="btnAgregar_Click" />
         &nbsp;&nbsp;&nbsp;

@@ -150,7 +150,7 @@ END
 
 GO
 
-CREATE PROCEDURE AltaEmpleado
+create PROCEDURE AltaEmpleado
 @logueo VARCHAR(50),
 @contrasena VARCHAR(6),
 @nombreCompleto VARCHAR(50),
@@ -159,64 +159,77 @@ CREATE PROCEDURE AltaEmpleado
 AS
 BEGIN
 	IF EXISTS (SELECT * FROM Usuario WHERE logueo = @logueo AND activo = 1)
-		BEGIN
-			RETURN -1
-		END
+	BEGIN
+		RETURN -1
+	END
 	IF EXISTS (SELECT * FROM Usuario WHERE logueo = @logueo AND activo = 0)
-		BEGIN TRANSACTION
-			UPDATE Usuario SET activo = 1 WHERE logueo = @logueo
-			IF (@@ERROR <> 0)
-				BEGIN
-					ROLLBACK TRANSACTION
-					RETURN -2
-				END
-			UPDATE Empleado SET activo = 1 WHERE logueo = @logueo
-			IF (@@ERROR <> 0)
-				BEGIN
-					ROLLBACK TRANSACTION
-					RETURN -3
-				END	
-	BEGIN TRANSACTION 
+	BEGIN
+		BEGIN TRANSACTION;
+		UPDATE Usuario SET activo = 1 WHERE logueo = @logueo
+		IF (@@ERROR <> 0)
+			BEGIN
+				ROLLBACK TRANSACTION;
+				RETURN -2
+			END
+		UPDATE Empleado SET activo = 1 WHERE logueo = @logueo
+		IF (@@ERROR <> 0)
+		BEGIN
+			ROLLBACK TRANSACTION;
+			RETURN -3
+		END	
+		COMMIT TRANSACTION;
+	END
+	ELSE
+	BEGIN
+		BEGIN TRANSACTION;
 		INSERT INTO Usuario VALUES (@logueo, @contrasena, @nombreCompleto, 1)
 		IF (@@ERROR <> 0)
-			BEGIN
-				ROLLBACK TRANSACTION
-				RETURN -4
-			END
+		BEGIN
+			ROLLBACK TRANSACTION;
+			RETURN -4
+		END
 		INSERT INTO Empleado VALUES (@logueo, @horaInicio, @horaFin, 1)
 		IF (@@ERROR <> 0)
-			BEGIN
-				ROLLBACK TRANSACTION
-				RETURN -5
-			END
-	COMMIT TRANSACTION
+		BEGIN
+			ROLLBACK TRANSACTION;
+			RETURN -5
+		END
+		COMMIT TRANSACTION;
 
-	EXEC NuevoUsuarioSQL @logueo, @contrasena, 'securityadmin';
-	IF (@@ERROR <> 0)
+		EXEC NuevoUsuarioSQL @logueo, @contrasena, 'processadmin';
+		IF (@@ERROR <> 0)
 		BEGIN
 			RETURN -6
 		END
 
-	EXEC NuevoUsuarioBD @logueo, 'db_securityadmin', @logueo;
-
-	DECLARE @VarSentencia VARCHAR(200)
-	SET @VarSentencia = 'GRANT select, Insert, Update, delete ON Usuario TO ' + @logueo
-	EXEC (@VarSentencia)
-	SET @VarSentencia = 'GRANT select, Insert, Update, delete ON Empleado TO ' + @logueo
-	EXEC (@VarSentencia)
-	SET @VarSentencia = 'GRANT select, Insert, Update, delete ON Empresa TO ' + @logueo
-	EXEC (@VarSentencia)
-	SET @VarSentencia = 'GRANT select, Insert, Update, delete ON Paquete TO ' + @logueo
-	EXEC (@VarSentencia)
-	SET @VarSentencia = 'GRANT select, Insert, Update, delete ON Solicitud TO ' + @logueo
-	EXEC (@VarSentencia)
-	SET @VarSentencia = 'GRANT EXECUTE TO ' + @logueo
-	EXEC (@VarSentencia)
-	IF (@@ERROR <> 0)
+		EXEC NuevoUsuarioBD @logueo, 'db_accessadmin', @logueo;
+		IF (@@ERROR <> 0)
 		BEGIN
 			RETURN -7
 		END
+
+		DECLARE @VarSentencia VARCHAR(200)
+		SET @VarSentencia = 'GRANT select, Insert, Update, delete ON Usuario TO ' + @logueo
+		EXEC (@VarSentencia)
+		SET @VarSentencia = 'GRANT select, Insert, Update, delete ON Empleado TO ' + @logueo
+		EXEC (@VarSentencia)
+		SET @VarSentencia = 'GRANT select, Insert, Update, delete ON Empresa TO ' + @logueo
+		EXEC (@VarSentencia)
+		SET @VarSentencia = 'GRANT select, Insert, Update, delete ON Paquete TO ' + @logueo
+		EXEC (@VarSentencia)
+		SET @VarSentencia = 'GRANT select, Insert, Update, delete ON Solicitud TO ' + @logueo
+		EXEC (@VarSentencia)
+		SET @VarSentencia = 'GRANT EXECUTE TO ' + @logueo
+		EXEC (@VarSentencia)
+		IF (@@ERROR <> 0)
+		BEGIN
+			RETURN -8
+		END
+	END
 END
+
+
+
 
 GO
 
@@ -310,6 +323,8 @@ BEGIN
 	WHERE Usuario.logueo = @logueo AND Usuario.activo = 1
 END
 
+
+
 GO
 
 CREATE PROCEDURE AltaEmpresa
@@ -354,13 +369,13 @@ BEGIN
 			END
 	COMMIT TRANSACTION
 
-	EXEC NuevoUsuarioSQL @logueo, @contrasena, 'securityadmin';
+	EXEC NuevoUsuarioSQL @logueo, @contrasena, 'processadmin';
 	IF (@@ERROR <> 0)
 		BEGIN
 			RETURN -6
 		END
 
-	EXEC NuevoUsuarioBD @logueo, 'db_securityadmin', @logueo;
+	EXEC NuevoUsuarioBD @logueo, 'db_accessadmin', @logueo;
 
 	DECLARE @VarSentencia VARCHAR(200)
 	SET @VarSentencia = 'GRANT select ON Solicitud TO ' + @logueo
@@ -687,52 +702,3 @@ END
 
 
 
-
----------------DATOS-DE-PRUEBA----------------------------------------------------
-
-CREATE USER [gero] FROM LOGIN [gero]
-
-EXEC AltaEmpleado 'gero', '123456', 'Gero 1', '09:00:00.0000', '18:00:0.0000';
-
-EXEC AltaEmpresa 'jero', '123456', 'Gero 2', 091654252, '18 de julio y rio negro', 'geronimo.somma@gsoft.com.uy';
-
-
-select * from Usuario;
-
-select * from Empleado;
-select * from Empresa;
-
-
-delete from Empleado
-delete from Usuario
-
-exec NuevoUsuarioBD 'gero', 'db_securityadmin', 'gero'
-
-
-select * from Solicitud;
-select * from Paquete;
-select * from PaquetesSolicitud;
-
-exec AltaSolicitud '2021-05-08 12:35:29.123', 'geronimo somma', '18 de julio y rio negro', 'en deposito', 'gero';
-
-exec AltaPaquete 1, 'fragil', 'paquete sospechoso', 25, 'jero'; 
-
-exec AltaPaqueteSolicitud 1, 1;
-
-exec listadoSolicitudes
-
-
-exec sp_who
-
-
-select b.name as dbname,a.*
-from sys.sysprocesses a , sys.sysdatabases b
-where a.dbid=b.dbid
-
-
-SELECT   *
-FROM     sys.dm_exec_sessions
-WHERE    login_name = 'gero'
-
-
-kill 51
