@@ -54,10 +54,8 @@ namespace Persistencia
                 {
                     case -1:
                         throw new Exception("error -1");
-                        break;
                     case -2:
                         throw new Exception("error -2");
-                        break;
                 }
             }
             catch (Exception ex)
@@ -72,50 +70,7 @@ namespace Persistencia
                 }
             }
         }
-
-        public void BajaPaquete(Paquete paquete, Usuario usLog)
-        {
-            SqlConnection conexion = null;
-
-            try
-            {
-                conexion = new SqlConnection(Conexion.ObtenerCadenaConexion(usLog.Logueo, usLog.Contrasena));
-
-                SqlCommand cmdAltaPaquete = new SqlCommand("BajaPaquete", conexion);
-                cmdAltaPaquete.CommandType = CommandType.StoredProcedure;
-
-                cmdAltaPaquete.Parameters.AddWithValue("@codigo", paquete.Codigo);
-
-                SqlParameter valorRetorno = new SqlParameter("@valorRetorno", SqlDbType.Int);
-                valorRetorno.Direction = ParameterDirection.ReturnValue;
-                cmdAltaPaquete.Parameters.Add(valorRetorno);
-
-                conexion.Open();
-
-                cmdAltaPaquete.ExecuteNonQuery();
-
-                switch ((int)valorRetorno.Value)
-                {
-                    case -1:
-                        throw new Exception("error -1");
-                        break;
-                    case -2:
-                        throw new Exception("error -2");
-                        break;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            finally
-            {
-                if (conexion != null)
-                {
-                    conexion.Close();
-                }
-            }
-        }
+        
 
         public Paquete BuscarPaquete(int codigo, Usuario usLog)
         {
@@ -160,7 +115,7 @@ namespace Persistencia
             }
         }
 
-        public Paquete interBuscarPaquete(int codigo, SqlConnection conexion)
+        internal Paquete interBuscarPaquete(int codigo, SqlConnection conexion)
         {
             Paquete paquete = null;
             Empresa empresa = null;
@@ -196,55 +151,7 @@ namespace Persistencia
                 throw ex;
             }
         }
-
-        public void ModificarPaquete(Paquete paquete, Usuario usLog)
-        {
-            SqlConnection conexion = null;
-
-            try
-            {
-                conexion = new SqlConnection(Conexion.ObtenerCadenaConexion(usLog.Logueo, usLog.Contrasena));
-
-                SqlCommand cmdAltaPaquete = new SqlCommand("ModificarPaquete", conexion);
-                cmdAltaPaquete.CommandType = CommandType.StoredProcedure;
-
-                cmdAltaPaquete.Parameters.AddWithValue("@codigo", paquete.Codigo);
-                cmdAltaPaquete.Parameters.AddWithValue("@tipo", paquete.Tipo);
-                cmdAltaPaquete.Parameters.AddWithValue("@descripcion", paquete.Descripcion);
-                cmdAltaPaquete.Parameters.AddWithValue("@peso", paquete.Peso);
-                cmdAltaPaquete.Parameters.AddWithValue("@empresa", paquete.EmpresaOrigen.Logueo);
-
-                SqlParameter valorRetorno = new SqlParameter("@valorRetorno", SqlDbType.Int);
-                valorRetorno.Direction = ParameterDirection.ReturnValue;
-                cmdAltaPaquete.Parameters.Add(valorRetorno);
-
-                conexion.Open();
-
-                cmdAltaPaquete.ExecuteNonQuery();
-
-                switch ((int)valorRetorno.Value)
-                {
-                    case -1:
-                        throw new Exception("error -1");
-                        break;
-                    case -2:
-                        throw new Exception("error -2");
-                        break;
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            finally
-            {
-                if (conexion != null)
-                {
-                    conexion.Close();
-                }
-            }
-        }
-
+        
         internal static void AltaPaqueteSolicitud(SqlConnection conexion, Solicitud solicitud, Paquete paquete, Usuario usLog)
         {
             try

@@ -16,32 +16,30 @@ GO
 USE ProyectoSegundo2020
 
 CREATE TABLE Usuario (
-	logueo VARCHAR(50) NOT NULL PRIMARY KEY,
-	contrasena VARCHAR(6) NOT NULL,
+	logueo VARCHAR(50) NOT NULL PRIMARY KEY,-- 12 caracteres
+	contrasena VARCHAR(6) NOT NULL, -- checks formato
 	nombreCompleto VARCHAR(50) NOT NULL,
 	activo BIT NOT NULL DEFAULT 1
 )
 
 CREATE TABLE Empresa (
-	logueo VARCHAR(50) NOT NULL PRIMARY KEY FOREIGN KEY REFERENCES Usuario(logueo),
-	telefono VARCHAR(50) NOT NULL,
+	logueo VARCHAR(50) NOT NULL PRIMARY KEY FOREIGN KEY REFERENCES Usuario(logueo), -- 12 caracteres
+	telefono VARCHAR(50) NOT NULL, -- 9 caracteres, check solo numeros
 	direccion VARCHAR(50) NOT NULL,
-	email VARCHAR(50) NOT NULL,
-	activo BIT NOT NULL DEFAULT 1
+	email VARCHAR(50) NOT NULL -- check formato email
 )
-
+-- borro columna activo
 CREATE TABLE Empleado (
-	logueo VARCHAR(50) NOT NULL PRIMARY KEY FOREIGN KEY REFERENCES Usuario(logueo),
-	horaInicio TIME NOT NULL,
-	horaFin TIME NOT NULL,
-	activo BIT NOT NULL DEFAULT 1
+	logueo VARCHAR(50) NOT NULL PRIMARY KEY FOREIGN KEY REFERENCES Usuario(logueo), -- 12 caracteres
+	horaInicio TIME NOT NULL, -- check hora fin > hora inicio
+	horaFin TIME NOT NULL
 )
 
 CREATE TABLE Paquete (
 	codigo INT NOT NULL PRIMARY KEY,
-	tipo VARCHAR(6) NOT NULL CHECK (tipo = 'fragil' OR tipo = 'comun' OR tipo = 'bulto'),
+	tipo VARCHAR(6) NOT NULL CHECK (tipo in ('fragil', 'comun', 'bulto')), -- cambio
 	descripcion VARCHAR(100) NOT NULL,
-	peso DECIMAL NOT NULL,
+	peso DECIMAL NOT NULL, -- check
 	empresa VARCHAR(50) NOT NULL FOREIGN KEY REFERENCES Empresa(logueo)
 )
 
@@ -50,7 +48,7 @@ CREATE TABLE Solicitud (
 	fechaEntrega DATETIME NOT NULL, 
 	nombreDestinatario VARCHAR(50) NOT NULL, 
 	direccionDestinatario VARCHAR(50) NOT NULL,
-	estado VARCHAR(11) NOT NULL  DEFAULT 'en deposito' CHECK (estado = 'en deposito' OR estado = 'en camino' OR estado = 'entregado'),
+	estado VARCHAR(11) NOT NULL  DEFAULT 'en deposito' CHECK (estado in ('en deposito', 'en camino', 'entregado')), -- cambio
 	empleado VARCHAR(50) NOT NULL FOREIGN KEY REFERENCES Empleado(logueo)
 )
 
@@ -63,6 +61,8 @@ CREATE TABLE PaquetesSolicitud (
 GO
 
 --------------------------------------------SP Base Datos------------------------------------------
+-- este sp no va, el create va dentro de altaEmpleado y Empresa directamente
+-- empresa solo tiene que tener usuario de logueo y no rol.
 CREATE PROCEDURE NuevoUsuarioSQL
 @nombre VARCHAR(50),
 @pass VARCHAR(6),
@@ -85,7 +85,7 @@ BEGIN
 END
 
 GO
-
+-- el create user debe estar dentro del sp de altaEmpleado y altaEmpresa
 CREATE PROCEDURE NuevoUsuarioBD
 @nombre VARCHAR(50),
 @rol VARCHAR(30),
@@ -128,12 +128,14 @@ CREATE PROCEDURE EliminarUsuarioBD
 AS
 BEGIN
    DECLARE @VarSentencia VARCHAR(200)
-   SET @VarSentencia = 'DROP LOGIN [' + @nombre + ']'
+   SET @VarSentencia = 'DROP USER [' + @nombre + ']'
    EXEC (@VarSentencia)
 
    IF (@@ERROR <> 0)
        RETURN -1
 END   
+
+-- los eliminar lo mismo
 
 GO
 
@@ -147,6 +149,13 @@ BEGIN
 	ON Usuario.logueo = Empleado.logueo
 	WHERE Usuario.logueo = @logueo AND Usuario.activo = 1
 END
+
+-- un buscar activos y un buscar todos.
+-- todos para mapear objetos dependientes.
+
+-- mismo caso para los buscar empresa
+
+
 
 GO
 
@@ -162,21 +171,22 @@ BEGIN
 	BEGIN
 		RETURN -1
 	END
-	IF EXISTS (SELECT * FROM Usuario WHERE logueo = @logueo AND activo = 0)
+	IF EXISTS (SELECT * FROM Usuario WHERE logueo = @logueo AND activo = 0) -- buscar con join a Empleado inactivo
 	BEGIN
 		BEGIN TRANSACTION;
-		UPDATE Usuario SET activo = 1 WHERE logueo = @logueo
+		UPDATE Usuario SET activo = 1 WHERE logueo = @logueo -- aparte de activar actualizar datos
 		IF (@@ERROR <> 0)
 			BEGIN
 				ROLLBACK TRANSACTION;
 				RETURN -2
 			END
-		UPDATE Empleado SET activo = 1 WHERE logueo = @logueo
+		UPDATE Empleado SET activo = 1 WHERE logueo = @logueo -- aca ya no existe activo, aparte de activar actualizar datos
 		IF (@@ERROR <> 0)
 		BEGIN
 			ROLLBACK TRANSACTION;
 			RETURN -3
 		END	
+		-- falta la creacion de usuario y roles en base.
 		COMMIT TRANSACTION;
 	END
 	ELSE
@@ -196,18 +206,18 @@ BEGIN
 		END
 		COMMIT TRANSACTION;
 
-		EXEC NuevoUsuarioSQL @logueo, @contrasena, 'processadmin';
+		EXEC NuevoUsuarioSQL @logueo, @contrasena, 'processadmin'; -- securityadmin
 		IF (@@ERROR <> 0)
 		BEGIN
 			RETURN -6
 		END
 
-		EXEC NuevoUsuarioBD @logueo, 'db_accessadmin', @logueo;
+		EXEC NuevoUsuarioBD @logueo, 'db_accessadmin', @logueo; -- aca deberiamos crear un rol con los sp que puede ejecutar un empleado y que permisos necesita para poder administrar usuarios de base de datos
 		IF (@@ERROR <> 0)
 		BEGIN
 			RETURN -7
 		END
-
+		-- todos los grant select, Insert, Update, delete no van.
 		DECLARE @VarSentencia VARCHAR(200)
 		SET @VarSentencia = 'GRANT select, Insert, Update, delete ON Usuario TO ' + @logueo
 		EXEC (@VarSentencia)
@@ -219,6 +229,10 @@ BEGIN
 		EXEC (@VarSentencia)
 		SET @VarSentencia = 'GRANT select, Insert, Update, delete ON Solicitud TO ' + @logueo
 		EXEC (@VarSentencia)
+		-- todos los grant necesarios van en un rol, y debemos ver cuales sp puede ejecutar el empleados
+		-- puedo crear un rol con todos los permisos y revokar los que no sean necesarios.
+		-- tambien se debe crear un tercer rol para el IIS publico, que se seteara cuando se creae dicho usuario
+		-- pasos 1 crear roles go 2 crear sp 3 asignar permisos a roles
 		SET @VarSentencia = 'GRANT EXECUTE TO ' + @logueo
 		EXEC (@VarSentencia)
 		IF (@@ERROR <> 0)
@@ -241,14 +255,14 @@ CREATE PROCEDURE ModificarEmpleado
 @horaFin TIME
 AS
 BEGIN
-	IF NOT EXISTS (SELECT * FROM Usuario WHERE logueo = @logueo AND activo = 1)
+	IF NOT EXISTS (SELECT * FROM Usuario WHERE logueo = @logueo AND activo = 1) -- join empleado
 		BEGIN
 			RETURN -1
 		END
 
 		BEGIN TRANSACTION
 		UPDATE Usuario
-		SET contrasena = @contrasena, nombreCompleto = @nombreCompleto
+		SET contrasena = @contrasena, nombreCompleto = @nombreCompleto -- solo se puede cambiar la contraseña del propio usuario logueado
 		WHERE logueo = @logueo
 		IF (@@ERROR <> 0)
 			BEGIN
@@ -264,6 +278,8 @@ BEGIN
 				RETURN -3
 			END
 	COMMIT TRANSACTION
+
+	-- faltaria cambiar contraseña sql, usar sp_password para no tener que modificar permisos
 END
 
 GO
@@ -285,12 +301,13 @@ BEGIN
 					ROLLBACK TRANSACTION
 					RETURN -2
 				END
-			UPDATE Empleado SET activo = 0 WHERE logueo = @logueo
+			UPDATE Empleado SET activo = 0 WHERE logueo = @logueo -- este no va mas
 			IF (@@ERROR <> 0)
 				BEGIN
 					ROLLBACK TRANSACTION
 					RETURN -3
 				END
+				-- borrar usuarios sql y BD
 		COMMIT TRANSACTION
 		END
 	ELSE
@@ -307,6 +324,7 @@ BEGIN
 					ROLLBACK TRANSACTION
 					RETURN -5
 				END
+				-- borrar usuarios sql y BD
 		COMMIT TRANSACTION
 END	
 
@@ -323,6 +341,8 @@ BEGIN
 	WHERE Usuario.logueo = @logueo AND Usuario.activo = 1
 END
 
+
+-- son los mismos cambios que tenemos apra Empleado
 
 
 GO
@@ -369,18 +389,20 @@ BEGIN
 			END
 	COMMIT TRANSACTION
 
-	EXEC NuevoUsuarioSQL @logueo, @contrasena, 'processadmin';
+	EXEC NuevoUsuarioSQL @logueo, @contrasena, 'processadmin'; -- necesita usuario pero no rol
 	IF (@@ERROR <> 0)
 		BEGIN
 			RETURN -6
 		END
 
-	EXEC NuevoUsuarioBD @logueo, 'db_accessadmin', @logueo;
+	EXEC NuevoUsuarioBD @logueo, 'db_accessadmin', @logueo; -- este rol tampoco es necesario
+
+	-- deberiamos tener los crate user y asignar el rol empresa
 
 	DECLARE @VarSentencia VARCHAR(200)
-	SET @VarSentencia = 'GRANT select ON Solicitud TO ' + @logueo
+	SET @VarSentencia = 'GRANT select ON Solicitud TO ' + @logueo -- este tampoco
 	EXEC (@VarSentencia)
-	SET @VarSentencia = 'GRANT EXECUTE TO ' + @logueo
+	SET @VarSentencia = 'GRANT EXECUTE TO ' + @logueo -- esto no va directamente
 	EXEC (@VarSentencia)
 	IF (@@ERROR <> 0)
 		BEGIN
@@ -406,7 +428,7 @@ BEGIN
 
 		BEGIN TRANSACTION
 		UPDATE Usuario
-		SET contrasena = @contrasena, nombreCompleto = @nombreCompleto
+		SET contrasena = @contrasena, nombreCompleto = @nombreCompleto -- solo el propio empleado puede odificar la contraseña
 		WHERE logueo = @logueo
 		IF (@@ERROR <> 0)
 			BEGIN
@@ -451,7 +473,7 @@ BEGIN
 		END
 	ELSE
 		BEGIN TRANSACTION
-			DELETE FROM Empleado WHERE logueo = @logueo
+			DELETE FROM Empresa WHERE logueo = @logueo
 			IF (@@ERROR <> 0)
 				BEGIN
 					RETURN -4
@@ -496,7 +518,7 @@ CREATE PROCEDURE AltaPaquete
 @empresa VARCHAR(50)
 AS
 BEGIN
-	IF NOT EXISTS (SELECT * FROM Empresa WHERE logueo = @empresa)	
+	IF NOT EXISTS (SELECT * FROM Empresa WHERE logueo = @empresa)	-- joiniar tiene que estar  activa la empresa
 	BEGIN
 		RETURN -1
 	END
@@ -513,7 +535,7 @@ END
 
 GO
 
-CREATE PROCEDURE ModificarPaquete
+CREATE PROCEDURE ModificarPaquete -- este no va
 @codigo INT,
 @tipo VARCHAR(6),
 @descripcion VARCHAR(100),
@@ -543,7 +565,7 @@ END
 
 GO
 
-CREATE PROCEDURE BajaPaquete
+CREATE PROCEDURE BajaPaquete -- este tampoco va
 @codigo INT
 AS
 BEGIN
@@ -563,7 +585,7 @@ END
 
 GO
 
-CREATE PROCEDURE ListarPaquetes
+CREATE PROCEDURE ListarPaquetes -- asi no sirve, es necesario listar paquetes sin solicitud y listar paquetes de una solicitud en particular.
 AS
 BEGIN
 	SELECT * FROM Paquete
@@ -580,7 +602,7 @@ CREATE PROCEDURE AltaSolicitud
 @empleado VARCHAR(50)
 AS
 BEGIN
-	IF NOT EXISTS (SELECT * FROM Empleado WHERE logueo = @empleado)	
+	IF NOT EXISTS (SELECT * FROM Empleado WHERE logueo = @empleado)	-- empleado activo?
 	BEGIN
 		RETURN -1
 	END
@@ -627,7 +649,7 @@ END
 
 GO 
 
-CREATE PROCEDURE BajaSolicitud
+CREATE PROCEDURE BajaSolicitud -- tampoco va
 @numero int
 AS
 BEGIN
@@ -647,7 +669,7 @@ END
 
 GO
 
-CREATE PROCEDURE ModificarSolicitud
+CREATE PROCEDURE ModificarSolicitud -- seria modificarEstadoSolicitud con la logica necesaria.
 @numero INT,
 @fechaEntrega DATETIME, 
 @nombreDestinatario VARCHAR(50), 
@@ -682,7 +704,7 @@ END
 
 GO
 
-CREATE PROCEDURE listadoSolicitudes
+CREATE PROCEDURE listadoSolicitudes -- todas no, faltan listadoSolicitudeEnCamino y ListadoSolicitudesEmpresa
 AS
 BEGIN
 	SELECT *
