@@ -12,7 +12,7 @@
             </tr>
             <tr class="tabTr">
                 <th>Contraseña: </th>
-                <th><asp:TextBox ID="txtContrasena" runat="server" TextMode="Password"></asp:TextBox></th>
+                <th><asp:TextBox ID="txtContrasena" runat="server" TextMode="Password" OnTextChanged="txtContrasena_TextChanged"></asp:TextBox></th>
             </tr>
             <tr class="tabTr">
                 <th></th>

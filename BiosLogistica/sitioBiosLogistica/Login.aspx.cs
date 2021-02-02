@@ -52,4 +52,9 @@ public partial class Login : System.Web.UI.Page
             lblError.Text = ex.Message;
         }
     }
+
+    protected void txtContrasena_TextChanged(object sender, EventArgs e)
+    {
+        btnLog_Click(sender, e);
+    }
 }

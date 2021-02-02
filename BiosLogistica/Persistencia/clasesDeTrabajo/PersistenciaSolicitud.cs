@@ -72,7 +72,7 @@ namespace Persistencia
                 //deberiamos insertar los paquetes de la solicitud.
                 foreach (Paquete paquete in solicitud.PaquetesSolicitud)
                 {
-                    PersistenciaPaquete.AltaPaqueteSolicitud(conexion, solicitud, paquete, usLog);
+                    PersistenciaPaquete.AltaPaqueteSolicitud(conexion, solicitud, paquete, usLog); // pasar la transaccion no la conexion.
                 }
                 
                 trn.Commit();
@@ -141,7 +141,7 @@ namespace Persistencia
             throw new NotImplementedException();
         }
 
-        public void ModificarSolicitud(Solicitud solicitud, Usuario usLog)
+        public void ModificarSolicitud(Solicitud solicitud, Usuario usLog) // es ModificarEstado
         {
             SqlConnection conexion = null;
             SqlTransaction trn = null;
@@ -178,8 +178,7 @@ namespace Persistencia
                         throw new Exception("error -2");
                         break;
                 }
-
-                //deberiamos modificar los paquetes de la solicitud.
+                
 
                 trn.Commit();
 

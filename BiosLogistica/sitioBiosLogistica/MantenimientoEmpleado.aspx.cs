@@ -15,6 +15,13 @@ public partial class MantenimientoEmpleado : System.Web.UI.Page
     {
         ((Label)this.Master.FindControl("lblPagina")).Text = "ABM de Empleado";
         usuarioLogueado = (Usuario)Session["Usuario"];
+
+        Usuario us = (Usuario)Session["Usuario"];
+        if (usuarioLogueado == null)
+        {
+            lblMensaje.Text = "Logeese para modificar ";
+            btnBuscar.Enabled = false;
+        }
     }
 
     protected void btnBuscar_Click(object sender, EventArgs e)
@@ -150,6 +157,7 @@ public partial class MantenimientoEmpleado : System.Web.UI.Page
     private void LimpiarFormulario()
     {
         txtLogueo.Text = string.Empty;
+        txtLogueo.Enabled = true;
         txtLogueo.Focus();
         txtContrasena.Text = string.Empty;
         txtContrasena.Enabled = false;
@@ -164,5 +172,7 @@ public partial class MantenimientoEmpleado : System.Web.UI.Page
         btnAgregar.Enabled = false;
         btnModificar.Enabled = false;
         btnEliminar.Enabled = false;
+
+        lblMensaje.Text = string.Empty;
     }
 }
