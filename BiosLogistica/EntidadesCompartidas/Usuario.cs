@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EntidadesCompartidas
 {
-    public class Usuario
+    public abstract class Usuario
     {
         private string _logueo;
         private string _contrasenia;
@@ -28,7 +28,7 @@ namespace EntidadesCompartidas
             set { _nombreCompleto = value; }
         }
 
-        public Usuario(string logueo, string contrasenia, string nombreCompleto)
+        public  Usuario(string logueo, string contrasenia, string nombreCompleto)
         {
             Logueo = logueo;
             Contrasena = contrasenia;

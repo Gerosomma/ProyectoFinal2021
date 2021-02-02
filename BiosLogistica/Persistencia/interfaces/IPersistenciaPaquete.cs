@@ -11,7 +11,5 @@ namespace Persistencia.interfaces
     {
         Paquete BuscarPaquete(int codigo, Usuario usLog);
         void AltaPaquete(Paquete paquete, Usuario usLog);
-        void ModificarPaquete(Paquete paquete, Usuario usLog);
-        void BajaPaquete(Paquete paquete, Usuario usLog);
     }
 }

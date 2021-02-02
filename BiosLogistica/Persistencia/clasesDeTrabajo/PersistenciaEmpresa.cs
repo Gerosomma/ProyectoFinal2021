@@ -292,7 +292,8 @@ namespace Persistencia
 
                 while (drEmpresas.Read())
                 {
-                    empresa = new Empresa((string)drEmpresas["logueo"], (string)drEmpresas["contrasena"], (string)drEmpresas["nombreCompleto"], (string)drEmpresas["telefono"], (string)drEmpresas["direccion"], (string)drEmpresas["email"]);
+                    empresa = new Empresa((string)drEmpresas["logueo"], (string)drEmpresas["contrasena"], (string)drEmpresas["nombreCompleto"], (string)drEmpresas["telefono"],
+                        (string)drEmpresas["direccion"], (string)drEmpresas["email"]);
                     empresas.Add(empresa);
                 }
 
