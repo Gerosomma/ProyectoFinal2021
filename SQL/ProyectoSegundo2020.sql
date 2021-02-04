@@ -16,21 +16,21 @@ GO
 USE ProyectoSegundo2020
 
 CREATE TABLE Usuario (
-	logueo VARCHAR(50) NOT NULL PRIMARY KEY,-- 12 caracteres
+	logueo VARCHAR(12) NOT NULL PRIMARY KEY,-- 12 caracteres
 	contrasena VARCHAR(6) NOT NULL, -- checks formato
 	nombreCompleto VARCHAR(50) NOT NULL,
 	activo BIT NOT NULL DEFAULT 1
 )
 
 CREATE TABLE Empresa (
-	logueo VARCHAR(50) NOT NULL PRIMARY KEY FOREIGN KEY REFERENCES Usuario(logueo), -- 12 caracteres
+	logueo VARCHAR(12) NOT NULL PRIMARY KEY FOREIGN KEY REFERENCES Usuario(logueo), -- 12 caracteres
 	telefono VARCHAR(50) NOT NULL, -- 9 caracteres, check solo numeros
 	direccion VARCHAR(50) NOT NULL,
 	email VARCHAR(50) NOT NULL -- check formato email
 )
 -- borro columna activo
 CREATE TABLE Empleado (
-	logueo VARCHAR(50) NOT NULL PRIMARY KEY FOREIGN KEY REFERENCES Usuario(logueo), -- 12 caracteres
+	logueo VARCHAR(12) NOT NULL PRIMARY KEY FOREIGN KEY REFERENCES Usuario(logueo), -- 12 caracteres
 	horaInicio TIME NOT NULL, -- check hora fin > hora inicio
 	horaFin TIME NOT NULL
 )
@@ -150,6 +150,17 @@ BEGIN
 	WHERE Usuario.logueo = @logueo AND Usuario.activo = 1
 END
 
+go
+
+CREATE PROCEDURE interBuscarEmpleado
+@logueo VARCHAR(50)
+AS
+BEGIN
+	SELECT Usuario.*, Empleado.horaInicio, Empleado.horaFin
+	FROM Usuario INNER JOIN Empleado
+	ON Usuario.logueo = Empleado.logueo
+	WHERE Usuario.logueo = @logueo
+END
 -- un buscar activos y un buscar todos.
 -- todos para mapear objetos dependientes.
 
@@ -341,6 +352,17 @@ BEGIN
 	WHERE Usuario.logueo = @logueo AND Usuario.activo = 1
 END
 
+go
+
+CREATE PROCEDURE interBuscarEmpresa
+@logueo VARCHAR(50)
+AS
+BEGIN
+	SELECT Usuario.*, Empresa.telefono, Empresa.direccion, Empresa.email
+	FROM Usuario INNER JOIN Empresa
+	ON Usuario.logueo = Empresa.logueo
+	WHERE Usuario.logueo = @logueo
+END
 
 -- son los mismos cambios que tenemos apra Empleado
 
@@ -534,61 +556,30 @@ BEGIN
 END
 
 GO
+-- listado de paquetes asi no sirve, 
+-- es necesario listar paquetes sin solicitud 
+-- y listar paquetes de una solicitud en particular.
 
-CREATE PROCEDURE ModificarPaquete -- este no va
-@codigo INT,
-@tipo VARCHAR(6),
-@descripcion VARCHAR(100),
-@peso DECIMAL,
-@empresa VARCHAR(50)
+CREATE PROCEDURE ListarPaquetesLibres
 AS
 BEGIN
-	IF NOT EXISTS (SELECT * FROM Empresa WHERE logueo = @empresa)	
-	BEGIN
-		RETURN -1
-	END
-	IF EXISTS (SELECT * FROM Paquete WHERE codigo = @codigo)	
-	BEGIN
-		RETURN -2
-	END
-
-	UPDATE Paquete 
-	SET tipo = @tipo, descripcion = @descripcion,
-	peso = @peso, empresa = @empresa
-	WHERE codigo = @codigo
-
-	IF (@@ERROR <> 0)
-	BEGIN
-		RETURN -3
-	END
+	SELECT * 
+	FROM Paquete
+	WHERE codigo not in (SELECT codigoPaquete FROM PaquetesSolicitud)
 END
 
 GO
 
-CREATE PROCEDURE BajaPaquete -- este tampoco va
-@codigo INT
+CREATE PROCEDURE ListarPaquetesSolicitud
+@solicitud int
 AS
 BEGIN
-	IF EXISTS (SELECT * FROM Paquete WHERE codigo = @codigo)	
-	BEGIN
-		RETURN -1
-	END
-
-	DELETE FROM Paquete 
-	WHERE codigo = @codigo
-
-	IF (@@ERROR <> 0)
-	BEGIN
-		RETURN -2
-	END
-END
-
-GO
-
-CREATE PROCEDURE ListarPaquetes -- asi no sirve, es necesario listar paquetes sin solicitud y listar paquetes de una solicitud en particular.
-AS
-BEGIN
-	SELECT * FROM Paquete
+	SELECT *
+	FROM Paquete
+	WHERE codigo in (
+		SELECT codigoPaquete 
+		FROM PaquetesSolicitud 
+		WHERE numeroSolicitud = @solicitud)
 END
 
 GO
@@ -649,26 +640,6 @@ END
 
 GO 
 
-CREATE PROCEDURE BajaSolicitud -- tampoco va
-@numero int
-AS
-BEGIN
-	IF NOT EXISTS (SELECT * FROM Solicitud WHERE numero = @numero)	
-	BEGIN
-		RETURN -1
-	END
-
-	DELETE FROM Solicitud
-	WHERE numero = @numero
-
-	IF (@@ERROR <> 0)
-	BEGIN
-		RETURN -2
-	END
-END
-
-GO
-
 CREATE PROCEDURE ModificarSolicitud -- seria modificarEstadoSolicitud con la logica necesaria.
 @numero INT,
 @fechaEntrega DATETIME, 
@@ -704,11 +675,25 @@ END
 
 GO
 
-CREATE PROCEDURE listadoSolicitudes -- todas no, faltan listadoSolicitudeEnCamino y ListadoSolicitudesEmpresa
+-- todas no, faltan listadoSolicitudeEnCamino y ListadoSolicitudesEmpresa
+
+CREATE PROCEDURE listadoSolicitudesEnCamino
 AS
 BEGIN
 	SELECT *
 	FROM Solicitud
+	WHERE estado = 'en camino'
+END
+
+GO
+
+CREATE PROCEDURE ListadoSolicitudesEmpresa
+AS
+BEGIN
+	SELECT a.*
+	FROM Solicitud a
+	INNER JOIN PaquetesSolicitud b on a.numero = b.numeroSolicitud
+	INNER JOIN Paquete c on b.codigoPaquete = c.codigo
 END
 
 GO
