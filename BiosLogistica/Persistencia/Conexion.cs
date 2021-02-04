@@ -8,12 +8,12 @@ namespace Persistencia
 {
     internal class Conexion
     {
-        private static string autenticacion = "data source = .\\SQLEXPRESS; initial catalog = ProyectoSegundo2020;";
-
-        public static string ObtenerCadenaConexion(string us, string pw)
+        internal static string Cnn(EntidadesCompartidas.Usuario u = null)
         {
-            return autenticacion + String.Format(" User Id={0}; Password={1};", us, pw);
+            if (u == null)
+                return "Data Source =.; Initial Catalog = EjemploExtraBD; Integrated Security = true";
+            else
+                return "Data Source =.; Initial Catalog = EjemploExtraBD; User=" + u.Logueo + "; Password='" + u.Contrasena + "'";
         }
-        
     }
 }

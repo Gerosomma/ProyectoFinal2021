@@ -44,6 +44,10 @@ namespace EntidadesCompartidas
             set { _empresaOrigen = value; }
         }
 
+        public Paquete()
+        {
+        }
+
         public Paquete(int codigo, string tipo, string descripcion, double peso, Empresa empresaOrigen)
         {
             Codigo = codigo;

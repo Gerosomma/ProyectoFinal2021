@@ -29,6 +29,9 @@ namespace EntidadesCompartidas
             set { _email = value; }
         }
 
+        public Empresa()
+        { }
+
         public Empresa(string logueo, string contrasenia, string nombreCompleto, 
             string telefono, string direccion, string email)
             :base(logueo, contrasenia, nombreCompleto)

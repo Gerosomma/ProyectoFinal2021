@@ -31,7 +31,7 @@ namespace Persistencia
             
             try
             {
-                conexion = new SqlConnection(Conexion.ObtenerCadenaConexion(usLog.Logueo, usLog.Contrasena));
+                conexion = new SqlConnection(Conexion.Cnn(usLog));
 
                 SqlCommand cmdAltaPaquete = new SqlCommand("AltaPaquete", conexion);
                 cmdAltaPaquete.CommandType = CommandType.StoredProcedure;
@@ -71,7 +71,6 @@ namespace Persistencia
             }
         }
         
-
         public Paquete BuscarPaquete(int codigo, Usuario usLog)
         {
             SqlConnection conexion = null;
@@ -81,7 +80,7 @@ namespace Persistencia
 
             try
             {
-                conexion = new SqlConnection(Conexion.ObtenerCadenaConexion(usLog.Logueo, usLog.Contrasena));
+                conexion = new SqlConnection(Conexion.Cnn(usLog));
                 SqlCommand cmdBuscarPaquete = new SqlCommand("BuscarPaquete", conexion);
                 cmdBuscarPaquete.CommandType = CommandType.StoredProcedure;
 

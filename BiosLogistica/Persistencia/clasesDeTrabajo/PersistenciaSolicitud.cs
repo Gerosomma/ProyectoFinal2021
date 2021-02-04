@@ -33,7 +33,7 @@ namespace Persistencia
 
             try
             {
-                conexion = new SqlConnection(Conexion.ObtenerCadenaConexion(usLog.Logueo, usLog.Contrasena));
+                conexion = new SqlConnection(Conexion.Cnn(usLog));
 
                 SqlCommand cmdAltaSolicitud = new SqlCommand("AltaSolicitud", conexion);
                 cmdAltaSolicitud.CommandType = CommandType.StoredProcedure;
@@ -98,7 +98,7 @@ namespace Persistencia
 
             try
             {
-                conexion = new SqlConnection(Conexion.ObtenerCadenaConexion(usLog.Logueo, usLog.Contrasena));
+                conexion = new SqlConnection(Conexion.Cnn(usLog));
 
                 SqlCommand cmdBajaSolicitud = new SqlCommand("BajaSolicitud", conexion);
                 cmdBajaSolicitud.CommandType = CommandType.StoredProcedure;
@@ -148,17 +148,12 @@ namespace Persistencia
 
             try
             {
-                conexion = new SqlConnection(Conexion.ObtenerCadenaConexion(usLog.Logueo, usLog.Contrasena));
+                conexion = new SqlConnection(Conexion.Cnn(usLog));
 
-                SqlCommand cmdModificarSolicitud = new SqlCommand("ModificarSolicitud", conexion);
+                SqlCommand cmdModificarSolicitud = new SqlCommand("ModificarEstadoSolicitud", conexion);
                 cmdModificarSolicitud.CommandType = CommandType.StoredProcedure;
 
                 cmdModificarSolicitud.Parameters.AddWithValue("@numero", solicitud.Numero);
-                cmdModificarSolicitud.Parameters.AddWithValue("@fechaEntrega", solicitud.FechaEntrega);
-                cmdModificarSolicitud.Parameters.AddWithValue("@nombreDestinatario", solicitud.NombreDestinatario);
-                cmdModificarSolicitud.Parameters.AddWithValue("@direccionDestinatario", solicitud.DireccionDestinatario);
-                cmdModificarSolicitud.Parameters.AddWithValue("@estado", solicitud.Estado);
-                cmdModificarSolicitud.Parameters.AddWithValue("@empleado", solicitud.Empleado.Logueo);
 
                 SqlParameter valorRetorno = new SqlParameter("@valorRetorno", SqlDbType.Int);
                 valorRetorno.Direction = ParameterDirection.ReturnValue;
@@ -315,10 +310,11 @@ namespace Persistencia
 
             try
             {
-                conexion = new SqlConnection(Conexion.ObtenerCadenaConexion(usLog.Logueo, usLog.Contrasena));
+                conexion = new SqlConnection(Conexion.Cnn(usLog));
                 SqlCommand cmdListadoSolicitues = new SqlCommand("listadoSolicitudes", conexion);
                 cmdListadoSolicitues.CommandType = CommandType.StoredProcedure;
 
+                //este data table no va, el problema qe tuve en las conexiones se resuelve cambiando la conexion para las busquedas internas.
                 conexion.Open();
                 DataTable dtSolicitures = new DataTable("Solicitud");
                 dtSolicitures.Load(cmdListadoSolicitues.ExecuteReader());

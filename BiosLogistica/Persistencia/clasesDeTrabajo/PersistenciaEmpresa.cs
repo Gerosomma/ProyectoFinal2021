@@ -73,7 +73,7 @@ namespace Persistencia
 
             try
             {
-                conexion = new SqlConnection(Conexion.ObtenerCadenaConexion(usLog.Logueo, usLog.Contrasena));
+                conexion = new SqlConnection(Conexion.Cnn(usLog));
                 SqlCommand cmdBuscarEpresa = new SqlCommand("BuscarEmpresa", conexion);
                 cmdBuscarEpresa.CommandType = CommandType.StoredProcedure;
 
@@ -140,7 +140,7 @@ namespace Persistencia
 
             try
             {
-                conexion = new SqlConnection(Conexion.ObtenerCadenaConexion(usLog.Logueo, usLog.Contrasena));
+                conexion = new SqlConnection(Conexion.Cnn(usLog));
 
                 SqlCommand cmdAltaEmpresa = new SqlCommand("AltaEmpresa", conexion);
                 cmdAltaEmpresa.CommandType = CommandType.StoredProcedure;

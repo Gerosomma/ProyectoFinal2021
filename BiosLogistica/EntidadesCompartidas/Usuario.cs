@@ -28,6 +28,9 @@ namespace EntidadesCompartidas
             set { _nombreCompleto = value; }
         }
 
+        public Usuario()
+        { }
+
         public  Usuario(string logueo, string contrasenia, string nombreCompleto)
         {
             Logueo = logueo;

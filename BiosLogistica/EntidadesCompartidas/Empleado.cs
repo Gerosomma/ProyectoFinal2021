@@ -23,6 +23,11 @@ namespace EntidadesCompartidas
             set { _horaFin = value; }
         }
 
+        public Empleado()
+        {
+
+        }
+
         public Empleado(string logueo, string contrasenia, string nombreCompleto,
             string horaInicio, string horaFin)
             :base(logueo, contrasenia, nombreCompleto)

@@ -33,7 +33,7 @@ namespace Persistencia
 
             try
             {
-                conexion = new SqlConnection(Conexion.ObtenerCadenaConexion(logueo, contrasenia));
+                conexion = new SqlConnection(Conexion.Cnn(null));
                 SqlCommand cmdBuscarEmpresa = new SqlCommand("BuscarEmpleado", conexion);
                 cmdBuscarEmpresa.CommandType = CommandType.StoredProcedure;
 
@@ -73,7 +73,7 @@ namespace Persistencia
 
             try
             {
-                conexion = new SqlConnection(Conexion.ObtenerCadenaConexion(usLog.Logueo, usLog.Contrasena));
+                conexion = new SqlConnection(Conexion.Cnn(usLog));
                 SqlCommand cmdBuscarEmpresa = new SqlCommand("BuscarEmpleado", conexion);
                 cmdBuscarEmpresa.CommandType = CommandType.StoredProcedure;
 
@@ -111,7 +111,7 @@ namespace Persistencia
 
             try
             {
-                conexion = new SqlConnection(Conexion.ObtenerCadenaConexion(usLog.Logueo, usLog.Contrasena));
+                conexion = new SqlConnection(Conexion.Cnn(usLog));
                 //conexion = new SqlConnection(Conexion.CadenaConexion);
 
                 SqlCommand cmdAltaEmpleado = new SqlCommand("AltaEmpleado", conexion);
@@ -147,13 +147,13 @@ namespace Persistencia
                 }
             }
         }
-        public void ModificarEmpleado(Empleado empleado, Usuario empLog)
+        public void ModificarEmpleado(Empleado empleado, Usuario usLog)
         {
             SqlConnection conexion = null;
 
             try
             {
-                conexion = new SqlConnection(Conexion.ObtenerCadenaConexion(empLog.Logueo, empLog.Contrasena));
+                conexion = new SqlConnection(Conexion.Cnn(usLog));
 
                 SqlCommand cmdModificarEmpleado = new SqlCommand("ModificarEmpleado", conexion);
                 cmdModificarEmpleado.CommandType = CommandType.StoredProcedure;
@@ -197,13 +197,13 @@ namespace Persistencia
             }
         }
 
-        public void BajaEmpleado(Empleado empleado, Usuario empLog)
+        public void BajaEmpleado(Empleado empleado, Usuario usLog)
         {
             SqlConnection conexion = null;
 
             try
             {
-                conexion = new SqlConnection(Conexion.ObtenerCadenaConexion(empLog.Logueo, empLog.Contrasena));
+                conexion = new SqlConnection(Conexion.Cnn(usLog));
 
                 SqlCommand cmdBajaEmpleado = new SqlCommand("BajaEmpleado", conexion);
                 cmdBajaEmpleado.CommandType = CommandType.StoredProcedure;

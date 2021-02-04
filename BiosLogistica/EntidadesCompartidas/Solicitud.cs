@@ -58,6 +58,10 @@ namespace EntidadesCompartidas
             set { _paquetesSolicitud = value; }
         }
 
+        public Solicitud()
+        {
+        }
+
         public Solicitud(int numero, DateTime fechaEntrega, string nombreDestinatario, 
             string direccionDestinatario, string estado, Empleado empleado, List<Paquete> paquetesSolicitud)
         {
