@@ -60,84 +60,27 @@ CREATE TABLE PaquetesSolicitud (
 
 GO
 
---------------------------------------------SP Base Datos------------------------------------------
--- este sp no va, el create va dentro de altaEmpleado y Empresa directamente
--- empresa solo tiene que tener usuario de logueo y no rol.
-CREATE PROCEDURE NuevoUsuarioSQL
-@nombre VARCHAR(50),
-@pass VARCHAR(6),
-@rol VARCHAR(30)
-AS
-BEGIN
-	DECLARE @VarSentencia VARCHAR(200)
-	SET @VarSentencia = 'CREATE LOGIN [' + @nombre + '] WITH PASSWORD = ' + QUOTENAME(@pass, '''')
-	EXEC (@VarSentencia)
-
-	IF (@@ERROR <> 0)
-		RETURN -1
-
-	EXEC sp_addsrvrolemember @loginame=@nombre, @rolename=@rol
-	
-	IF (@@ERROR = 0)
-		RETURN 1
-	ELSE
-		RETURN -2
-END
-
-GO
--- el create user debe estar dentro del sp de altaEmpleado y altaEmpresa
-CREATE PROCEDURE NuevoUsuarioBD
-@nombre VARCHAR(50),
-@rol VARCHAR(30),
-@logueo VARCHAR(50)
-AS
-BEGIN
-	DECLARE @VarSentencia VARCHAR(200)
-	SET @VarSentencia = 'CREATE USER [' + @nombre + '] FROM LOGIN [' + @logueo + ']'
-	EXEC (@VarSentencia)
-
-	IF (@@ERROR <> 0)
-		RETURN -1
-
-	EXEC sp_addrolemember @rolename=@rol, @membername=@nombre
-
-	IF (@@ERROR = 0)
-		RETURN 1
-	ELSE
-		RETURN -2
-END
+CREATE ROLE db_rol_empleado
+CREATE ROLE db_rol_empresa
+CREATE ROLE db_rol_publico
 
 GO
 
-CREATE PROCEDURE EliminarUsuarioSQL
-@nombre VARCHAR(50)
-AS
-BEGIN
-   DECLARE @VarSentencia VARCHAR(200)
-   SET @VarSentencia = 'DROP LOGIN [' + @nombre + ']'
-   EXEC (@VarSentencia)
-
-   IF (@@ERROR <> 0)
-       RETURN -1
-END
-
+USE master
 GO
 
-CREATE PROCEDURE EliminarUsuarioBD 
-@nombre VARCHAR(50)
-AS
-BEGIN
-   DECLARE @VarSentencia VARCHAR(200)
-   SET @VarSentencia = 'DROP USER [' + @nombre + ']'
-   EXEC (@VarSentencia)
-
-   IF (@@ERROR <> 0)
-       RETURN -1
-END   
-
--- los eliminar lo mismo
-
+CREATE LOGIN [IIS APPPOOL\DefaultAppPool] FROM WINDOWS WITH DEFAULT_DATABASE = master
 GO
+
+USE ProyectoSegundo2020
+GO
+
+CREATE USER [IIS APPPOOL\DefaultAppPool] FOR LOGIN [IIS APPPOOL\DefaultAppPool]
+GO
+
+EXEC sp_addrolemember [db_rol_publico], [IIS APPPOOL\DefaultAppPool]
+
+
 
 --------------------------------------------SP Empleado------------------------------------------
 CREATE PROCEDURE BuscarEmpleado
@@ -197,8 +140,37 @@ BEGIN
 			ROLLBACK TRANSACTION;
 			RETURN -3
 		END	
-		-- falta la creacion de usuario y roles en base.
+		
+		DECLARE @VarSentencia VARCHAR(200)
+		SET @VarSentencia = 'CREATE LOGIN [' + @logueo + '] WITH PASSWORD = ' + QUOTENAME(@contrasena, '''')
+		EXEC (@VarSentencia)
+		IF (@@ERROR <> 0)
+		BEGIN
+			ROLLBACK TRANSACTION;
+			RETURN -6
+		END
+	
+		SET @VarSentencia = 'Create User [' + @logueo + '] From Login [' + convert(varchar(MAX),@logueo) + ']'
+		EXEC (@VarSentencia)
+		IF (@@ERROR <> 0)
+		BEGIN
+			ROLLBACK TRANSACTION;
+			RETURN -7
+		END
+
 		COMMIT TRANSACTION;
+
+		EXEC sp_addsrvrolemember @loginame=@logueo, @rolename='securityadmin'	
+		IF (@@ERROR <> 0)
+			RETURN -8
+
+		EXEC sp_addrolemember @rolename='db_securityadmin', @membername=@logueo
+		IF (@@ERROR <> 0)
+			RETURN -9
+		
+		EXEC sp_addrolemember @rolename='db_rol_empleado' , @membername=@logueo
+		IF (@@ERROR <> 0)
+			RETURN -9
 	END
 	ELSE
 	BEGIN
@@ -215,44 +187,46 @@ BEGIN
 			ROLLBACK TRANSACTION;
 			RETURN -5
 		END
-		COMMIT TRANSACTION;
 
-		EXEC NuevoUsuarioSQL @logueo, @contrasena, 'processadmin'; -- securityadmin
+		DECLARE @VarSentencia2 VARCHAR(200)
+		SET @VarSentencia2 = 'CREATE LOGIN [' + @logueo + '] WITH PASSWORD = ' + QUOTENAME(@contrasena, '''')
+		EXEC (@VarSentencia2)
 		IF (@@ERROR <> 0)
 		BEGIN
+			ROLLBACK TRANSACTION;
 			RETURN -6
 		END
-
-		EXEC NuevoUsuarioBD @logueo, 'db_accessadmin', @logueo; -- aca deberiamos crear un rol con los sp que puede ejecutar un empleado y que permisos necesita para poder administrar usuarios de base de datos
+	
+		SET @VarSentencia2 = 'Create User [' + @logueo + '] From Login [' + convert(varchar(MAX),@logueo) + ']'
+		EXEC (@VarSentencia2)
 		IF (@@ERROR <> 0)
 		BEGIN
+			ROLLBACK TRANSACTION;
 			RETURN -7
 		END
-		-- todos los grant select, Insert, Update, delete no van.
-		DECLARE @VarSentencia VARCHAR(200)
-		SET @VarSentencia = 'GRANT select, Insert, Update, delete ON Usuario TO ' + @logueo
-		EXEC (@VarSentencia)
-		SET @VarSentencia = 'GRANT select, Insert, Update, delete ON Empleado TO ' + @logueo
-		EXEC (@VarSentencia)
-		SET @VarSentencia = 'GRANT select, Insert, Update, delete ON Empresa TO ' + @logueo
-		EXEC (@VarSentencia)
-		SET @VarSentencia = 'GRANT select, Insert, Update, delete ON Paquete TO ' + @logueo
-		EXEC (@VarSentencia)
-		SET @VarSentencia = 'GRANT select, Insert, Update, delete ON Solicitud TO ' + @logueo
-		EXEC (@VarSentencia)
-		-- todos los grant necesarios van en un rol, y debemos ver cuales sp puede ejecutar el empleados
-		-- puedo crear un rol con todos los permisos y revokar los que no sean necesarios.
-		-- tambien se debe crear un tercer rol para el IIS publico, que se seteara cuando se creae dicho usuario
-		-- pasos 1 crear roles go 2 crear sp 3 asignar permisos a roles
-		SET @VarSentencia = 'GRANT EXECUTE TO ' + @logueo
-		EXEC (@VarSentencia)
+
+		COMMIT TRANSACTION;
+
+		EXEC sp_addsrvrolemember @loginame=@logueo, @rolename='securityadmin'	
 		IF (@@ERROR <> 0)
-		BEGIN
 			RETURN -8
-		END
+
+		EXEC sp_addrolemember @rolename='db_securityadmin', @membername=@logueo
+		IF (@@ERROR <> 0)
+			RETURN -9
+		
+		EXEC sp_addrolemember @rolename='db_rol_empleado' , @membername=@logueo
+		IF (@@ERROR <> 0)
+			RETURN -9
+
 	END
 END
+-- aca deberiamos crear un rol con los sp que puede ejecutar un empleado y que permisos necesita para poder administrar usuarios de base de datos
 
+-- todos los grant necesarios van en un rol, y debemos ver cuales sp puede ejecutar el empleados
+-- puedo crear un rol con todos los permisos y revokar los que no sean necesarios.
+-- tambien se debe crear un tercer rol para el IIS publico, que se seteara cuando se creae dicho usuario
+-- pasos 1 crear roles go 2 crear sp 3 asignar permisos a roles
 
 
 
@@ -707,5 +681,29 @@ BEGIN
 	WHERE numeroSolicitud = @numeroSolicitud
 END
 
+
+GO
+
+
+GRANT EXECUTE ON dbo.AltaEmpleado TO [db_rol_empleado]
+GRANT EXECUTE ON dbo.AltaEmpresa TO [db_rol_empleado]
+GRANT EXECUTE ON dbo.AltaPaquete TO [db_rol_empleado]
+GRANT EXECUTE ON dbo.AltaPaqueteSolicitud TO [db_rol_empleado]
+GRANT EXECUTE ON dbo.AltaSolicitud TO [db_rol_empleado]
+GRANT EXECUTE ON dbo.BajaEmpleado TO [db_rol_empleado]
+GRANT EXECUTE ON dbo.BajaEmpresa TO [db_rol_empleado]
+GRANT EXECUTE ON dbo.BajaPaquete TO [db_rol_empleado]
+GRANT EXECUTE ON dbo.BajaSolicitud TO [db_rol_empleado]
+GRANT EXECUTE ON dbo.BuscarEmpleado TO [db_rol_empleado]
+GRANT EXECUTE ON dbo.BuscarEmpresa TO [db_rol_empleado]
+GRANT EXECUTE ON dbo.BuscarPaquete TO [db_rol_empleado]
+GRANT EXECUTE ON dbo.listadoPaquetesSolicitud TO [db_rol_empleado]
+GRANT EXECUTE ON dbo.listadoSolicitudes TO [db_rol_empleado]
+GRANT EXECUTE ON dbo.listarEmpresas TO [db_rol_empleado]
+GRANT EXECUTE ON dbo.ListarPaquetes TO [db_rol_empleado]
+GRANT EXECUTE ON dbo.ModificarEmpleado TO [db_rol_empleado]
+GRANT EXECUTE ON dbo.ModificarEmpresa TO [db_rol_empleado]
+GRANT EXECUTE ON dbo.ModificarPaquete TO [db_rol_empleado]
+GRANT EXECUTE ON dbo.ModificarSolicitud TO [db_rol_empleado]
 
 
