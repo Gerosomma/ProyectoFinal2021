@@ -53,9 +53,11 @@ namespace Persistencia
                 switch ((int)valorRetorno.Value)
                 {
                     case -1:
-                        throw new Exception("error -1");
+                        throw new Exception("La empresa origen no esta activa o no existe.");
                     case -2:
-                        throw new Exception("error -2");
+                        throw new Exception("Se encontro otro paquete con el mismo codigo de paquete.");
+                    case -3:
+                        throw new Exception("Ocurrio un error al insertar paquete.");
                 }
             }
             catch (Exception ex)
@@ -90,7 +92,7 @@ namespace Persistencia
                 drPaquete = cmdBuscarPaquete.ExecuteReader();
                 if (drPaquete.Read())
                 {
-                    empresa = PersistenciaEmpresa.getInstancia().interBuscarEmpresa(conexion, (string)drPaquete["empresa"]);
+                    empresa = PersistenciaEmpresa.getInstancia().interBuscarEmpresa((string)drPaquete["empresa"]);
                     paquete = new Paquete((int)drPaquete["codigo"], (string)drPaquete["tipo"],
                         (string)drPaquete["descripcion"], (double)drPaquete["peso"], empresa);
                 }
@@ -113,43 +115,7 @@ namespace Persistencia
                 }
             }
         }
-
-        internal Paquete interBuscarPaquete(int codigo, SqlConnection conexion)
-        {
-            Paquete paquete = null;
-            Empresa empresa = null;
-
-            try
-            {
-                SqlCommand cmdBuscarPaquete = new SqlCommand("BuscarPaquete", conexion);
-                cmdBuscarPaquete.CommandType = CommandType.StoredProcedure;
-
-                cmdBuscarPaquete.Parameters.AddWithValue("@codigo", codigo);
-                
-                DataTable dtPaquete = new DataTable("Paquete");
-                dtPaquete.Load(cmdBuscarPaquete.ExecuteReader());
-
-                if (dtPaquete.Rows.Count > 0)
-                {
-                    empresa = PersistenciaEmpresa.getInstancia().interBuscarEmpresa(conexion, dtPaquete.Rows[0]["empresa"].ToString());
-                    paquete = new Paquete(Convert.ToInt32(dtPaquete.Rows[0]["codigo"]), dtPaquete.Rows[0]["tipo"].ToString(),
-                        dtPaquete.Rows[0]["descripcion"].ToString(), Convert.ToDouble(dtPaquete.Rows[0]["peso"]), empresa);
-                }
-                /*
-                if (drPaquete.Read())
-                {
-                    empresa = PersistenciaEmpresa.getInstancia().interBuscarEmpresa(conexion, (string)drPaquete["empresa"]);
-                    paquete = new Paquete((int)drPaquete["codigo"], (string)drPaquete["tipo"],
-                        (string)drPaquete["descripcion"], (double)drPaquete["peso"], empresa);
-                }*/
-
-                return paquete;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
+        
         
         internal static void AltaPaqueteSolicitud(SqlConnection conexion, Solicitud solicitud, Paquete paquete, Usuario usLog)
         {
@@ -173,16 +139,12 @@ namespace Persistencia
                 {
                     case -1:
                         throw new Exception("error -1");
-                        break;
                     case -2:
                         throw new Exception("error -2");
-                        break;
                     case -3:
                         throw new Exception("error -3");
-                        break;
                     case -4:
                         throw new Exception("error -4");
-                        break;
                 }
             }
             catch (Exception ex)
@@ -198,23 +160,30 @@ namespace Persistencia
             }
         }
 
-        public List<Paquete> paquetesSolicitud(SqlConnection conexion, int solicitud, Usuario usLog)
+        public List<Paquete> paquetesSolicitud(int solicitud)
         {
             Paquete paquete = null;
+            Empresa empresa = null; 
             List<Paquete> listaPaquetes = new List<Paquete>();
+            SqlConnection conexion = null;
+            SqlDataReader drPaquete = null;
 
             try
             {
-                SqlCommand cmdListadoSolicitues = new SqlCommand("listadoPaquetesSolicitud", conexion);
+                conexion = new SqlConnection(Conexion.Cnn(null));
+                SqlCommand cmdListadoSolicitues = new SqlCommand("ListarPaquetesSolicitud", conexion);
                 cmdListadoSolicitues.CommandType = CommandType.StoredProcedure;
                 cmdListadoSolicitues.Parameters.AddWithValue("@numeroSolicitud", solicitud);
-                
-                DataTable dtPaquetesSolicitud = new DataTable("PaquetesSolicitud");
-                dtPaquetesSolicitud.Load(cmdListadoSolicitues.ExecuteReader());
 
-                foreach (DataRow r in dtPaquetesSolicitud.Rows)
+                /*DataTable dtPaquetesSolicitud = new DataTable("PaquetesSolicitud");
+                dtPaquetesSolicitud.Load(cmdListadoSolicitues.ExecuteReader());*/
+
+                conexion.Open();
+                drPaquete = cmdListadoSolicitues.ExecuteReader();
+                while (drPaquete.Read())
                 {
-                    paquete = interBuscarPaquete(Convert.ToInt32(r["codigoPaquete"]), conexion);
+                    empresa = PersistenciaEmpresa.getInstancia().interBuscarEmpresa((string)drPaquete["empresa"]);
+                    paquete = new Paquete((int)drPaquete["codigo"], (string)drPaquete["tipo"], (string)drPaquete["descripcion"], (double)drPaquete["peso"], empresa);
                     listaPaquetes.Add(paquete);
                 }
 

@@ -174,7 +174,7 @@ BEGIN
 		IF (@@ERROR <> 0)
 		BEGIN
 			ROLLBACK TRANSACTION;
-			RETURN -6
+			RETURN -4
 		END
 	
 		SET @VarSentencia = 'Create User [' + @logueo + '] From Login [' + convert(varchar(MAX),@logueo) + ']'
@@ -182,22 +182,22 @@ BEGIN
 		IF (@@ERROR <> 0)
 		BEGIN
 			ROLLBACK TRANSACTION;
-			RETURN -7
+			RETURN -5 
 		END
 
 		COMMIT TRANSACTION;
 
 		EXEC sp_addsrvrolemember @loginame=@logueo, @rolename='securityadmin'	
 		IF (@@ERROR <> 0)
-			RETURN -8
+			RETURN -6
 
 		EXEC sp_addrolemember @rolename='db_securityadmin', @membername=@logueo
 		IF (@@ERROR <> 0)
-			RETURN -9
+			RETURN -7
 		
 		EXEC sp_addrolemember @rolename='db_rol_empleado' , @membername=@logueo
 		IF (@@ERROR <> 0)
-			RETURN -9
+			RETURN -8
 	END
 	ELSE
 	BEGIN
@@ -206,13 +206,13 @@ BEGIN
 		IF (@@ERROR <> 0)
 		BEGIN
 			ROLLBACK TRANSACTION;
-			RETURN -4
+			RETURN -2
 		END
 		INSERT INTO Empleado VALUES (@logueo, @horaInicio, @horaFin)
 		IF (@@ERROR <> 0)
 		BEGIN
 			ROLLBACK TRANSACTION;
-			RETURN -5
+			RETURN -3
 		END
 
 		DECLARE @VarSentencia2 VARCHAR(200)
@@ -221,7 +221,7 @@ BEGIN
 		IF (@@ERROR <> 0)
 		BEGIN
 			ROLLBACK TRANSACTION;
-			RETURN -6
+			RETURN -4
 		END
 	
 		SET @VarSentencia2 = 'Create User [' + @logueo + '] From Login [' + convert(varchar(MAX),@logueo) + ']'
@@ -229,22 +229,22 @@ BEGIN
 		IF (@@ERROR <> 0)
 		BEGIN
 			ROLLBACK TRANSACTION;
-			RETURN -7
+			RETURN -5
 		END
 
 		COMMIT TRANSACTION;
 
 		EXEC sp_addsrvrolemember @loginame=@logueo, @rolename='securityadmin'	
 		IF (@@ERROR <> 0)
-			RETURN -8
+			RETURN -6
 
 		EXEC sp_addrolemember @rolename='db_securityadmin', @membername=@logueo
 		IF (@@ERROR <> 0)
-			RETURN -9
+			RETURN -7
 		
 		EXEC sp_addrolemember @rolename='db_rol_empleado' , @membername=@logueo
 		IF (@@ERROR <> 0)
-			RETURN -9
+			RETURN -8
 
 	END
 END
@@ -356,13 +356,13 @@ BEGIN
 			IF (@@ERROR <> 0)
 			BEGIN
 				ROLLBACK TRANSACTION;
-				RETURN -4
+				RETURN -2
 			END
 			DELETE FROM Usuario WHERE logueo = @logueo
 			IF (@@ERROR <> 0)
 			BEGIN
 				ROLLBACK TRANSACTION;
-				RETURN -5
+				RETURN -3
 			END
 			-- borrar usuarios sql y BD
 			DECLARE @VarSentencia2 VARCHAR(200)
@@ -471,7 +471,7 @@ BEGIN
 			IF (@@ERROR <> 0)
 			BEGIN
 				ROLLBACK TRANSACTION;
-				RETURN -6
+				RETURN -4
 			END
 	
 			SET @VarSentencia = 'Create User [' + @logueo + '] From Login [' + convert(varchar(MAX),@logueo) + ']'
@@ -479,7 +479,7 @@ BEGIN
 			IF (@@ERROR <> 0)
 			BEGIN
 				ROLLBACK TRANSACTION;
-				RETURN -7
+				RETURN -5
 			END
 
 		COMMIT TRANSACTION;
@@ -487,7 +487,7 @@ BEGIN
 		EXEC sp_addrolemember @rolename='db_rol_empresa' , @membername=@logueo
 		IF (@@ERROR <> 0)
 		BEGIN
-			RETURN -9
+			RETURN -6
 		END
 	END
 	ELSE
@@ -497,13 +497,13 @@ BEGIN
 			IF (@@ERROR <> 0)
 			BEGIN
 				ROLLBACK TRANSACTION;
-				RETURN -4
+				RETURN -2
 			END
 			INSERT INTO Empresa VALUES (@logueo, @telefono, @direccion, @email)
 			IF (@@ERROR <> 0)
 			BEGIN
 				ROLLBACK TRANSACTION;
-				RETURN -5
+				RETURN -3
 			END
 
 			DECLARE @VarSentencia2 VARCHAR(200)
@@ -512,7 +512,7 @@ BEGIN
 			IF (@@ERROR <> 0)
 			BEGIN
 				ROLLBACK TRANSACTION;
-				RETURN -6
+				RETURN -4
 			END
 	
 			SET @VarSentencia2 = 'Create User [' + @logueo + '] From Login [' + convert(varchar(MAX),@logueo) + ']'
@@ -520,7 +520,7 @@ BEGIN
 			IF (@@ERROR <> 0)
 			BEGIN
 				ROLLBACK TRANSACTION;
-				RETURN -7
+				RETURN -5
 			END
 		
 		COMMIT TRANSACTION;
@@ -528,7 +528,7 @@ BEGIN
 		EXEC sp_addrolemember @rolename='db_rol_empresa' , @membername=@logueo
 		IF (@@ERROR <> 0)
 		BEGIN
-			RETURN -9
+			RETURN -6
 		END
 	END
 END
@@ -614,7 +614,7 @@ BEGIN
 			IF (@@ERROR <> 0)
 			BEGIN
 			   ROLLBACK TRANSACTION;
-			   RETURN -3
+			   RETURN -4
 			END
     
 			SET @VarSentencia = 'DROP LOGIN [' + convert(varchar(MAX),@logueo) + ']'
@@ -622,7 +622,7 @@ BEGIN
 			IF (@@ERROR <> 0)
 			BEGIN
 			   ROLLBACK TRANSACTION;
-			   RETURN -4
+			   RETURN -5
 			END
 
 		COMMIT TRANSACTION;
@@ -634,13 +634,13 @@ BEGIN
 			IF (@@ERROR <> 0)
 			BEGIN
 				ROLLBACK TRANSACTION;
-				RETURN -5
+				RETURN -3
 			END
 			DELETE FROM Usuario WHERE logueo = @logueo
 			IF (@@ERROR <> 0)
 			BEGIN
 				ROLLBACK TRANSACTION;
-				RETURN -6
+				RETURN -2
 			END
 
 			DECLARE @VarSentencia2 VARCHAR(200)
@@ -649,7 +649,7 @@ BEGIN
 			IF (@@ERROR <> 0)
 			BEGIN
 			   ROLLBACK TRANSACTION;
-			   RETURN -7
+			   RETURN -4
 			END
     
 			SET @VarSentencia2 = 'DROP LOGIN [' + convert(varchar(MAX),@logueo) + ']'
@@ -657,7 +657,7 @@ BEGIN
 			IF (@@ERROR <> 0)
 			BEGIN
 			   ROLLBACK TRANSACTION;
-			   RETURN -8
+			   RETURN -5
 			END
 		COMMIT TRANSACTION;
 	END
@@ -695,7 +695,10 @@ CREATE PROCEDURE AltaPaquete
 @empresa VARCHAR(50)
 AS
 BEGIN
-	IF NOT EXISTS (SELECT * FROM Empresa WHERE logueo = @empresa)	-- joiniar tiene que estar  activa la empresa
+	IF NOT EXISTS (SELECT * 
+					FROM Usuario a 
+					inner join Empresa b on a.logueo = b.logueo
+					WHERE a.logueo = @empresa AND a.activo = 1)	-- joiniar tiene que estar  activa la empresa
 	BEGIN
 		RETURN -1
 	END
@@ -715,7 +718,7 @@ GO
 -- es necesario listar paquetes sin solicitud 
 -- y listar paquetes de una solicitud en particular.
 
-CREATE PROCEDURE ListarPaquetesLibres
+CREATE PROCEDURE ListarPaquetesSinSolicitud
 AS
 BEGIN
 	SELECT * 

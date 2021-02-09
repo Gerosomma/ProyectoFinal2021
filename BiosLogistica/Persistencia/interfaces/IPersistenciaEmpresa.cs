@@ -12,7 +12,6 @@ namespace Persistencia.interfaces
     {
         Empresa LoguearEmpresa(string logueo, string contrasenia);
         Empresa BuscarEmpresa(string logueo, Usuario usLog);
-        Empresa interBuscarEmpresa(SqlConnection conexion, string logueo);
         void AltaEmpresa(Empresa empresa, Usuario usLog);
         void ModificarEmpresa(Empresa empresa, Usuario usLog);
         void BajaEmpresa(Empresa empresa, Usuario usLog);

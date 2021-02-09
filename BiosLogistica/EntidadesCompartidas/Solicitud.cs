@@ -19,13 +19,23 @@ namespace EntidadesCompartidas
         public int Numero
         {
             get { return _numero; }
-            set { _numero = value; }
+            set {
+                if (value > 0)
+                    _numero = value;
+                else
+                    throw new Exception("Numero solicitud inválido");
+            }
         }
 
         public DateTime FechaEntrega
         {
             get { return _fechaEntrega; }
-            set { _fechaEntrega = value; }
+            set {
+                if (value != null && value > DateTime.Today)
+                    _fechaEntrega = value;
+                else
+                    throw new Exception("Fecha de entrega inválida");
+            }
         }
 
         public string NombreDestinatario

@@ -25,7 +25,7 @@ namespace Persistencia
             return _instancia;
         }
 
-        public Empresa LoguearEmpresa(string logueo, string contrasenia)
+        public Empresa LoguearEmpresa(string logueo, string contrasena)
         {
             SqlConnection conexion = null;
             SqlDataReader drEmpresa = null;
@@ -34,10 +34,11 @@ namespace Persistencia
             try
             {
                 conexion = new SqlConnection(Conexion.Cnn(null));
-                SqlCommand cmdBuscarEpresa = new SqlCommand("LoguearEmpresa", conexion);
+                SqlCommand cmdBuscarEpresa = new SqlCommand("LogueoEmpresa", conexion);
                 cmdBuscarEpresa.CommandType = CommandType.StoredProcedure;
 
                 cmdBuscarEpresa.Parameters.AddWithValue("@logueo", logueo);
+                cmdBuscarEpresa.Parameters.AddWithValue("@contrasena", contrasena);
 
                 conexion.Open();
                 drEmpresa = cmdBuscarEpresa.ExecuteReader();
@@ -105,32 +106,43 @@ namespace Persistencia
             }
         }
 
-        public Empresa interBuscarEmpresa(SqlConnection conexion, string logueo)
+        internal Empresa interBuscarEmpresa(string logueo)
         {
+            SqlConnection conexion = null;
+            SqlDataReader drEmpresa = null;
             Empresa empresa = null;
 
             try
             {
-                SqlCommand cmdBuscarEpresa = new SqlCommand("BuscarEmpresa", conexion);
+                conexion = new SqlConnection(Conexion.Cnn(null));
+                SqlCommand cmdBuscarEpresa = new SqlCommand("interBuscarEmpresa", conexion);
                 cmdBuscarEpresa.CommandType = CommandType.StoredProcedure;
 
                 cmdBuscarEpresa.Parameters.AddWithValue("@logueo", logueo);
-                
-                DataTable dtEmpresa = new DataTable("Empresa");
-                dtEmpresa.Load(cmdBuscarEpresa.ExecuteReader());
 
-                if (dtEmpresa.Rows.Count > 0)
+                conexion.Open();
+                drEmpresa = cmdBuscarEpresa.ExecuteReader();
+
+                if (drEmpresa.Read())
                 {
-                    empresa = new Empresa(dtEmpresa.Rows[0]["logueo"].ToString(), dtEmpresa.Rows[0]["contrasena"].ToString(),
-                        dtEmpresa.Rows[0]["nombreCompleto"].ToString(), dtEmpresa.Rows[0]["telefono"].ToString(),
-                        dtEmpresa.Rows[0]["direccion"].ToString(), dtEmpresa.Rows[0]["email"].ToString());
+                    empresa = new Empresa((string)drEmpresa["logueo"], (string)drEmpresa["contrasena"], (string)drEmpresa["nombreCompleto"], (string)drEmpresa["telefono"], (string)drEmpresa["direccion"], (string)drEmpresa["email"]);
                 }
-                
                 return empresa;
             }
             catch (Exception ex)
             {
                 throw ex;
+            }
+            finally
+            {
+                if (drEmpresa != null)
+                {
+                    drEmpresa.Close();
+                }
+                if (conexion != null)
+                {
+                    conexion.Close();
+                }
             }
         }
 
@@ -161,6 +173,18 @@ namespace Persistencia
 
                 switch ((int)valorRetorno.Value)
                 {
+                    case -1:
+                        throw new Exception("Nombre de usuario existente y activo.");
+                    case -2:
+                        throw new Exception("Ocurrió un error al insertar usuario.");
+                    case -3:
+                        throw new Exception("Ocurrió un error al insertar empresa.");
+                    case -4:
+                        throw new Exception("Ocurrio un error al crear usuario servidor.");
+                    case -5:
+                        throw new Exception("Ocurrió un error al crear usuario base de datos.");
+                    case -6:
+                        throw new Exception("Ocurrió un error al asignar permisos usuario.");
 
                 }
             }
@@ -187,6 +211,9 @@ namespace Persistencia
                 SqlCommand cmdModificarEmpresa = new SqlCommand("ModificarEmpresa", conexion);
                 cmdModificarEmpresa.CommandType = CommandType.StoredProcedure;
 
+                //ACA TENEMOS QUE MODIFICAR LA LOGICA DEL SP, la empresa nunca hara ABM de empresa, solo podra cambiar su contraseña
+                //sinembargo supongo que el empleado si debe poder modificar los demas datos de la empresa.
+                cmdModificarEmpresa.Parameters.AddWithValue("@usLog", usLog.Logueo);
                 cmdModificarEmpresa.Parameters.AddWithValue("@logueo", empresa.Logueo);
                 cmdModificarEmpresa.Parameters.AddWithValue("@contrasena", empresa.Contrasena);
                 cmdModificarEmpresa.Parameters.AddWithValue("@nombreCompleto", empresa.NombreCompleto);
@@ -204,14 +231,15 @@ namespace Persistencia
                 switch ((int)valorRetorno.Value)
                 {
                     case -1:
-                        throw new Exception("El empleado no existe.");
-                        break;
+                        throw new Exception("Debe estar logueado como esta empresa para poder modificarla.");
                     case -2:
-                        throw new Exception("Ocurrió un error al modificar el usuario.");
-                        break;
+                        throw new Exception("No se encontro empresa activa.");
                     case -3:
-                        throw new Exception("Ocurrió un error al modificar el empleado.");
-                        break;
+                        throw new Exception("Ocurrió un error al modificar el usuario.");
+                    case -4:
+                        throw new Exception("Ocurrió un error al modificar el empresa.");
+                    case -5:
+                        throw new Exception("Ocurrió un error al modificar contraseña de usuario.");
                 }
             }
             catch (Exception ex)
@@ -250,14 +278,15 @@ namespace Persistencia
                 switch ((int)valorRetorno.Value)
                 {
                     case -1:
-                        throw new Exception("El empleado no existe.");
-                        break;
+                        throw new Exception("No se encontro empresa activa.");
                     case -2:
-                        throw new Exception("Ocurrió un error al eliminar el empleado.");
-                        break;
-                    case -3:
                         throw new Exception("Ocurrió un error al eliminar el usuario.");
-                        break;
+                    case -3:
+                        throw new Exception("Ocurrió un error al eliminar la empresa.");
+                    case -4:
+                        throw new Exception("Ocurrió un error al eliminar el usuario de base de datos.");
+                    case -5:
+                        throw new Exception("Ocurrió un error al eliminar la usuario del servidor.");
                 }
             }
             catch (Exception ex)
