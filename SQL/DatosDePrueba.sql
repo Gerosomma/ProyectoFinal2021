@@ -29,6 +29,7 @@ select * from Solicitud;
 select * from Paquete;
 select * from PaquetesSolicitud;
 
+
 exec AltaSolicitud '2021-05-08 12:35:29.123', 'geronimo somma', '18 de julio y rio negro', 'en deposito', 'gero';
 
 exec AltaPaquete 1, 'fragil', 'paquete sospechoso', 25, 'jero'; 

@@ -33,8 +33,8 @@ namespace Persistencia
 
             try
             {
-                conexion = new SqlConnection(Conexion.ObtenerCadenaConexion(logueo, contrasenia));
-                SqlCommand cmdBuscarEpresa = new SqlCommand("BuscarEmpresa", conexion);
+                conexion = new SqlConnection(Conexion.Cnn(null));
+                SqlCommand cmdBuscarEpresa = new SqlCommand("LoguearEmpresa", conexion);
                 cmdBuscarEpresa.CommandType = CommandType.StoredProcedure;
 
                 cmdBuscarEpresa.Parameters.AddWithValue("@logueo", logueo);
@@ -176,13 +176,13 @@ namespace Persistencia
                 }
             }
         }
-        public void ModificarEmpresa(Empresa empresa, Usuario empLog)
+        public void ModificarEmpresa(Empresa empresa, Usuario usLog)
         {
             SqlConnection conexion = null;
 
             try
             {
-                conexion = new SqlConnection(Conexion.ObtenerCadenaConexion(empLog.Logueo, empLog.Contrasena));
+                conexion = new SqlConnection(Conexion.Cnn(usLog));
 
                 SqlCommand cmdModificarEmpresa = new SqlCommand("ModificarEmpresa", conexion);
                 cmdModificarEmpresa.CommandType = CommandType.StoredProcedure;
@@ -227,13 +227,13 @@ namespace Persistencia
             }
         }
 
-        public void BajaEmpresa(Empresa empresa, Usuario empLog)
+        public void BajaEmpresa(Empresa empresa, Usuario usLog)
         {
             SqlConnection conexion = null;
 
             try
             {
-                conexion = new SqlConnection(Conexion.ObtenerCadenaConexion(empLog.Logueo, empLog.Contrasena));
+                conexion = new SqlConnection(Conexion.Cnn(usLog));
 
                 SqlCommand cmdBajaEmpresa = new SqlCommand("BajaEmpresa", conexion);
                 cmdBajaEmpresa.CommandType = CommandType.StoredProcedure;
@@ -273,7 +273,7 @@ namespace Persistencia
             }
         }
 
-        public List<Empresa> ListarEmpresas(Usuario usuarioLogueado)
+        public List<Empresa> ListarEmpresas(Usuario usLog)
         {
             SqlConnection conexion = null;
             SqlDataReader drEmpresas = null;
@@ -282,7 +282,7 @@ namespace Persistencia
 
             try
             {
-                conexion = new SqlConnection(Conexion.ObtenerCadenaConexion(usuarioLogueado.Logueo, usuarioLogueado.Contrasena));
+                conexion = new SqlConnection(Conexion.Cnn(usLog));
 
                 SqlCommand cmdListarEmpresas = new SqlCommand("ListarEmpresas", conexion);
                 cmdListarEmpresas.CommandType = CommandType.StoredProcedure;

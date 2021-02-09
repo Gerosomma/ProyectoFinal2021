@@ -34,7 +34,7 @@ namespace Persistencia
             try
             {
                 conexion = new SqlConnection(Conexion.Cnn(null));
-                SqlCommand cmdBuscarEmpresa = new SqlCommand("BuscarEmpleado", conexion);
+                SqlCommand cmdBuscarEmpresa = new SqlCommand("LoguearEmpleado", conexion);
                 cmdBuscarEmpresa.CommandType = CommandType.StoredProcedure;
 
                 cmdBuscarEmpresa.Parameters.AddWithValue("@logueo", logueo);
