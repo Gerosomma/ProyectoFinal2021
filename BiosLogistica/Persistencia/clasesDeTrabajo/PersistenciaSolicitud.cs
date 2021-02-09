@@ -321,7 +321,7 @@ namespace Persistencia
 
                 foreach (DataRow r in dtSolicitures.Rows)
                 {
-                    listaPaquetes = PersistenciaPaquete.getInstancia().paquetesSolicitud(conexion, Convert.ToInt32(r["numero"]), usLog);
+                    listaPaquetes = PersistenciaPaquete.getInstancia().paquetesSolicitud(Convert.ToInt32(r["numero"]));
                     solicitud = new Solicitud(Convert.ToInt32(r["numero"]), Convert.ToDateTime(r["fechaEntrega"]), r["nombreDestinatario"].ToString(),
                         r["direccionDestinatario"].ToString(), r["estado"].ToString(), (Empleado)usLog, listaPaquetes);
                     listaSolicitudes.Add(solicitud);
