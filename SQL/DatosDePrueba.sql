@@ -8,7 +8,7 @@ EXEC AltaEmpleado 'agu', '123456', 'Gero 1', '09:00:00.0000', '18:00:0.0000';
 
 EXEC AltaEmpleado 'pppp', '123456', 'Gero 1', '09:00:00.0000', '18:00:0.0000';
 
-EXEC AltaEmpresa 'jero', '123456', 'Gero 2', '091654252', '18 de julio y rio negro', 'geronimo.somma@gsoft.com.uy';
+EXEC AltaEmpresa 'jero', 'asd12?', 'Gero 2', '091654252', '18 de julio y rio negro', 'geronimo.somma@gsoft.com.uy';
 
 
 exec AltaEmpleado 'luque', 'losque', 'los que queres', '9:00:00', '13:00:00'
@@ -22,7 +22,6 @@ select * from Empresa;
 delete from Empleado
 delete from Usuario
 
-exec NuevoUsuarioBD 'gero', 'db_securityadmin', 'gero'
 
 
 select * from Solicitud;

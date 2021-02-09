@@ -17,31 +17,57 @@ namespace EntidadesCompartidas
         public int Codigo
         {
             get { return _codigo; }
-            set { _codigo = value; }
+            set {
+                if (value >= 1)
+                    _codigo = value;
+                else
+                    throw new Exception("Codigo paquete inválido");
+            }
         }
 
         public string Tipo
         {
             get { return _tipo; }
-            set { _tipo = value; }
+            set {
+                string[] arr = { "fragil", "comun", "bulto"};
+                if (arr.All(value.Contains))
+                    _tipo = value;
+                else
+                    throw new Exception("Tipo inválido");
+            }
         }
 
         public string Descripcion
         {
             get { return _descripcion;  }
-            set { _descripcion = value; }
+            set {
+                if (value.Trim().Length > 0 && value.Trim().Length <= 100)
+                    _descripcion = value;
+                else
+                    throw new Exception("Descripcion inválida");
+            }
         }
 
         public double Peso
         {
             get { return _peso; }
-            set { _peso = value; }
+            set {
+                if (value > 0)
+                    _peso = value;
+                else
+                    throw new Exception("Peso inválido");
+            }
         }
 
         public Empresa EmpresaOrigen
         {
             get { return _empresaOrigen; }
-            set { _empresaOrigen = value; }
+            set {
+                if (value != null)
+                    _empresaOrigen = value;
+                else
+                    throw new Exception("Empleado inválido para paquete");
+            }
         }
 
         public Paquete()

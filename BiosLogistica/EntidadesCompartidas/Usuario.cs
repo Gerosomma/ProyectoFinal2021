@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace EntidadesCompartidas
@@ -15,17 +16,39 @@ namespace EntidadesCompartidas
         public string Logueo
         {
             get { return _logueo; }
-            set { _logueo = value; }
+            set
+            {
+                if (value.Trim().Length > 12 || value.Trim().Length <= 0)
+                    throw new Exception("Usuario debe tener 12 caracteres");
+                else
+                    _logueo = value;
+            }
         }
         public string Contrasena
         {
             get { return _contrasenia; }
-            set { _contrasenia = value; }
+            set {
+                Regex _expresion = new Regex("[a-zA-ZñÑ]{3}[0-9]{2}[|°¬¡!#$%&/=()¿?'_´{},;.:`+*~^<>@]");
+                if (!_expresion.IsMatch(value))
+                {
+                    throw new Exception("El formato de la contraseña no es válido.");
+                }
+                else
+                {
+                    _contrasenia = value;
+                }
+            }
         }
         public string NombreCompleto
         {
             get { return _nombreCompleto; }
-            set { _nombreCompleto = value; }
+            set
+            {
+                if ((value.Trim().Length > 50) || (value.Trim().Length <= 0))
+                    throw new Exception("Nombre cliente muy largo");
+                else
+                    _nombreCompleto = value;
+            }
         }
 
         public Usuario()

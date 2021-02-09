@@ -24,7 +24,7 @@ CREATE TABLE Usuario (
 
 CREATE TABLE Empresa (
 	logueo VARCHAR(12) NOT NULL PRIMARY KEY FOREIGN KEY REFERENCES Usuario(logueo), -- 12 caracteres
-	telefono VARCHAR(50) NOT NULL CHECK (LEN(telefono) = 9 AND telefono not like '%[^0-9]%'), -- 9 caracteres, check solo numeros
+	telefono VARCHAR(9) NOT NULL CHECK (LEN(telefono) = 9 AND telefono not like '%[^0-9]%'), -- 9 caracteres, check solo numeros
 	direccion VARCHAR(50) NOT NULL CHECK (direccion <> ''),
 	email VARCHAR(50) NOT NULL CHECK (CHARINDEX('@',email,1)>0 AND CHARINDEX('.', email, CHARINDEX( '@', email))>0 ) -- check formato email
 )
@@ -62,7 +62,8 @@ CREATE TABLE PaquetesSolicitud (
 
 GO
 
-select * from Empleado;
+
+select * from Empresa;
 
 CREATE ROLE db_rol_empleado
 CREATE ROLE db_rol_empresa
@@ -431,7 +432,7 @@ CREATE PROCEDURE AltaEmpresa
 @logueo VARCHAR(12),
 @contrasena VARCHAR(6),
 @nombreCompleto VARCHAR(50),
-@telefono INT,
+@telefono VARCHAR(9),
 @direccion VARCHAR(50),
 @email VARCHAR(50)
 AS

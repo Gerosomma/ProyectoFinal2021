@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace EntidadesCompartidas
@@ -14,13 +15,27 @@ namespace EntidadesCompartidas
         public string HoraInicio
         {
             get { return _horaInicio; }
-            set { _horaInicio = value; }
+            set
+            {
+                Regex _expresion = new Regex("[0-2][0-9][:][0-5][0-9][:][0-5][0-9]");
+                if (!_expresion.IsMatch(value))
+                    throw new Exception("Formato hora inicio inválido.");
+                else
+                    _horaInicio = value;
+                
+            }
         }
 
         public string HoraFin
         {
             get { return _horaFin; }
-            set { _horaFin = value; }
+            set
+            {
+                if (!new Regex("[0-2][0-9][:][0-5][0-9][:][0-5][0-9]").IsMatch(value))
+                    throw new Exception("Formato hora fin inválido.");
+                else
+                    _horaFin = value;
+            }
         }
 
         public Empleado()

@@ -31,31 +31,57 @@ namespace EntidadesCompartidas
         public string NombreDestinatario
         {
             get { return _nombreDestinatario; }
-            set { _nombreDestinatario = value; }
+            set {
+                if (value.Trim().Length > 0 && value.Trim().Length <= 50)
+                    _nombreDestinatario = value;
+                else
+                    throw new Exception("Direccion inválida");
+            }
         }
 
         public string DireccionDestinatario
         {
             get { return _direccionDestinatario; }
-            set { _direccionDestinatario = value; }
+            set {
+                if (value.Trim().Length > 0 && value.Trim().Length <= 50)
+                    _direccionDestinatario = value;
+                else
+                    throw new Exception("Direccion inválida");
+            }
         }
 
         public string Estado
         {
             get { return _estado; }
-            set { _estado = value; }
+            set {
+                string[] arr = { "en deposito", "en camino", "entregado" };
+                if (arr.All(value.Contains))
+                    _estado = value;
+                else
+                    throw new Exception("Estado inválido");
+            }
         }
 
         public Empleado Empleado
         {
             get { return _empleado; }
-            set { _empleado = value; }
+            set {
+                if (value != null)
+                    _empleado = value;
+                else
+                    throw new Exception("Empleado inválido");
+            }
         }
 
         public List<Paquete> PaquetesSolicitud
         {
             get { return _paquetesSolicitud; }
-            set { _paquetesSolicitud = value; }
+            set {
+                if (value != null && value.Count > 0)
+                    _paquetesSolicitud = value;
+                else
+                    throw new Exception("Solicitud sin paquetes");
+            }
         }
 
         public Solicitud()

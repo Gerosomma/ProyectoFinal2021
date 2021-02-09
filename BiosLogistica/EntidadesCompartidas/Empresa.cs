@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace EntidadesCompartidas
@@ -15,18 +16,34 @@ namespace EntidadesCompartidas
         public string Telefono
         {
             get { return _telefono; }
-            set { _telefono = value; }
+            set {
+                if (value.Trim().Length == 9)
+                    _telefono = value;
+                else
+                    throw new Exception("Telefono inválido");
+            }
         }
         public string Direccion
         {
             get { return _direccion; }
-            set { _direccion = value; }
+            set
+            {
+                if (value.Trim().Length > 0 && value.Trim().Length <= 50)
+                    _direccion = value;
+                else
+                    throw new Exception("Direccion inválida");
+            }
         }
 
         public string Email
         {
             get { return _email; }
-            set { _email = value; }
+            set {
+                if (Regex.IsMatch(value, @"^[^@\s]+@[^@\s]+\.[^@\s]+$", RegexOptions.IgnoreCase))
+                    _email = value;
+                else
+                    throw new Exception("Email inválido");
+            }
         }
 
         public Empresa()
