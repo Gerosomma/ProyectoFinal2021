@@ -747,7 +747,6 @@ CREATE PROCEDURE AltaSolicitud
 @fechaEntrega DATETIME, 
 @nombreDestinatario VARCHAR(50), 
 @direccionDestinatario VARCHAR(50),
-@estado VARCHAR(11),
 @empleado VARCHAR(50)
 AS
 BEGIN
@@ -758,7 +757,8 @@ BEGIN
 	BEGIN
 		RETURN -1
 	END
-	INSERT INTO Solicitud VALUES (@fechaEntrega, @nombreDestinatario, @direccionDestinatario, @estado, @empleado)
+	INSERT INTO Solicitud (fechaEntrega, nombreDestinatario, direccionDestinatario, empleado)
+	VALUES (@fechaEntrega, @nombreDestinatario, @direccionDestinatario, @empleado)
 	IF (@@ERROR <> 0)
 	BEGIN
 		RETURN -2
@@ -803,10 +803,6 @@ GO
 
 CREATE PROCEDURE ModificarEstadoSolicitud -- seria modificarEstadoSolicitud con la logica necesaria.
 @numero INT,
-@fechaEntrega DATETIME, 
-@nombreDestinatario VARCHAR(50), 
-@direccionDestinatario VARCHAR(50),
-@estado VARCHAR(11),
 @empleado VARCHAR(50)
 AS
 BEGIN

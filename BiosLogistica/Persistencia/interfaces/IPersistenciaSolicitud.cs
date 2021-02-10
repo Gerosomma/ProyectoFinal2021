@@ -9,10 +9,8 @@ namespace Persistencia.interfaces
 {
     public interface IPersistenciaSolicitud
     {
-        Solicitud BuscarSolicitud(int codigo, Usuario usLog);
         void AltaSolicitud(Solicitud solicitud, Usuario usLog);
-        void ModificarSolicitud(Solicitud solicitud, Usuario usLog);
-        void BajaSolicitud(Solicitud solicitud, Usuario usLog);
-        string listadoSolicitudes(Usuario usLog);
+        void ModificarEstadoSolicitud(Solicitud solicitud, Usuario usLog);
+        List<Solicitud> listadoSolicitudes(Usuario usLog);
     }
 }

@@ -117,11 +117,11 @@ namespace Persistencia
         }
         
         
-        internal static void AltaPaqueteSolicitud(SqlConnection conexion, Solicitud solicitud, Paquete paquete, Usuario usLog)
+        internal void AltaPaqueteSolicitud(SqlTransaction trn, Solicitud solicitud, Paquete paquete, Usuario usLog)
         {
             try
             {
-                SqlCommand cmdAltaPaquete = new SqlCommand("AltaPaqueteSolicitud", conexion);
+                SqlCommand cmdAltaPaquete = new SqlCommand("AltaPaqueteSolicitud", trn.Connection);
                 cmdAltaPaquete.CommandType = CommandType.StoredProcedure;
 
                 cmdAltaPaquete.Parameters.AddWithValue("@codigoPaquete", paquete.Codigo);
@@ -131,32 +131,25 @@ namespace Persistencia
                 valorRetorno.Direction = ParameterDirection.ReturnValue;
                 cmdAltaPaquete.Parameters.Add(valorRetorno);
 
-                conexion.Open();
-
+                cmdAltaPaquete.Transaction = trn;
                 cmdAltaPaquete.ExecuteNonQuery();
 
                 switch ((int)valorRetorno.Value)
                 {
                     case -1:
-                        throw new Exception("error -1");
+                        throw new Exception("No existe solicitud.");
                     case -2:
-                        throw new Exception("error -2");
+                        throw new Exception("No existe paquete.");
                     case -3:
-                        throw new Exception("error -3");
+                        throw new Exception("Paquete ya existente en solicitud.");
                     case -4:
-                        throw new Exception("error -4");
+                        throw new Exception("Error al insertar paqueteSolicitud.");
                 }
             }
             catch (Exception ex)
             {
+                trn.Rollback();
                 throw ex;
-            }
-            finally
-            {
-                if (conexion != null)
-                {
-                    conexion.Close();
-                }
             }
         }
 
