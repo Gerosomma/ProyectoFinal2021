@@ -134,9 +134,10 @@ namespace Persistencia
             }
         }
 
-        public List<Solicitud> listadoSolicitudes(Usuario usLog)
+        public List<Solicitud> listadoSolicitudesEnCamino(Usuario usLog)
         {
             SqlConnection conexion = null;
+            SqlDataReader drSolicitud = null;
             Solicitud solicitud = null;
             List<Solicitud> listaSolicitudes = new List<Solicitud>();
             List<Paquete> listaPaquetes = new List<Paquete>();
@@ -144,29 +145,20 @@ namespace Persistencia
             try
             {
                 conexion = new SqlConnection(Conexion.Cnn(usLog));
-                SqlCommand cmdListadoSolicitues = new SqlCommand("listadoSolicitudes", conexion);
+                SqlCommand cmdListadoSolicitues = new SqlCommand("listadoSolicitudesEnCamino", conexion);
                 cmdListadoSolicitues.CommandType = CommandType.StoredProcedure;
 
                 //este data table no va, el problema qe tuve en las conexiones se resuelve cambiando la conexion para las busquedas internas.
                 conexion.Open();
-                DataTable dtSolicitures = new DataTable("Solicitud");
-                dtSolicitures.Load(cmdListadoSolicitues.ExecuteReader());
-
-                foreach (DataRow r in dtSolicitures.Rows)
-                {
-                    listaPaquetes = PersistenciaPaquete.getInstancia().paquetesSolicitud(Convert.ToInt32(r["numero"]));
-                    solicitud = new Solicitud(Convert.ToInt32(r["numero"]), Convert.ToDateTime(r["fechaEntrega"]), r["nombreDestinatario"].ToString(),
-                        r["direccionDestinatario"].ToString(), r["estado"].ToString(), (Empleado)usLog, listaPaquetes);
-                    listaSolicitudes.Add(solicitud);
-                }
-
-                /*while (drSolicitud.Read())
+                drSolicitud = cmdListadoSolicitues.ExecuteReader();
+                
+                while (drSolicitud.Read())
                 { 
-                    listaPaquetes = PersistenciaPaquete.getInstancia().paquetesSolicitud(conexion, (int)drSolicitud["numero"], usLog);
+                    listaPaquetes = PersistenciaPaquete.getInstancia().paquetesSolicitud((int)drSolicitud["numero"]);
                     solicitud = new Solicitud((int)drSolicitud["numero"], (DateTime)drSolicitud["fechaEntrega"], (string)drSolicitud["nombreDestinatario"],
                         (string)drSolicitud["direccionDestinatario"], (string)drSolicitud["estado"], (Empleado)usLog, listaPaquetes);
                     listaSolicitudes.Add(solicitud);
-                }*/
+                }
 
                 return listaSolicitudes;
             }

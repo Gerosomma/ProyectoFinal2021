@@ -718,7 +718,7 @@ GO
 -- es necesario listar paquetes sin solicitud 
 -- y listar paquetes de una solicitud en particular.
 
-CREATE PROCEDURE ListarPaquetesSinSolicitud
+CREATE PROCEDURE ListarPaquetesSinSolicitud -- falta en persistencia interno?
 AS
 BEGIN
 	SELECT * 
@@ -728,7 +728,7 @@ END
 
 GO
 
-CREATE PROCEDURE ListarPaquetesSolicitud
+CREATE PROCEDURE ListarPaquetesSolicitud 
 @solicitud int
 AS
 BEGIN
@@ -849,7 +849,7 @@ END
 
 GO
 
-CREATE PROCEDURE ListadoSolicitudesEmpresa
+CREATE PROCEDURE ListadoSolicitudesEmpresa -- falta en persistencia
 AS
 BEGIN
 	SELECT a.*

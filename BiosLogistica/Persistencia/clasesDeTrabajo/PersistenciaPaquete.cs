@@ -153,7 +153,7 @@ namespace Persistencia
             }
         }
 
-        public List<Paquete> paquetesSolicitud(int solicitud)
+        internal List<Paquete> paquetesSolicitud(int solicitud)
         {
             Paquete paquete = null;
             Empresa empresa = null; 
@@ -167,27 +167,16 @@ namespace Persistencia
                 SqlCommand cmdListadoSolicitues = new SqlCommand("ListarPaquetesSolicitud", conexion);
                 cmdListadoSolicitues.CommandType = CommandType.StoredProcedure;
                 cmdListadoSolicitues.Parameters.AddWithValue("@numeroSolicitud", solicitud);
-
-                /*DataTable dtPaquetesSolicitud = new DataTable("PaquetesSolicitud");
-                dtPaquetesSolicitud.Load(cmdListadoSolicitues.ExecuteReader());*/
-
+                
                 conexion.Open();
                 drPaquete = cmdListadoSolicitues.ExecuteReader();
                 while (drPaquete.Read())
                 {
                     empresa = PersistenciaEmpresa.getInstancia().interBuscarEmpresa((string)drPaquete["empresa"]);
-                    paquete = new Paquete((int)drPaquete["codigo"], (string)drPaquete["tipo"], (string)drPaquete["descripcion"], (double)drPaquete["peso"], empresa);
+                    paquete = new Paquete((int)drPaquete["codigo"], (string)drPaquete["tipo"], (string)drPaquete["descripcion"],
+                        (double)drPaquete["peso"], empresa);
                     listaPaquetes.Add(paquete);
                 }
-
-                /*while (drPaquetes.Read())
-                {
-
-                    paquete = interBuscarPaquete((int)drPaquetes["codigoPaquete"], conexion);
-                    //paquete = new Paquete((int)drPaquetes["codigo"], (string)drPaquetes["tipo"], (string)drPaquetes["descripcion"],
-                    //    (double)drPaquetes["peso"], (Empresa)usLog);
-                    listaPaquetes.Add(paquete);
-                }*/
 
                 return listaPaquetes;
             }
