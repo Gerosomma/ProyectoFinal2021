@@ -850,23 +850,14 @@ END
 GO
 
 CREATE PROCEDURE ListadoSolicitudesEmpresa -- falta en persistencia
+@empresa varchar(12)
 AS
 BEGIN
 	SELECT a.*
 	FROM Solicitud a
 	INNER JOIN PaquetesSolicitud b on a.numero = b.numeroSolicitud
 	INNER JOIN Paquete c on b.codigoPaquete = c.codigo
-END
-
-GO
-
-CREATE PROCEDURE listadoPaquetesSolicitud
-@numeroSolicitud INT
-AS
-BEGIN
-	SELECT *
-	FROM PaquetesSolicitud
-	WHERE numeroSolicitud = @numeroSolicitud
+	WHERE c.empresa = @empresa
 END
 
 

@@ -66,7 +66,7 @@ namespace Persistencia
             }
         }
 
-        public Empleado BuscarEmpleado(string logueo, Usuario usLog)
+        public Empleado BuscarEmpleado(string logueo, Empleado usLog)
         {
             SqlConnection conexion = null;
             SqlDataReader drEmpleado = null;
@@ -146,14 +146,13 @@ namespace Persistencia
             }
         }
 
-        public void AltaEmpleado(Empleado empleado, Usuario usLog)
+        public void AltaEmpleado(Empleado empleado, Empleado usLog)
         {
             SqlConnection conexion = null;
 
             try
             {
                 conexion = new SqlConnection(Conexion.Cnn(usLog));
-                //conexion = new SqlConnection(Conexion.CadenaConexion);
 
                 SqlCommand cmdAltaEmpleado = new SqlCommand("AltaEmpleado", conexion);
                 cmdAltaEmpleado.CommandType = CommandType.StoredProcedure;
@@ -203,7 +202,7 @@ namespace Persistencia
                 }
             }
         }
-        public void ModificarEmpleado(Empleado empleado, Usuario usLog)
+        public void ModificarEmpleado(Empleado empleado, Empleado usLog)
         {
             SqlConnection conexion = null;
 
@@ -255,7 +254,7 @@ namespace Persistencia
             }
         }
 
-        public void BajaEmpleado(Empleado empleado, Usuario usLog)
+        public void BajaEmpleado(Empleado empleado, Empleado usLog)
         {
             SqlConnection conexion = null;
 

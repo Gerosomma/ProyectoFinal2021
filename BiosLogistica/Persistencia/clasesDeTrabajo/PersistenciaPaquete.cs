@@ -25,7 +25,7 @@ namespace Persistencia
             return _instancia;
         }
 
-        public void AltaPaquete(Paquete paquete, Usuario usLog)
+        public void AltaPaquete(Paquete paquete, Empleado usLog)
         {
             SqlConnection conexion = null;
             
@@ -73,7 +73,7 @@ namespace Persistencia
             }
         }
         
-        public Paquete BuscarPaquete(int codigo, Usuario usLog)
+        public Paquete BuscarPaquete(int codigo, Empleado usLog)
         {
             SqlConnection conexion = null;
             SqlDataReader drPaquete = null;
@@ -117,7 +117,7 @@ namespace Persistencia
         }
         
         
-        internal void AltaPaqueteSolicitud(SqlTransaction trn, Solicitud solicitud, Paquete paquete, Usuario usLog)
+        internal void AltaPaqueteSolicitud(SqlTransaction trn, Solicitud solicitud, Paquete paquete)
         {
             try
             {
@@ -153,7 +153,7 @@ namespace Persistencia
             }
         }
 
-        internal List<Paquete> paquetesSolicitud(int solicitud)
+        internal List<Paquete> listadoPaquetesSolicitud(int solicitud)
         {
             Paquete paquete = null;
             Empresa empresa = null; 
@@ -168,6 +168,38 @@ namespace Persistencia
                 cmdListadoSolicitues.CommandType = CommandType.StoredProcedure;
                 cmdListadoSolicitues.Parameters.AddWithValue("@numeroSolicitud", solicitud);
                 
+                conexion.Open();
+                drPaquete = cmdListadoSolicitues.ExecuteReader();
+                while (drPaquete.Read())
+                {
+                    empresa = PersistenciaEmpresa.getInstancia().interBuscarEmpresa((string)drPaquete["empresa"]);
+                    paquete = new Paquete((int)drPaquete["codigo"], (string)drPaquete["tipo"], (string)drPaquete["descripcion"],
+                        (double)drPaquete["peso"], empresa);
+                    listaPaquetes.Add(paquete);
+                }
+
+                return listaPaquetes;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public List<Paquete> ListadoPaquetesSinSolicitud()
+        {
+            Paquete paquete = null;
+            Empresa empresa = null;
+            List<Paquete> listaPaquetes = new List<Paquete>();
+            SqlConnection conexion = null;
+            SqlDataReader drPaquete = null;
+
+            try
+            {
+                conexion = new SqlConnection(Conexion.Cnn(null));
+                SqlCommand cmdListadoSolicitues = new SqlCommand("ListarPaquetesSinSolicitud", conexion);
+                cmdListadoSolicitues.CommandType = CommandType.StoredProcedure;
+
                 conexion.Open();
                 drPaquete = cmdListadoSolicitues.ExecuteReader();
                 while (drPaquete.Read())

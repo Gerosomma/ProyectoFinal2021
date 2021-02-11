@@ -11,10 +11,10 @@ namespace Persistencia.interfaces
     public interface IPersistenciaEmpresa
     {
         Empresa LoguearEmpresa(string logueo, string contrasenia);
-        Empresa BuscarEmpresa(string logueo, Usuario usLog);
-        void AltaEmpresa(Empresa empresa, Usuario usLog);
-        void ModificarEmpresa(Empresa empresa, Usuario usLog);
-        void BajaEmpresa(Empresa empresa, Usuario usLog);
-        List<Empresa> ListarEmpresas(Usuario usuarioLogueado);
+        Empresa BuscarEmpresa(string logueo, Empleado usLog);
+        void AltaEmpresa(Empresa empresa, Empleado usLog);
+        void ModificarEmpresa(Empresa empresa, Empleado usLog);
+        void BajaEmpresa(Empresa empresa, Empleado usLog);
+        List<Empresa> ListarEmpresas(Empleado usuarioLogueado);
     }
 }

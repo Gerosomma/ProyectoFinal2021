@@ -9,7 +9,9 @@ namespace Persistencia.interfaces
 {
     public interface IPersistenciaPaquete
     {
-        Paquete BuscarPaquete(int codigo, Usuario usLog);
-        void AltaPaquete(Paquete paquete, Usuario usLog);
+        Paquete BuscarPaquete(int codigo, Empleado usLog);
+        void AltaPaquete(Paquete paquete, Empleado usLog);
+        List<Paquete> ListadoPaquetesSinSolicitud();
+
     }
 }
