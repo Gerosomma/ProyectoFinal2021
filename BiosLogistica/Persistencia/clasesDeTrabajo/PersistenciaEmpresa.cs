@@ -66,7 +66,7 @@ namespace Persistencia
             }
         }
 
-        public Empresa BuscarEmpresa(string logueo, Usuario usLog)
+        public Empresa BuscarEmpresa(string logueo, Empleado usLog)
         {
             SqlConnection conexion = null;
             SqlDataReader drEmpresa = null;
@@ -146,7 +146,7 @@ namespace Persistencia
             }
         }
 
-        public void AltaEmpresa(Empresa empresa, Usuario usLog)
+        public void AltaEmpresa(Empresa empresa, Empleado usLog)
         {
             SqlConnection conexion = null;
 
@@ -200,7 +200,7 @@ namespace Persistencia
                 }
             }
         }
-        public void ModificarEmpresa(Empresa empresa, Usuario usLog)
+        public void ModificarEmpresa(Empresa empresa, Empleado usLog)
         {
             SqlConnection conexion = null;
 
@@ -255,7 +255,7 @@ namespace Persistencia
             }
         }
 
-        public void BajaEmpresa(Empresa empresa, Usuario usLog)
+        public void BajaEmpresa(Empresa empresa, Empleado usLog)
         {
             SqlConnection conexion = null;
 
@@ -302,7 +302,7 @@ namespace Persistencia
             }
         }
 
-        public List<Empresa> ListarEmpresas(Usuario usLog)
+        public List<Empresa> ListarEmpresas(Empleado usLog)
         {
             SqlConnection conexion = null;
             SqlDataReader drEmpresas = null;

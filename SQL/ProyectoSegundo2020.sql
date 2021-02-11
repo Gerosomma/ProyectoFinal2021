@@ -718,7 +718,7 @@ GO
 -- es necesario listar paquetes sin solicitud 
 -- y listar paquetes de una solicitud en particular.
 
-CREATE PROCEDURE ListarPaquetesSinSolicitud
+CREATE PROCEDURE ListarPaquetesSinSolicitud -- falta en persistencia interno?
 AS
 BEGIN
 	SELECT * 
@@ -728,7 +728,7 @@ END
 
 GO
 
-CREATE PROCEDURE ListarPaquetesSolicitud
+CREATE PROCEDURE ListarPaquetesSolicitud 
 @solicitud int
 AS
 BEGIN
@@ -849,24 +849,15 @@ END
 
 GO
 
-CREATE PROCEDURE ListadoSolicitudesEmpresa
+CREATE PROCEDURE ListadoSolicitudesEmpresa -- falta en persistencia
+@empresa varchar(12)
 AS
 BEGIN
 	SELECT a.*
 	FROM Solicitud a
 	INNER JOIN PaquetesSolicitud b on a.numero = b.numeroSolicitud
 	INNER JOIN Paquete c on b.codigoPaquete = c.codigo
-END
-
-GO
-
-CREATE PROCEDURE listadoPaquetesSolicitud
-@numeroSolicitud INT
-AS
-BEGIN
-	SELECT *
-	FROM PaquetesSolicitud
-	WHERE numeroSolicitud = @numeroSolicitud
+	WHERE c.empresa = @empresa
 END
 
 

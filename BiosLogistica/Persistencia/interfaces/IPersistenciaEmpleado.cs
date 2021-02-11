@@ -10,9 +10,9 @@ namespace Persistencia.interfaces
     public interface IPersistenciaEmpleado
     {
         Empleado LoguearEmpleado(string logueo, string contrasenia);
-        Empleado BuscarEmpleado(string logueo, Usuario usLog);
-        void AltaEmpleado(Empleado empleado, Usuario usLog);
-        void ModificarEmpleado(Empleado empleado, Usuario usLog);
-        void BajaEmpleado(Empleado empleado, Usuario usLog);
+        Empleado BuscarEmpleado(string logueo, Empleado usLog);
+        void AltaEmpleado(Empleado empleado, Empleado usLog);
+        void ModificarEmpleado(Empleado empleado, Empleado usLog);
+        void BajaEmpleado(Empleado empleado, Empleado usLog);
     }
 }
