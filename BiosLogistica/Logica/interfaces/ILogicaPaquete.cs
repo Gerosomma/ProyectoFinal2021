@@ -9,9 +9,8 @@ namespace Logica.interfaces
 {
     public interface ILogicaPaquete
     {
-        Paquete BuscarPaquete(int codigo, Usuario usLog);
-        void AltaPaquete(Paquete paquete, Usuario usLog);
-        void ModificarPaquete(Paquete paquete, Usuario usLog);
-        void BajaPaquete(Paquete paquete, Usuario usLog);
+        Paquete BuscarPaquete(int codigo, Empleado usLog);
+        void AltaPaquete(Paquete paquete, Empleado usLog);
+        List<Paquete> ListadoPaquetesSinSolicitud(Empleado usLog);
     }
 }

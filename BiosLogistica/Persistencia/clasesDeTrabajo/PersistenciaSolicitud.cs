@@ -154,7 +154,7 @@ namespace Persistencia
                 
                 while (drSolicitud.Read())
                 { 
-                    listaPaquetes = PersistenciaPaquete.getInstancia().paquetesSolicitud((int)drSolicitud["numero"]);
+                    listaPaquetes = PersistenciaPaquete.getInstancia().listadoPaquetesSolicitud((int)drSolicitud["numero"]);
                     empleado = PersistenciaEmpleado.getInstancia().interBuscarEmpleado((string)drSolicitud["empleado"]);
                     solicitud = new Solicitud((int)drSolicitud["numero"], (DateTime)drSolicitud["fechaEntrega"], (string)drSolicitud["nombreDestinatario"],
                         (string)drSolicitud["direccionDestinatario"], (string)drSolicitud["estado"], empleado, listaPaquetes);
@@ -196,7 +196,7 @@ namespace Persistencia
 
                 while (drSolicitud.Read())
                 {
-                    listaPaquetes = PersistenciaPaquete.getInstancia().paquetesSolicitud((int)drSolicitud["numero"]);
+                    listaPaquetes = PersistenciaPaquete.getInstancia().listadoPaquetesSolicitud((int)drSolicitud["numero"]);
                     empleado = PersistenciaEmpleado.getInstancia().interBuscarEmpleado((string)drSolicitud["empleado"]);
                     solicitud = new Solicitud((int)drSolicitud["numero"], (DateTime)drSolicitud["fechaEntrega"], (string)drSolicitud["nombreDestinatario"],
                         (string)drSolicitud["direccionDestinatario"], (string)drSolicitud["estado"], empleado, listaPaquetes);

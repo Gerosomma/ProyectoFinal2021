@@ -24,30 +24,26 @@ namespace Logica.clasesDeTrabajo
 
         internal static void validarPaquete(Paquete paquete)
         {
-
+            if (paquete.Peso <= 0)
+            {
+                throw new Exception("Peso paquete inválido");
+            }
         }
 
-        public void AltaPaquete(Paquete paquete, Usuario usLog)
+        public void AltaPaquete(Paquete paquete, Empleado usLog)
         {
             validarPaquete(paquete);
             FabricaPersistencia.GetPersistenciaPaquete().AltaPaquete(paquete, usLog);   
         }
 
-        public void BajaPaquete(Paquete paquete, Usuario usLog)
-        {
-            validarPaquete(paquete);
-            FabricaPersistencia.GetPersistenciaPaquete().BajaPaquete(paquete, usLog);
-        }
-
-        public Paquete BuscarPaquete(int codigo, Usuario usLog)
+        public Paquete BuscarPaquete(int codigo, Empleado usLog)
         {
             return FabricaPersistencia.GetPersistenciaPaquete().BuscarPaquete(codigo, usLog);
         }
 
-        public void ModificarPaquete(Paquete paquete, Usuario usLog)
+        public List<Paquete> ListadoPaquetesSinSolicitud(Empleado usLog)
         {
-            validarPaquete(paquete);
-            FabricaPersistencia.GetPersistenciaPaquete().ModificarPaquete(paquete, usLog);
+            return FabricaPersistencia.GetPersistenciaPaquete().ListadoPaquetesSinSolicitud(usLog);
         }
     }
 }

@@ -27,7 +27,7 @@ namespace Logica.clasesDeTrabajo
             
         }
 
-        public void AltaUsuario(Usuario usuario, Usuario usLog)
+        public void AltaUsuario(Usuario usuario, Empleado usLog)
         {
             validarUsuario(usuario);
             if (usuario is Empleado)
@@ -40,7 +40,7 @@ namespace Logica.clasesDeTrabajo
             }
         }
 
-        public void BajaUsuario(Usuario usuario, Usuario usLog)
+        public void BajaUsuario(Usuario usuario, Empleado usLog)
         {
             validarUsuario(usuario);
             if (usuario is Empleado)
@@ -53,7 +53,7 @@ namespace Logica.clasesDeTrabajo
             }
         }
 
-        public Usuario BuscarUsuario(string logueo, Usuario usLog)
+        public Usuario BuscarUsuario(string logueo, Empleado usLog)
         {
             Usuario usuario = FabricaPersistencia.GetPersistenciaEmpleado().BuscarEmpleado(logueo, usLog);
 
@@ -84,7 +84,7 @@ namespace Logica.clasesDeTrabajo
             }
         }
 
-        public void ModificarUsuario(Usuario usuario, Usuario usLog)
+        public void ModificarUsuario(Usuario usuario, Empleado usLog)
         {
             validarUsuario(usuario);
             if (usuario is Empleado)
@@ -97,9 +97,9 @@ namespace Logica.clasesDeTrabajo
             }
         }
 
-        public List<Empresa> ListarEmpresas(Usuario usuarioLogueado)
+        public List<Empresa> ListarEmpresas(Empleado usLog)
         {
-            return FabricaPersistencia.GetPersistenciaEmpresa().ListarEmpresas(usuarioLogueado);
+            return FabricaPersistencia.GetPersistenciaEmpresa().ListarEmpresas(usLog);
         }
     }
 }

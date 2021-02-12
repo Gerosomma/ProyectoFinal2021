@@ -10,10 +10,10 @@ namespace Logica.interfaces
     public interface ILogicaUsuario
     {
         Usuario LogueoUsuario(string logueo, string contraseana);
-        Usuario BuscarUsuario(string logueo, Usuario usLog);
-        void AltaUsuario(Usuario usuario, Usuario usLog);
-        void ModificarUsuario(Usuario usuario, Usuario usLog);
-        void BajaUsuario(Usuario usuario, Usuario usLog);
-        List<Empresa> ListarEmpresas(Usuario usuarioLogueado);
+        Usuario BuscarUsuario(string logueo, Empleado usLog);
+        void AltaUsuario(Usuario usuario, Empleado usLog);
+        void ModificarUsuario(Usuario usuario, Empleado usLog);
+        void BajaUsuario(Usuario usuario, Empleado usLog);
+        List<Empresa> ListarEmpresas(Empleado usuarioLogueado);
     }
 }

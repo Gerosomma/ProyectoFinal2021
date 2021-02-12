@@ -11,7 +11,7 @@ namespace Persistencia.interfaces
     {
         Paquete BuscarPaquete(int codigo, Empleado usLog);
         void AltaPaquete(Paquete paquete, Empleado usLog);
-        List<Paquete> ListadoPaquetesSinSolicitud();
+        List<Paquete> ListadoPaquetesSinSolicitud(Empleado usLog);
 
     }
 }

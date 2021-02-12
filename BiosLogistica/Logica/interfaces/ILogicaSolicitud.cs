@@ -9,8 +9,9 @@ namespace Logica.interfaces
 {
     public interface ILogicaSolicitud
     {
-        void AltaSolicitud(Solicitud solicitud, Usuario usLog);
-        void ModificarEstadoSolicitud(Solicitud solicitud, Usuario usLog);
-        string listadoSolicitudes(Usuario usLog);
+        void AltaSolicitud(Solicitud solicitud, Empleado usLog);
+        void ModificarEstadoSolicitud(Solicitud solicitud, Empleado usLog);
+        string listadoSolicitudesEnCamino(Usuario usLog);
+        List<Solicitud> listadoSolicitudesEmpresa(Empresa usLog);
     }
 }
