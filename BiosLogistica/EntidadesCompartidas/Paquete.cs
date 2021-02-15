@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.ServiceModel;
+using System.Runtime.Serialization;
 namespace EntidadesCompartidas
 {
+    [DataContract]
     public class Paquete
     {
         private int _codigo;
@@ -14,6 +16,7 @@ namespace EntidadesCompartidas
         private double _peso;
         private Empresa _empresaOrigen;
 
+        [DataMember]
         public int Codigo
         {
             get { return _codigo; }
@@ -25,6 +28,7 @@ namespace EntidadesCompartidas
             }
         }
 
+        [DataMember]
         public string Tipo
         {
             get { return _tipo; }
@@ -37,6 +41,7 @@ namespace EntidadesCompartidas
             }
         }
 
+        [DataMember]
         public string Descripcion
         {
             get { return _descripcion;  }
@@ -48,6 +53,7 @@ namespace EntidadesCompartidas
             }
         }
 
+        [DataMember]
         public double Peso
         {
             get { return _peso; }
@@ -59,6 +65,7 @@ namespace EntidadesCompartidas
             }
         }
 
+        [DataMember]
         public Empresa EmpresaOrigen
         {
             get { return _empresaOrigen; }
