@@ -11,9 +11,9 @@ namespace Persistencia
         internal static string Cnn(EntidadesCompartidas.Usuario u = null)
         {
             if (u == null)
-                return "Data Source =.; Initial Catalog = EjemploExtraBD; Integrated Security = true";
+                return "Data Source =.; Initial Catalog = ProyectoSegundo2020; Integrated Security = true";
             else
-                return "Data Source =.; Initial Catalog = EjemploExtraBD; User=" + u.Logueo + "; Password='" + u.Contrasena + "'";
+                return "Data Source =.; Initial Catalog = ProyectoSegundo2020; User=" + u.Logueo + "; Password='" + u.Contrasena + "'";
         }
     }
 }
