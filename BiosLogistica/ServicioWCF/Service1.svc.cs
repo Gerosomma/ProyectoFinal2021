@@ -11,45 +11,21 @@ using Logica;
 
 namespace ServicioWCF
 {
-    // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "Service1" in code, svc and config file together.
-    // NOTE: In order to launch WCF Test Client for testing this service, please select Service1.svc or Service1.svc.cs at the Solution Explorer and start debugging.
     public class Service1 : IService1
     {
-        public string GetData(int value)
-        {
-            return string.Format("You entered: {0}", value);
-        }
-
-        public CompositeType GetDataUsingDataContract(CompositeType composite)
-        {
-            if (composite == null)
-            {
-                throw new ArgumentNullException("composite");
-            }
-            if (composite.BoolValue)
-            {
-                composite.StringValue += "Suffix";
-            }
-            return composite;
-        }
-
         #region LogicaUsuario
-        void IService1.validarUsuario(Usuario us)
-        {
-            //FabricaLogica.GetLogicaUsuario().
-        } 
         
-        void IService1.AltaUsuario(Usuario usuario, Usuario usLog)
+        void IService1.AltaUsuario(Usuario usuario, Empleado usLog)
         {
             FabricaLogica.GetLogicaUsuario().AltaUsuario(usuario, usLog);
         }
         
-        void IService1.BajaUsuario(Usuario usuario, Usuario usLog)
+        void IService1.BajaUsuario(Usuario usuario, Empleado usLog)
         {
             FabricaLogica.GetLogicaUsuario().BajaUsuario(usuario, usLog);
         }
         
-        Usuario IService1.BuscarUsuario(string logueo, Usuario usLog)
+        Usuario IService1.BuscarUsuario(string logueo, Empleado usLog)
         {
             return FabricaLogica.GetLogicaUsuario().BuscarUsuario(logueo, usLog);
         }
@@ -59,12 +35,12 @@ namespace ServicioWCF
             return FabricaLogica.GetLogicaUsuario().LogueoUsuario(logueo, contraseana);
         }
         
-        void IService1.ModificarUsuario(Usuario usuario, Usuario usLog)
+        void IService1.ModificarUsuario(Usuario usuario, Empleado usLog)
         {
             FabricaLogica.GetLogicaUsuario().ModificarUsuario(usuario, usLog);
         }
         
-        List<Empresa> IService1.ListarEmpresas(Usuario usuarioLogueado)
+        List<Empresa> IService1.ListarEmpresas(Empleado usuarioLogueado)
         {
             return FabricaLogica.GetLogicaUsuario().ListarEmpresas(usuarioLogueado);
         }
@@ -73,58 +49,42 @@ namespace ServicioWCF
 
         #region LogicaPaquete
 
-        void IService1.validarPaquete(Paquete paquete)
-        {
-            //FabricaLogica.GetLogicaPaquete().
-        }
-
-        void IService1.AltaPaquete(Paquete paquete, Usuario usLog)
+        void IService1.AltaPaquete(Paquete paquete, Empleado usLog)
         {
             FabricaLogica.GetLogicaPaquete().AltaPaquete(paquete, usLog);
         }
 
-        void IService1.BajaPaquete(Paquete paquete, Usuario usLog)
-        {
-            FabricaLogica.GetLogicaPaquete().BajaPaquete(paquete, usLog);
-        }
-
-        Paquete IService1.BuscarPaquete(int codigo, Usuario usLog)
+        Paquete IService1.BuscarPaquete(int codigo, Empleado usLog)
         {
             return FabricaLogica.GetLogicaPaquete().BuscarPaquete(codigo, usLog);
         }
 
-        void IService1.ModificarPaquete(Paquete paquete, Usuario usLog)
+        List<Paquete> IService1.ListadoPaquetesSinSolicitud(Empleado usLog)
         {
-            FabricaLogica.GetLogicaPaquete().ModificarPaquete(paquete, usLog);
+            return FabricaLogica.GetLogicaPaquete().ListadoPaquetesSinSolicitud(usLog);
         }
 
         #endregion
 
         #region LogicaSolicitud
 
-        void IService1.validarSolicitud(Solicitud solicitud)
-        {
-            //FabricaLogica.GetLogicaSolicitud().
-        }
-
-        string IService1.generaXmlSolicitudes(List<Solicitud> listaSolicitudes)
-        {
-            //return FabricaLogica.GetLogicaSolicitud().
-        } 
-
-        void IService1.AltaSolicitud(Solicitud solicitud, Usuario usLog)
+        void IService1.AltaSolicitud(Solicitud solicitud, Empleado usLog)
         {
             FabricaLogica.GetLogicaSolicitud().AltaSolicitud(solicitud, usLog);
         }
 
-        void IService1.ModificarEstadoSolicitud(Solicitud solicitud, Usuario usLog)
+        void IService1.ModificarEstadoSolicitud(Solicitud solicitud, Empleado usLog)
         {
             FabricaLogica.GetLogicaSolicitud().ModificarEstadoSolicitud(solicitud, usLog);
         }
 
-        string IService1.listadoSolicitudes(Usuario usLog)
+        string IService1.listadoSolicitudesEnCamino(Usuario usLog)
         {
-            return FabricaLogica.GetLogicaSolicitud().listadoSolicitudes(usLog);
+            return FabricaLogica.GetLogicaSolicitud().listadoSolicitudesEnCamino(usLog);
+        }
+        List<Solicitud> IService1.listadoSolicitudesEmpresa(Empresa usLog)
+        {
+            return FabricaLogica.GetLogicaSolicitud().listadoSolicitudesEmpresa(usLog);
         }
 
         #endregion

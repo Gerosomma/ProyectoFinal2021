@@ -14,97 +14,55 @@ namespace ServicioWCF
     [ServiceContract]
     public interface IService1
     {
-
-        [OperationContract]
-        string GetData(int value);
-
-        [OperationContract]
-        CompositeType GetDataUsingDataContract(CompositeType composite);
-
         #region LogicaUsuario
 
         [OperationContract]
-        void validarUsuario(Usuario us);
+        void AltaUsuario(Usuario usuario, Empleado usLog);
 
         [OperationContract]
-        void AltaUsuario(Usuario usuario, Usuario usLog);
+        void BajaUsuario(Usuario usuario, Empleado usLog);
 
         [OperationContract]
-        void BajaUsuario(Usuario usuario, Usuario usLog);
-
-        [OperationContract]
-        Usuario BuscarUsuario(string logueo, Usuario usLog);
+        Usuario BuscarUsuario(string logueo, Empleado usLog);
 
         [OperationContract]
         Usuario LogueoUsuario(string logueo, string contraseana);
 
         [OperationContract]
-        void ModificarUsuario(Usuario usuario, Usuario usLog);
+        void ModificarUsuario(Usuario usuario, Empleado usLog);
 
         [OperationContract]
-        List<Empresa> ListarEmpresas(Usuario usuarioLogueado);
+        List<Empresa> ListarEmpresas(Empleado usuarioLogueado);
 
         #endregion
 
         #region LogicaPaquete
 
         [OperationContract]
-        void validarPaquete(Paquete paquete);
+        void AltaPaquete(Paquete paquete, Empleado usLog);
 
         [OperationContract]
-        void AltaPaquete(Paquete paquete, Usuario usLog);
+        Paquete BuscarPaquete(int codigo, Empleado usLog);
 
         [OperationContract]
-        void BajaPaquete(Paquete paquete, Usuario usLog);
-
-        [OperationContract]
-        Paquete BuscarPaquete(int codigo, Usuario usLog);
-
-        [OperationContract]
-        void ModificarPaquete(Paquete paquete, Usuario usLog);
+        List<Paquete> ListadoPaquetesSinSolicitud(Empleado usLog);
 
         #endregion
 
         #region LogicaSolicitud
 
         [OperationContract]
-        void validarSolicitud(Solicitud solicitud);
+        void AltaSolicitud(Solicitud solicitud, Empleado usLog);
 
         [OperationContract]
-        string generaXmlSolicitudes(List<Solicitud> listaSolicitudes);
+        void ModificarEstadoSolicitud(Solicitud solicitud, Empleado usLog);
 
         [OperationContract]
-        void AltaSolicitud(Solicitud solicitud, Usuario usLog);
+        string listadoSolicitudesEnCamino(Usuario usLog);
 
         [OperationContract]
-        void ModificarEstadoSolicitud(Solicitud solicitud, Usuario usLog);
-
-        [OperationContract]
-        string listadoSolicitudes(Usuario usLog);
+        List<Solicitud> listadoSolicitudesEmpresa(Empresa usLog);
 
         #endregion
-    }
-
-
-    // Use a data contract as illustrated in the sample below to add composite types to service operations.
-    [DataContract]
-    public class CompositeType
-    {
-        bool boolValue = true;
-        string stringValue = "Hello ";
-
-        [DataMember]
-        public bool BoolValue
-        {
-            get { return boolValue; }
-            set { boolValue = value; }
-        }
-
-        [DataMember]
-        public string StringValue
-        {
-            get { return stringValue; }
-            set { stringValue = value; }
-        }
     }
 }
