@@ -4,15 +4,21 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.ServiceModel;
+using System.Runtime.Serialization;
 
 namespace EntidadesCompartidas
 {
+    [KnownType(typeof(Empresa))]
+    [KnownType(typeof(Empleado))]
+    [DataContract]
     public abstract class Usuario
     {
         private string _logueo;
         private string _contrasenia;
         private string _nombreCompleto;
 
+        [DataMember]
         public string Logueo
         {
             get { return _logueo; }
@@ -24,6 +30,8 @@ namespace EntidadesCompartidas
                     _logueo = value;
             }
         }
+
+        [DataMember]
         public string Contrasena
         {
             get { return _contrasenia; }
@@ -39,6 +47,8 @@ namespace EntidadesCompartidas
                 }
             }
         }
+
+        [DataMember]
         public string NombreCompleto
         {
             get { return _nombreCompleto; }
@@ -50,7 +60,7 @@ namespace EntidadesCompartidas
                     _nombreCompleto = value;
             }
         }
-
+        
         public Usuario()
         { }
 

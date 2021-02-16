@@ -4,14 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.ServiceModel;
+using System.Runtime.Serialization;
 
 namespace EntidadesCompartidas
 {
+    [DataContract]
     public class Empleado : Usuario
     {
         private string _horaInicio;
         private string _horaFin;
 
+        [DataMember]
         public string HoraInicio
         {
             get { return _horaInicio; }
@@ -26,6 +30,7 @@ namespace EntidadesCompartidas
             }
         }
 
+        [DataMember]
         public string HoraFin
         {
             get { return _horaFin; }
@@ -37,7 +42,7 @@ namespace EntidadesCompartidas
                     _horaFin = value;
             }
         }
-
+        
         public Empleado()
         {
 

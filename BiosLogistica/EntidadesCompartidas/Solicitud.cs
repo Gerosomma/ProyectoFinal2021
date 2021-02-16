@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ServiceModel;
+using System.Runtime.Serialization;
 
 namespace EntidadesCompartidas
 {
+    [DataContract]
     public class Solicitud
     {
         private int _numero;
@@ -16,6 +19,7 @@ namespace EntidadesCompartidas
         private Empleado _empleado;
         private List<Paquete> _paquetesSolicitud = new List<Paquete>();
 
+        [DataMember]
         public int Numero
         {
             get { return _numero; }
@@ -27,6 +31,7 @@ namespace EntidadesCompartidas
             }
         }
 
+        [DataMember]
         public DateTime FechaEntrega
         {
             get { return _fechaEntrega; }
@@ -38,6 +43,7 @@ namespace EntidadesCompartidas
             }
         }
 
+        [DataMember]
         public string NombreDestinatario
         {
             get { return _nombreDestinatario; }
@@ -49,6 +55,7 @@ namespace EntidadesCompartidas
             }
         }
 
+        [DataMember]
         public string DireccionDestinatario
         {
             get { return _direccionDestinatario; }
@@ -60,6 +67,7 @@ namespace EntidadesCompartidas
             }
         }
 
+        [DataMember]
         public string Estado
         {
             get { return _estado; }
@@ -72,6 +80,7 @@ namespace EntidadesCompartidas
             }
         }
 
+        [DataMember]
         public Empleado Empleado
         {
             get { return _empleado; }
@@ -83,6 +92,7 @@ namespace EntidadesCompartidas
             }
         }
 
+        [DataMember]
         public List<Paquete> PaquetesSolicitud
         {
             get { return _paquetesSolicitud; }
@@ -93,7 +103,7 @@ namespace EntidadesCompartidas
                     throw new Exception("Solicitud sin paquetes");
             }
         }
-
+        
         public Solicitud()
         {
         }

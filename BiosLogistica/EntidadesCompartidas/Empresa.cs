@@ -4,15 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.ServiceModel;
+using System.Runtime.Serialization;
 
 namespace EntidadesCompartidas
 {
+    [DataContract]
     public class Empresa : Usuario
     {
         private string _telefono;
         private string _direccion;
         private string _email;
 
+        [DataMember]
         public string Telefono
         {
             get { return _telefono; }
@@ -23,6 +27,8 @@ namespace EntidadesCompartidas
                     throw new Exception("Telefono inválido");
             }
         }
+
+        [DataMember]
         public string Direccion
         {
             get { return _direccion; }
@@ -35,6 +41,7 @@ namespace EntidadesCompartidas
             }
         }
 
+        [DataMember]
         public string Email
         {
             get { return _email; }

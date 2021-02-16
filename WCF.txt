@@ -1,0 +1,50 @@
+-Windows Comunication Foundation: La idea del WCF es trabajar con un servicio web pero que venga con una capa de seguridad.
+                                  El WCF se puede aplicar a todas las tecnologias de comunicacion.
+
+-ServiceModel: sirve para identificar datos para aplicaciones distribuidas.
+-Runtime.Serialization: permite crear los contratos de datos.
+                                  
+-Como funciona la comunicacion de mensajes: en los sistemas de mensajes vamos a encontrar 3 elementos bien diferenciados. Un programa cliente que va a generar el mensaje (que en nuestro caso van a ser las interfaces graficas).
+                                            El segundo es el programa de servicios que recibe el mensaje y procesarlo, y que por lo general genera una respuesta (en nuestro caso es la capa de logica). En el medio de ambos tenemos el servicio que funciona como intermediario.
+                                            Ese servicio puede ser un servicio web, una cola de mensajes, etc. No procesa los mensajes pero puede desviarlos o monitorear lo que hacen.
+                                            Una capa de seguridad aplica a el programa intermediario. Lo que vamos a hacer es poner la capa de seguridad sobre el servicio web.
+
+-Como aplicar WCF sobre un servicio web: 1-Por lo primero que me tengo que preocupar por los datos, en nuestro caso las entidades compartidas. Aparte de serializarse vamos a tener que definir un contrato para cada dato.
+                                         2-Meterle la seguridad al servicio web. Vamos a hacer otro contrato (usando interfaz).
+                                         3-EndPoint: Es el punto de acceso a algo. Se configura en la capa de seguriidad del webservice y es el que va a aplicar la capa de seguridad cuando se va a consumir el servicio.
+                                                     Se puede hacer de 2 formas: mediante codigo o mediante los archivos de configuracion.
+                                           YA NO VAMOS A USAR REFERENCIAS WEB, SOLO DE SERVICIO.
+
+Receta para hacer un servicio con WCF: 1-Base de datos: Solo se van a poder usar SP. Permisos especificos para usuarios, hay 2 formas: una es poner el usuario y contraseña en el string de conexion, la segunda es con el usuario de paso a traves del servidor (default apppool).
+                                       2-Crear una solucion en blanco.
+                                       3-Crear las entidades compartidas. No todas las entidades compartidas tienen que ser exportables a traves del servicio las que si vayan a serlo tienen que tener definido su contrato. Todas las definiciones de contrato se hacen a traves de los atributos de comportamento ([]).
+                                         El primer paso para convertir la clase en un contrato es en la definicion de la clase poner [DataContract]. Eso habla de que esa clase va a tener un contrato no de que se va a incluir en el contrato. Para solucionar el problema de los contratos en la herencia, la clase derivada reconozca el contrato de la clase base y no genere uno nuevo hay que agregar otro atributo de comportamiento en la definicion de la clase base.
+                                         Si tengo muchas derivadas tengo que agregar un atributo por cada derivada. En la clase base vamos a poner el atributo [KnowType(typeof)(claseDerivada)] de la clase derivada. esto se hace ANTES de poner el [DataContract].
+                                         Las caracteristicas para formar parte del contrato es ser elementos publicos y tienen que reresentar datos, no operaciones. En nuestro caso vamos a usar las propiedades, por lo tanto a los elementos que queremos incluir tenemos que ponerle el atributo de comportamiento [DataMember].
+                                         Se necesita un constructor por defecto para serializar la informacion.
+                                         Para hacer los contratos de datos al proyecto hay que agregarle referencia a 2 bibliotecas de net.framework (ServiceModel y Runtime.Serialization)
+                                       4-Agregamos la biblioteca de persistencia. Recordar que tengo que usar el connection string solicitado. Patron singleton y fabrica. USAR CONSTRUCTORES COMPLETOS. Usar baja logica con cosas que no salen de la persistencia.
+                                       5-Biblioteca para logica. Consejo de la docente: despues de hacer la logica (que es igual que antes) hacer una concola para probar que todo funciona bien entre la logica y la persistencia.
+                                       6-Meter el WebService con la capa de seguridad, y ahi lo que agregamos es una aplicacion de servicio de WCF.
+                                         Agregar un servicio me agrega 3 archivos. El primero es la interfaz que me va a permitir hacer el contrato, que lo que aparezca adentro del interfaz lo va a poder ver el cliente y lo que no aparezca no lo va a ver el cliente. Adentro de la interfaz vamos a definir el contrato.
+                                         El contrato tiene 2 partes. El atributo de comportamiento para la interfaz ([ServiceContract]) y las operaciones tienen que estar marcadas para ser accedidas por http, para lo cual tenemos el atributo de comportamiento [OperationContract].
+                                         En la interfaz solo se define la operacion, el metodo se define en otro archivo.
+                                         El segundo archivo que genera es de extension svc y el tercer archivo es el svc.cs que es la clase que implementa el contrato de servicios y que por lo tanto va a generar los objetos que realmente trabajan.
+                                         El WCF hace lo mismo que el webservice, es decir que todo lo que se provoque por ahi cae en el webservice y se genera una FaultException.
+                                         Como se crea la faultException: con o sin la informacion . Para eso tenemos en el archivo de configuracion del servicio dentro de la seccion de comportamientos el atributo includeExceptionDetailInFaults el cual por defecto viene desactivado. Lo segundo que hay que configurar es el EndPoint, a traves del archivo de configuracion.
+                                         Dentro del archivo de configuracion vamos a tener la seccion system.serviceModel. Ahi es donde hay que hacer toda la definicion para el WCF. Dentro de esa seccion tenemos 3 secciones. La seccion de services es donde voy a definir los endpoint del servicio (minimo 1), el endpoint lo que define es la ubicacion y el contrato del servicio.
+                                         La combinacion de alojamiento (direccion) + un contrato = endpoint.
+                                         La segunda seccion es behaviors que es el comportamiento del servicio. 
+                                         La tercera seccion es bindings, la seccion de enlace de datos que me dice como se transporta la informacion del servicio.
+              
+          -Etiqueta Service: identifica al servicio al cual va a pertenecer el endpoint. El nombre del atributo "name" es el nombre del servicio. Dentro de la etiqueta del servicio tenemos que definir el enpoint (si tengo mas de una direccion donde se exponga el servicio voy a tener mas de un endpoint). En la etiqueta endpoint van los datos necesarios para consumir el servicio. Dentro de la etiqueta endpoint tenemos minimo 4 atributos obligatorios.
+                              El primero es adress, la direccion donde esta disponible el WCF (es la ruta sin el nombre del servicio). El atributo binding es key sensitive y se refiere al tipo de enlace de datos con el que se va a trabajar en el WCF. Hay 7 o 9 tipos de enlace predefinidos. El que vamos a usar es de tipo web service mediante peticiones http, esto indica que la informacion se va a manejar como XML y que ademas va a hacer una encriptacion simple de los datos.
+                              El tercero es el bindingConfiguration, que se refiere a la definicion del enlace de datos que tiene que estar definida en la seccion bindings de la configuracion. El cuarto y ma simportante es el "contract", que se refiere al contrato de trabajo del servicio. Tecnicamente es la interfaz que hicimos en el servicio.
+
+                                         Para probar el WCF hay un detalle, no se puede hacer desde el servicio mismo. Para poder depurar poner la opcion en true en el IIS.
+                                         
+                                        7-Crear la interfaz grafica para usar el WCF. Para poder usar un servicio WCF necesitamos agregar una referencia de servicio.
+                                          A diferencia del servicio tengo que trabajar con la interfaz que es el contrato. Aparte de eso tener en cuenta que como estamos en capa de seguridad hay que definir con que parte del soad vamos a trabajar. 
+                                                         
+ 
+                                             
