@@ -25,9 +25,7 @@ namespace Logica.clasesDeTrabajo
         internal static void validarPaquete(Paquete paquete)
         {
             if (paquete.Peso <= 0)
-            {
                 throw new Exception("Peso paquete inválido");
-            }
         }
 
         public void AltaPaquete(Paquete paquete, Empleado usLog)
