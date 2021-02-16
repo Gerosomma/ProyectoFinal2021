@@ -441,7 +441,9 @@ BEGIN
 	BEGIN
 		RETURN -1
 	END
-	IF EXISTS (SELECT * FROM Usuario WHERE logueo = @logueo AND activo = 0)
+	IF EXISTS (SELECT * FROM Usuario  a  
+			inner join Empresa b on a.logueo = b.logueo
+			WHERE a.logueo = @logueo AND a.activo = 0)
 	BEGIN
 		BEGIN TRANSACTION;
 			UPDATE Usuario 

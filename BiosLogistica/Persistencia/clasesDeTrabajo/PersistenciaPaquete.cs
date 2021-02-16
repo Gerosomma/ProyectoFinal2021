@@ -186,7 +186,7 @@ namespace Persistencia
             }
         }
 
-        public List<Paquete> ListadoPaquetesSinSolicitud()
+        public List<Paquete> ListadoPaquetesSinSolicitud(Empleado usLog)
         {
             Paquete paquete = null;
             Empresa empresa = null;
@@ -196,7 +196,7 @@ namespace Persistencia
 
             try
             {
-                conexion = new SqlConnection(Conexion.Cnn(null));
+                conexion = new SqlConnection(Conexion.Cnn(usLog));
                 SqlCommand cmdListadoSolicitues = new SqlCommand("ListarPaquetesSinSolicitud", conexion);
                 cmdListadoSolicitues.CommandType = CommandType.StoredProcedure;
 

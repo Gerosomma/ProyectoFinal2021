@@ -55,7 +55,7 @@ namespace EntidadesCompartidas
             set
             {
                 if ((value.Trim().Length > 50) || (value.Trim().Length <= 0))
-                    throw new Exception("Nombre cliente muy largo");
+                    throw new Exception("Nombre cliente inválido");
                 else
                     _nombreCompleto = value;
             }

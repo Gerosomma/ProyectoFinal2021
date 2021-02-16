@@ -29,12 +29,38 @@ namespace Logica.clasesDeTrabajo
             {
                 throw new Exception("Fecha de entrega invalida.");
             }
+            if (solicitud.PaquetesSolicitud.Count == 0)
+            {
+                throw new Exception("La solicitud no tiene ningun paquetes");
+            }
+        }
+
+        public void AltaSolicitud(Solicitud solicitud, Empleado usLog)
+        {
+            validarSolicitud(solicitud);
+            FabricaPersistencia.GetPersistenciaSolicitud().AltaSolicitud(solicitud, usLog);
+        }
+
+        public void ModificarEstadoSolicitud(Solicitud solicitud, Empleado usLog)
+        {
+            validarSolicitud(solicitud);
+            FabricaPersistencia.GetPersistenciaSolicitud().ModificarEstadoSolicitud(solicitud, usLog);
+        }
+
+        public string listadoSolicitudesEnCamino(Usuario usLog)
+        {
+            return generaXmlSolicitudes(FabricaPersistencia.GetPersistenciaSolicitud().listadoSolicitudesEnCamino(usLog));
+        }
+
+        public List<Solicitud> listadoSolicitudesEmpresa(Empresa usLog)
+        {
+            return FabricaPersistencia.GetPersistenciaSolicitud().listadoSolicitudesEmpresa(usLog);
         }
 
         internal static string generaXmlSolicitudes(List<Solicitud> listaSolicitudes)
         {
             XmlDocument doc = new XmlDocument();
-            
+
             try
             {
                 XmlElement raiz = doc.CreateElement(string.Empty, "solicitudes", string.Empty);
@@ -135,23 +161,6 @@ namespace Logica.clasesDeTrabajo
             {
                 throw ex;
             }
-        } 
-
-        public void AltaSolicitud(Solicitud solicitud, Usuario usLog)
-        {
-            validarSolicitud(solicitud);
-            FabricaPersistencia.GetPersistenciaSolicitud().AltaSolicitud(solicitud, usLog);
-        }
-
-        public void ModificarEstadoSolicitud(Solicitud solicitud, Usuario usLog)
-        {
-            validarSolicitud(solicitud);
-            FabricaPersistencia.GetPersistenciaSolicitud().ModificarEstadoSolicitud(solicitud, usLog);
-        }
-
-        public string listadoSolicitudes(Usuario usLog)
-        {
-            return generaXmlSolicitudes(FabricaPersistencia.GetPersistenciaSolicitud().listadoSolicitudes(usLog));
         }
     }
 }
