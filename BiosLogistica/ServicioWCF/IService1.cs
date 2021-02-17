@@ -58,7 +58,7 @@ namespace ServicioWCF
         void ModificarEstadoSolicitud(Solicitud solicitud, Empleado usLog);
 
         [OperationContract]
-        string listadoSolicitudesEnCamino(Usuario usLog);
+        string listadoSolicitudesEnCamino();
 
         [OperationContract]
         List<Solicitud> listadoSolicitudesEmpresa(Empresa usLog);

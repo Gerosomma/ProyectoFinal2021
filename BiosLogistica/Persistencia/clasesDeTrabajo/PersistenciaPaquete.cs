@@ -163,7 +163,7 @@ namespace Persistencia
 
             try
             {
-                conexion = new SqlConnection(Conexion.Cnn(null));
+                conexion = new SqlConnection(Conexion.Cnn());
                 SqlCommand cmdListadoSolicitues = new SqlCommand("ListarPaquetesSolicitud", conexion);
                 cmdListadoSolicitues.CommandType = CommandType.StoredProcedure;
                 cmdListadoSolicitues.Parameters.AddWithValue("@numeroSolicitud", solicitud);
@@ -183,6 +183,17 @@ namespace Persistencia
             catch (Exception ex)
             {
                 throw ex;
+            }
+            finally
+            {
+                if (drPaquete != null)
+                {
+                    drPaquete.Close();
+                }
+                if (conexion != null)
+                {
+                    conexion.Close();
+                }
             }
         }
 
@@ -215,6 +226,17 @@ namespace Persistencia
             catch (Exception ex)
             {
                 throw ex;
+            }
+            finally
+            {
+                if (drPaquete != null)
+                {
+                    drPaquete.Close();
+                }
+                if (conexion != null)
+                {
+                    conexion.Close();
+                }
             }
         }
 

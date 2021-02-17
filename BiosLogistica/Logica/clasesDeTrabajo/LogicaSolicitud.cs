@@ -25,7 +25,7 @@ namespace Logica.clasesDeTrabajo
 
         internal static void validarSolicitud(Solicitud solicitud)
         {
-            if (solicitud.FechaEntrega < DateTime.Today.Date)
+            if (solicitud.FechaEntrega > DateTime.Today)
             {
                 throw new Exception("Fecha de entrega invalida.");
             }
@@ -47,9 +47,9 @@ namespace Logica.clasesDeTrabajo
             FabricaPersistencia.GetPersistenciaSolicitud().ModificarEstadoSolicitud(solicitud, usLog);
         }
 
-        public string listadoSolicitudesEnCamino(Usuario usLog)
+        public string listadoSolicitudesEnCamino()
         {
-            return generaXmlSolicitudes(FabricaPersistencia.GetPersistenciaSolicitud().listadoSolicitudesEnCamino(usLog));
+            return generaXmlSolicitudes(FabricaPersistencia.GetPersistenciaSolicitud().listadoSolicitudesEnCamino());
         }
 
         public List<Solicitud> listadoSolicitudesEmpresa(Empresa usLog)

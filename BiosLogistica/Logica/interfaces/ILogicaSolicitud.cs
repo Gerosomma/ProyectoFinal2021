@@ -11,7 +11,7 @@ namespace Logica.interfaces
     {
         void AltaSolicitud(Solicitud solicitud, Empleado usLog);
         void ModificarEstadoSolicitud(Solicitud solicitud, Empleado usLog);
-        string listadoSolicitudesEnCamino(Usuario usLog);
+        string listadoSolicitudesEnCamino();
         List<Solicitud> listadoSolicitudesEmpresa(Empresa usLog);
     }
 }

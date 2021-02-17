@@ -36,10 +36,7 @@ namespace EntidadesCompartidas
         {
             get { return _fechaEntrega; }
             set {
-                if (value != null && value > DateTime.Today)
-                    _fechaEntrega = value;
-                else
-                    throw new Exception("Fecha de entrega inválida");
+                _fechaEntrega = value;
             }
         }
 

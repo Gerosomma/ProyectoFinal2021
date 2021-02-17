@@ -78,9 +78,9 @@ namespace ServicioWCF
             FabricaLogica.GetLogicaSolicitud().ModificarEstadoSolicitud(solicitud, usLog);
         }
 
-        string IService1.listadoSolicitudesEnCamino(Usuario usLog)
+        string IService1.listadoSolicitudesEnCamino()
         {
-            return FabricaLogica.GetLogicaSolicitud().listadoSolicitudesEnCamino(usLog);
+            return FabricaLogica.GetLogicaSolicitud().listadoSolicitudesEnCamino();
         }
         List<Solicitud> IService1.listadoSolicitudesEmpresa(Empresa usLog)
         {
