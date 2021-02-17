@@ -134,7 +134,7 @@ namespace Persistencia
             }
         }
 
-        public List<Solicitud> listadoSolicitudesEnCamino(Usuario usLog)
+        public List<Solicitud> listadoSolicitudesEnCamino()
         {
             SqlConnection conexion = null;
             SqlDataReader drSolicitud = null;
@@ -145,7 +145,7 @@ namespace Persistencia
 
             try
             {
-                conexion = new SqlConnection(Conexion.Cnn(usLog));
+                conexion = new SqlConnection(Conexion.Cnn());
                 SqlCommand cmdListadoSolicitues = new SqlCommand("listadoSolicitudesEnCamino", conexion);
                 cmdListadoSolicitues.CommandType = CommandType.StoredProcedure;
                 
@@ -169,6 +169,10 @@ namespace Persistencia
             }
             finally
             {
+                if (drSolicitud != null)
+                {
+                    drSolicitud.Close();
+                }
                 if (conexion != null)
                 {
                     conexion.Close();
@@ -211,6 +215,10 @@ namespace Persistencia
             }
             finally
             {
+                if (drSolicitud != null)
+                {
+                    drSolicitud.Close();
+                }
                 if (conexion != null)
                 {
                     conexion.Close();

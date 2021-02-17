@@ -21,7 +21,8 @@ namespace EntidadesCompartidas
         {
             get { return _telefono; }
             set {
-                if (value.Trim().Length == 9)
+                int i = 0;
+                if (value.Trim().Length == 9 && int.TryParse(value, out i))
                     _telefono = value;
                 else
                     throw new Exception("Telefono inválido");

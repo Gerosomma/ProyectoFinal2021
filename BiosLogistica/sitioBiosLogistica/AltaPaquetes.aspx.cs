@@ -10,6 +10,7 @@ using Logica;
 
 public partial class AltaPaquetes : System.Web.UI.Page
 {
+
     Usuario usuarioLogueado;
     List<Empresa> empresas;
     protected void Page_Load(object sender, EventArgs e)
@@ -28,7 +29,7 @@ public partial class AltaPaquetes : System.Web.UI.Page
                 lbxEmpresa.Items.Add(new ListItem(emp.NombreCompleto, emp.Logueo));
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             lblMensaje.Text = "Ocurrió un error al listar las empresas";
 
@@ -73,7 +74,7 @@ public partial class AltaPaquetes : System.Web.UI.Page
         {
             peso = Convert.ToDouble(txtPeso.Text);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             lblMensaje.Text = "Ingrese un peso válido.";
 

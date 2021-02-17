@@ -11,7 +11,7 @@ namespace Persistencia.interfaces
     {
         void AltaSolicitud(Solicitud solicitud, Empleado usLog);
         void ModificarEstadoSolicitud(Solicitud solicitud, Empleado usLog);
-        List<Solicitud> listadoSolicitudesEnCamino(Usuario usLog);
+        List<Solicitud> listadoSolicitudesEnCamino();
         List<Solicitud> listadoSolicitudesEmpresa(Empresa usLog);
 
     }
