@@ -11,12 +11,12 @@ using Logica;
 public partial class AltaPaquetes : System.Web.UI.Page
 {
 
-    Usuario usuarioLogueado;
+    Empleado usuarioLogueado;
     List<Empresa> empresas;
     protected void Page_Load(object sender, EventArgs e)
     {
         ((Label)this.Master.FindControl("lblPagina")).Text = "Alta de paquetes";
-        usuarioLogueado = (Usuario)Session["Usuario"];
+        usuarioLogueado = (Empleado)Session["Usuario"];
 
         lbxEmpresa.Items.Clear();
 

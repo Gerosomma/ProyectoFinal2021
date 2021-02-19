@@ -26,6 +26,8 @@
             <Nodes>
                 <asp:TreeNode NavigateUrl="~/default.aspx" Text="Inicio" 
                     Value="Inicio" ImageUrl="~/img/casa2.png"></asp:TreeNode>
+                <asp:TreeNode NavigateUrl="~/ListadoSolicitudesEmpresa.aspx" Text="Solicitudes Empresa" 
+                    Value="Inicio" ImageUrl="~/img/gps.png"></asp:TreeNode>
                 
             </Nodes>
             <NodeStyle BorderStyle="None" Font-Bold="True" NodeSpacing="1px" VerticalPadding="9px" Width="100%" />

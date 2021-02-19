@@ -10,13 +10,12 @@ using Logica;
 
 public partial class MantenimientoEmpleado : System.Web.UI.Page
 {
-    Usuario usuarioLogueado;
+    Empleado usuarioLogueado;
     protected void Page_Load(object sender, EventArgs e)
     {
         ((Label)this.Master.FindControl("lblPagina")).Text = "ABM de Empleado";
-        usuarioLogueado = (Usuario)Session["Usuario"];
-
-        Usuario us = (Usuario)Session["Usuario"];
+        usuarioLogueado = (Empleado)Session["Usuario"];
+        
         if (usuarioLogueado == null)
         {
             lblMensaje.Text = "Logeese para modificar ";
