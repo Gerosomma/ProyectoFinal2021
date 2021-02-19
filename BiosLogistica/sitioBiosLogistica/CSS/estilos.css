@@ -65,6 +65,18 @@ div.content-bar
     color: #308695;
 }
 
+div.content-bar-publico
+{
+    padding-left:1%;
+    width:auto ;
+    padding-bottom: 20px;
+    padding-top: 20px;
+    text-align: center;
+    top: 141px;
+    background-color:#D4CFC9;
+    color: #308695;
+}
+
 div.side-bar
 {
     position: absolute;
@@ -148,9 +160,10 @@ table.tabLogin
 }
 .general 
 {
-    height: 981px; 
     width: 85%; 
-    text-align: -webkit-center;
+    text-align: center;
+    position: center;
+
 }
 
 

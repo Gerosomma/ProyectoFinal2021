@@ -102,7 +102,6 @@ namespace Persistencia
                 cmdModificarSolicitud.CommandType = CommandType.StoredProcedure;
 
                 cmdModificarSolicitud.Parameters.AddWithValue("@numero", solicitud.Numero);
-                cmdModificarSolicitud.Parameters.AddWithValue("@empleado", solicitud.Empleado.Logueo);
                 
                 SqlParameter valorRetorno = new SqlParameter("@valorRetorno", SqlDbType.Int);
                 valorRetorno.Direction = ParameterDirection.ReturnValue;
@@ -114,10 +113,8 @@ namespace Persistencia
                 switch ((int)valorRetorno.Value)
                 {
                     case -1:
-                        throw new Exception("El empleado no exíste o no está activo.");
-                    case -2:
                         throw new Exception("Solicitud inexistente.");
-                    case -3:
+                    case -2:
                         throw new Exception("Error al modificar estado.");
                 }
             }

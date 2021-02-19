@@ -22,28 +22,18 @@ namespace Logica.clasesDeTrabajo
             }
             return _instancia;
         }
-
-        internal static void validarSolicitud(Solicitud solicitud)
-        {
-            if (solicitud.FechaEntrega > DateTime.Today)
-            {
-                throw new Exception("Fecha de entrega invalida.");
-            }
-            if (solicitud.PaquetesSolicitud.Count == 0)
-            {
-                throw new Exception("La solicitud no tiene ningun paquetes");
-            }
-        }
+        
 
         public void AltaSolicitud(Solicitud solicitud, Empleado usLog)
         {
-            validarSolicitud(solicitud);
+            if (solicitud.FechaEntrega > DateTime.Today)
+                throw new Exception("Fecha de entrega invalida.");
+
             FabricaPersistencia.GetPersistenciaSolicitud().AltaSolicitud(solicitud, usLog);
         }
 
         public void ModificarEstadoSolicitud(Solicitud solicitud, Empleado usLog)
         {
-            validarSolicitud(solicitud);
             FabricaPersistencia.GetPersistenciaSolicitud().ModificarEstadoSolicitud(solicitud, usLog);
         }
 

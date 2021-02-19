@@ -1,0 +1,27 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="MPPublica.master.cs" Inherits="MPPublica" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Bios Logistica</title>
+    <link rel="icon" href="img/favicon.ico" type="image/ico" />
+    <link href="CSS/estilos.css" rel="stylesheet" />
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div class="title-bar">
+            <asp:ImageButton ID="logo" runat="server" PostBackUrl="~/Default.aspx" ImageUrl="~/img/red.png" EnableTheming="False" />
+            <asp:Button ID="btnLogout" runat="server" Text="Logout" Width="70px" OnClick="btnLogout_Click" />
+            <asp:Label ID="lblMensaje" runat="server"></asp:Label>
+        </div>
+        <div class="content-bar-publico">
+            <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+            </asp:ContentPlaceHolder>
+        </div>
+    </form>
+</body>
+</html>
