@@ -1,4 +1,4 @@
-﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="MasterPage.master.cs" Inherits="MasterPage" %>
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="MPEmpresa.master.cs" Inherits="MPEmpresa" %>
 
 <!DOCTYPE html>
 
@@ -26,15 +26,8 @@
             <Nodes>
                 <asp:TreeNode NavigateUrl="~/default.aspx" Text="Inicio" 
                     Value="Inicio" ImageUrl="~/img/casa2.png"></asp:TreeNode>
-                <asp:TreeNode ImageUrl="~/img/mas.png" NavigateUrl="~/AltaPaquetes.aspx" Text="Alta de Paquete" Value="Alta de Paquete"></asp:TreeNode>
-                <asp:TreeNode ImageUrl="~/img/calendario.png" NavigateUrl="~/AltaSolicitud.aspx" Text="Generar solicitud de Entrega" Value="Generar solicitud de Entrega"></asp:TreeNode>
-                <asp:TreeNode ImageUrl="~/img/garrapata.png" NavigateUrl="~/CambioEstadoSolicitud.aspx" Text="Cambiar estado solicitud" Value="Cambiar estado solicitud"></asp:TreeNode>
-                <asp:TreeNode ImageUrl="~/img/mantenimiento2.png" Text="Mantenimiento" Value="Mantenimiento">
-                    <asp:TreeNode ImageUrl="~/img/empresav1.png" NavigateUrl="~/MantenimientoEmpresa.aspx" Text="Mantenimiento de Empresa" Value="Mantenimiento de Empresa"></asp:TreeNode>
-                    <asp:TreeNode ImageUrl="~/img/empleadov1.png" NavigateUrl="~/MantenimientoEmpleado.aspx" Text="Mantenimiento de Empleado" Value="Mantenimiento de Empleado"></asp:TreeNode>
-                </asp:TreeNode>
-                <asp:TreeNode NavigateUrl="~/Login.aspx" Text="Login" 
-                    Value="Inicio" ImageUrl="~/img/usuario.png"></asp:TreeNode>
+                <asp:TreeNode NavigateUrl="~/ListadoSolicitudesEmpresa.aspx" Text="Solicitudes Empresa" 
+                    Value="Inicio" ImageUrl="~/img/gps.png"></asp:TreeNode>
                 
             </Nodes>
             <NodeStyle BorderStyle="None" Font-Bold="True" NodeSpacing="1px" VerticalPadding="9px" Width="100%" />

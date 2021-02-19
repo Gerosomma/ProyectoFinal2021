@@ -17,7 +17,7 @@ USE ProyectoSegundo2020
 
 CREATE TABLE Usuario (
 	logueo VARCHAR(12) NOT NULL PRIMARY KEY,-- 12 caracteres
-	contrasena VARCHAR(6) NOT NULL CHECK (contrasena LIKE '[a-zA-Z][a-zA-Z][a-zA-Z][0-9][0-9][|°¬¿?¡!"#$%&/\()=@´`¨+-*~{}^_<>,;.:]'), -- checks formato
+	contrasena VARCHAR(6) NOT NULL CHECK (contrasena LIKE '[a-zA-Z][a-zA-Z][a-zA-Z][0-9][0-9][|ï¿½ï¿½ï¿½?ï¿½!"#$%&/\()=@ï¿½`ï¿½+-*~{}^_<>,;.:]'), -- checks formato
 	nombreCompleto VARCHAR(50) DEFAULT 'N/A' NOT NULL CHECK (nombreCompleto <> ''),
 	activo BIT NOT NULL DEFAULT 1
 )
@@ -283,7 +283,7 @@ BEGIN
 	BEGIN TRANSACTION;
 	UPDATE Usuario
 	SET contrasena = @contrasena, 
-		nombreCompleto = @nombreCompleto -- solo se puede cambiar la contraseña del propio usuario logueado
+		nombreCompleto = @nombreCompleto -- solo se puede cambiar la contraseï¿½a del propio usuario logueado
 	WHERE logueo = @logueo
 	IF (@@ERROR <> 0)
 		BEGIN
@@ -307,7 +307,7 @@ BEGIN
 	BEGIN
 		RETURN -5
 	END
-	-- faltaria cambiar contraseña sql, usar sp_password para no tener que modificar permisos
+	-- faltaria cambiar contraseï¿½a sql, usar sp_password para no tener que modificar permisos
 END
 
 GO
@@ -562,7 +562,7 @@ BEGIN
 	BEGIN TRANSACTION;
 	UPDATE Usuario
 	SET contrasena = @contrasena, 
-		nombreCompleto = @nombreCompleto -- solo el propio usuario empresa puede modificar la contraseña
+		nombreCompleto = @nombreCompleto -- solo el propio usuario empresa puede modificar la contraseï¿½a
 	WHERE logueo = @logueo
 	IF (@@ERROR <> 0)
 	BEGIN
@@ -804,36 +804,23 @@ END
 GO 
 
 CREATE PROCEDURE ModificarEstadoSolicitud -- seria modificarEstadoSolicitud con la logica necesaria.
-@numero INT,
-@empleado VARCHAR(50)
+@numero INT
 AS
 BEGIN
-	IF NOT EXISTS (SELECT * 
-					FROM Usuario a
-					inner join Empleado b on a.logueo = b.logueo
-					WHERE a.logueo = @empleado AND a.activo = 1 )	
+	IF NOT EXISTS (SELECT * FROM Solicitud WHERE numero = @numero)	
 	BEGIN
 		RETURN -1
 	END
-
-	IF NOT EXISTS (SELECT * FROM Solicitud WHERE numero = @numero)	
-	BEGIN
-		RETURN -2
-	END
-	-- seria con todos los datos de la solicitud por parametro,
-	-- Y consulto el estado a travez de allí
-	-- seria con este ejemplo y solo el numero de solicitud como parametro?
 	UPDATE Solicitud 
 	SET  estado = CASE 
 					WHEN  estado = 'en deposito' then 'en camino'
 					WHEN estado = 'en camino' then 'entregado'
-				 END,
-		empleado = @empleado -- Modifico el empleado? y los demas datos de la solicitud?
+				 END
  	WHERE numero = @numero
 
 	IF (@@ERROR <> 0)
 	BEGIN
-		RETURN -3
+		RETURN -2
 	END
 END
 
