@@ -4,30 +4,30 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-
-using EntidadesCompartidas;
-using Logica;
+using wcfLogistica;
 
 public partial class MantenimientoEmpresa : System.Web.UI.Page
 {
-    Usuario usuarioLogueado;
+    private Empleado usuarioLogueado = null;
+    private Empresa objEmpresa = null;
+
     protected void Page_Load(object sender, EventArgs e)
     {
         ((Label)this.Master.FindControl("lblPagina")).Text = "ABM de Empresa";
-        usuarioLogueado = (Usuario)Session["Usuario"];
+        usuarioLogueado = (Empleado)Session["Usuario"];
     }
 
     protected void btnBuscar_Click(object sender, EventArgs e)
     {
         string logueo;
-        Empresa empresaEncontrada = null;
 
         if (!string.IsNullOrWhiteSpace(txtLogueo.Text))
         {
             try
             {
                 logueo = txtLogueo.Text;
-                empresaEncontrada = (Empresa)FabricaLogica.GetLogicaUsuario().BuscarUsuario(logueo, usuarioLogueado);
+                ServiceClient wcf = new ServiceClient();
+                objEmpresa = (Empresa)wcf.BuscarUsuario(logueo, usuarioLogueado);
 
                 btnBuscar.Enabled = false;
 
@@ -39,13 +39,13 @@ public partial class MantenimientoEmpresa : System.Web.UI.Page
                 txtDireccion.Enabled = true;
                 txtEmail.Enabled = true;
 
-                if (empresaEncontrada != null)
+                if (objEmpresa != null)
                 {
-                    txtContrasena.Text = empresaEncontrada.Contrasena;
-                    txtNombre.Text = empresaEncontrada.NombreCompleto;
-                    txtTelefono.Text = empresaEncontrada.Telefono;
-                    txtDireccion.Text = empresaEncontrada.Direccion;
-                    txtEmail.Text = empresaEncontrada.Email;
+                    txtContrasena.Text = objEmpresa.Contrasena;
+                    txtNombre.Text = objEmpresa.NombreCompleto;
+                    txtTelefono.Text = objEmpresa.Telefono;
+                    txtDireccion.Text = objEmpresa.Direccion;
+                    txtEmail.Text = objEmpresa.Email;
 
                     btnModificar.Enabled = true;
                     btnEliminar.Enabled = true;
@@ -61,7 +61,7 @@ public partial class MantenimientoEmpresa : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                lblMensaje.Text = "Ocurrió un error al buscar la empresa.";
+                lblMensaje.Text = ex.Message;
 
                 return;
             }
@@ -79,25 +79,25 @@ public partial class MantenimientoEmpresa : System.Web.UI.Page
     {
         try
         {
-            string logueo = txtLogueo.Text;
-            string contrasena = txtContrasena.Text;
-            string nombre = txtNombre.Text;
-            string telefono = txtTelefono.Text;
-            string direccion = txtDireccion.Text;
-            string email = txtEmail.Text;
-
-            Empresa empresa = new Empresa(logueo, contrasena, nombre, telefono, direccion, email);
-
-            FabricaLogica.GetLogicaUsuario().AltaUsuario(empresa, usuarioLogueado);
+            Empresa emp = new Empresa();
+            emp.Logueo = txtLogueo.Text;
+            emp.Contrasena = txtContrasena.Text;
+            emp.NombreCompleto = txtNombre.Text;
+            emp.Telefono = txtTelefono.Text;
+            emp.Direccion = txtDireccion.Text;
+            emp.Email = txtEmail.Text;
+            
+            ServiceClient wcf = new ServiceClient();
+            wcf.AltaUsuario(emp, usuarioLogueado);
+            //Empresa empresa = new Empresa(logueo, contrasena, nombre, telefono, direccion, email);
+            //FabricaLogica.GetLogicaUsuario().AltaUsuario(empresa, usuarioLogueado);
 
             LimpiarFormulario();
             lblMensaje.Text = "Empresa agregada con éxito";
         }
         catch(Exception ex)
         {
-            lblMensaje.Text = "Ocurrió un error al agregar la empresa";
-
-            return;
+            lblMensaje.Text = ex.Message;
         }
     }
 
@@ -105,25 +105,29 @@ public partial class MantenimientoEmpresa : System.Web.UI.Page
     {
         try
         {
-            string logueo = txtLogueo.Text;
-            Empresa empresa = (Empresa)FabricaLogica.GetLogicaUsuario().BuscarUsuario(logueo, usuarioLogueado);
+            if (objEmpresa != null)
+            {
+                objEmpresa.Contrasena = txtContrasena.Text;
+                objEmpresa.NombreCompleto = txtNombre.Text;
+                objEmpresa.Telefono = txtTelefono.Text;
+                objEmpresa.Direccion = txtDireccion.Text;
+                objEmpresa.Email = txtEmail.Text;
 
-            empresa.Contrasena = txtContrasena.Text;
-            empresa.NombreCompleto = txtNombre.Text;
-            empresa.Telefono = txtTelefono.Text;
-            empresa.Direccion = txtDireccion.Text;
-            empresa.Email = txtEmail.Text;
+                //FabricaLogica.GetLogicaUsuario().ModificarUsuario(empresa, usuarioLogueado);
+                ServiceClient wcf = new ServiceClient();
+                wcf.ModificarUsuario(objEmpresa, usuarioLogueado);
 
-            FabricaLogica.GetLogicaUsuario().ModificarUsuario(empresa, usuarioLogueado);
-
-            LimpiarFormulario();
-            lblMensaje.Text = "Empresa modificada con éxito";
+                LimpiarFormulario();
+                lblMensaje.Text = "Empresa modificada con éxito";
+            }
+            else
+            {
+                lblMensaje.Text = "Debe buscar la empresa primero.";
+            }
         }
         catch (Exception ex)
         {
-            lblMensaje.Text = "Ocurrió un error al modificar la empresa";
-
-            return;
+            lblMensaje.Text = ex.Message;
         }
         
     }
@@ -132,17 +136,23 @@ public partial class MantenimientoEmpresa : System.Web.UI.Page
     {
         try
         {
-            string logueo = txtLogueo.Text;
-            Empresa empresa = (Empresa)FabricaLogica.GetLogicaUsuario().BuscarUsuario(logueo, usuarioLogueado);
+            if (objEmpresa != null)
+            {
+                ServiceClient wcf = new ServiceClient();
+                wcf.BajaUsuario(objEmpresa, usuarioLogueado);
 
-            FabricaLogica.GetLogicaUsuario().BajaUsuario(empresa, usuarioLogueado);
+                LimpiarFormulario();
+                lblMensaje.Text = "Empresa eliminada con éxito";
+            }
+            else
+            {
+                lblMensaje.Text = "Debe buscar empresa primero";
+            }
 
-            LimpiarFormulario();
-            lblMensaje.Text = "Empresa eliminada con éxito";
         }
         catch (Exception ex)
         {
-            lblMensaje.Text = "Ocurrió un error al eliminar la empresa.";
+            lblMensaje.Text = ex.Message;
         }
     }
 

@@ -48,8 +48,7 @@ namespace EntidadesCompartidas
 
         }
 
-        public Empleado(string logueo, string contrasenia, string nombreCompleto,
-            string horaInicio, string horaFin)
+        public Empleado(string logueo, string contrasenia, string nombreCompleto, string horaInicio, string horaFin)
             :base(logueo, contrasenia, nombreCompleto)
         {
             HoraInicio = horaInicio;

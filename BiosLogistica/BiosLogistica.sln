@@ -12,7 +12,7 @@ EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "sitioBiosLogistica", "sitioBiosLogistica\", "{C690CF72-7216-4713-95C1-980A03B952FD}"
 	ProjectSection(WebsiteProperties) = preProject
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5"
-		ProjectReferences = "{5a2e40ac-d31e-4ddd-9268-69efd90a2460}|Logica.dll;{7454440D-870D-4DCF-91B4-DA2F7B6EC3D7}|EntidadesCompartidas.dll;{ADEFB852-9291-4C92-ACFF-98CD42C01572}|Persistencia.dll;"
+		ProjectReferences = ""
 		Debug.AspNetCompiler.VirtualPath = "/localhost_1858"
 		Debug.AspNetCompiler.PhysicalPath = "sitioBiosLogistica\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_1858\"
@@ -30,6 +30,9 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "sitioBiosLogistica", "sitio
 		VWDPort = "1858"
 		SlnRelativePath = "sitioBiosLogistica\"
 		DefaultWebSiteLanguage = "Visual C#"
+	EndProjectSection
+	ProjectSection(ProjectDependencies) = postProject
+		{F143D413-D5B9-44E6-BE57-15D70144EC7E} = {F143D413-D5B9-44E6-BE57-15D70144EC7E}
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServicioWCF", "ServicioWCF\ServicioWCF.csproj", "{47ADFC18-EDB0-49BD-ABB0-7032F43C3153}"
@@ -52,6 +55,7 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "wcfLogistica", "wcfLogistic
 		Release.AspNetCompiler.FixedNames = "false"
 		Release.AspNetCompiler.Debug = "False"
 		VWDPort = "7379"
+		SlnRelativePath = "wcfLogistica\"
 	EndProjectSection
 EndProject
 Global

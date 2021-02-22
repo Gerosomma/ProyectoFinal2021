@@ -4,13 +4,12 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-
-using EntidadesCompartidas;
-using Logica;
+using wcfLogistica;
 
 public partial class MantenimientoEmpleado : System.Web.UI.Page
 {
-    Empleado usuarioLogueado;
+    private Empleado usuarioLogueado = null;
+    private Empleado objEmpleado = null;
     protected void Page_Load(object sender, EventArgs e)
     {
         ((Label)this.Master.FindControl("lblPagina")).Text = "ABM de Empleado";
@@ -26,14 +25,16 @@ public partial class MantenimientoEmpleado : System.Web.UI.Page
     protected void btnBuscar_Click(object sender, EventArgs e)
     {
         string logueo;
-        Empleado empleadoEncontrado = null;
 
         if (!String.IsNullOrWhiteSpace(txtLogueo.Text))
         {
             try
             {
                 logueo = txtLogueo.Text;
-                empleadoEncontrado = (Empleado)FabricaLogica.GetLogicaUsuario().BuscarUsuario(logueo, usuarioLogueado);
+
+                ServiceClient wcf = new ServiceClient();
+                objEmpleado = (Empleado)wcf.BuscarUsuario(logueo, usuarioLogueado);
+                //empleadoEncontrado = (Empleado)FabricaLogica.GetLogicaUsuario().BuscarUsuario(logueo, usuarioLogueado);
 
                 btnBuscar.Enabled = false;
 
@@ -45,12 +46,12 @@ public partial class MantenimientoEmpleado : System.Web.UI.Page
                 txtHoraFin.Enabled = true;
                 
 
-                if (empleadoEncontrado != null)
+                if (objEmpleado != null)
                 {
-                    txtContrasena.Text = empleadoEncontrado.Contrasena;
-                    txtNombre.Text = empleadoEncontrado.NombreCompleto;
-                    txtHoraInicio.Text = empleadoEncontrado.HoraInicio;
-                    txtHoraFin.Text = empleadoEncontrado.HoraFin;
+                    txtContrasena.Text = objEmpleado.Contrasena;
+                    txtNombre.Text = objEmpleado.NombreCompleto;
+                    txtHoraInicio.Text = objEmpleado.HoraInicio;
+                    txtHoraFin.Text = objEmpleado.HoraFin;
 
                     btnModificar.Enabled = true;
                     btnEliminar.Enabled = true;
@@ -66,7 +67,7 @@ public partial class MantenimientoEmpleado : System.Web.UI.Page
             }
             catch (Exception ex)
             {
-                lblMensaje.Text = "Ocurrió un error al buscar el empleado";
+                lblMensaje.Text = ex.Message;
 
                 return;
             }
@@ -84,22 +85,24 @@ public partial class MantenimientoEmpleado : System.Web.UI.Page
     {
         try
         {
-            string logueo = txtLogueo.Text;
-            string contrasena = txtContrasena.Text;
-            string nombre = txtNombre.Text;
-            string horaInicio = txtHoraInicio.Text;
-            string horaFin = txtHoraFin.Text;         
+            //Empleado empleado = new Empleado(logueo, contrasena, nombre, horaInicio, horaFin);
+            Empleado empleado = new Empleado();
+            empleado.Logueo = txtLogueo.Text;
+            empleado.Contrasena = txtContrasena.Text;
+            empleado.NombreCompleto = txtNombre.Text;
+            empleado.HoraInicio = txtHoraInicio.Text;
+            empleado.HoraFin = txtHoraFin.Text;
 
-            Empleado empleado = new Empleado(logueo, contrasena, nombre, horaInicio, horaFin);
-
-            FabricaLogica.GetLogicaUsuario().AltaUsuario(empleado, usuarioLogueado);
+            ServiceClient wcf = new ServiceClient();
+            wcf.AltaUsuario(empleado, usuarioLogueado);
+            //FabricaLogica.GetLogicaUsuario().AltaUsuario(empleado, usuarioLogueado);
 
             LimpiarFormulario();
             lblMensaje.Text = "Empleado agregado con éxito";
         }
         catch (Exception ex)
         {
-            lblMensaje.Text = "Ocurrió un error al agregar el empleado";
+            lblMensaje.Text = ex.Message;
 
             return;
         }
@@ -109,22 +112,39 @@ public partial class MantenimientoEmpleado : System.Web.UI.Page
     {
         try
         {
-            string logueo = txtLogueo.Text;
+            /*string logueo = txtLogueo.Text;
             Empleado empleado = (Empleado)FabricaLogica.GetLogicaUsuario().BuscarUsuario(logueo, usuarioLogueado);
 
             empleado.Contrasena = txtContrasena.Text;
             empleado.NombreCompleto = txtNombre.Text;
             empleado.HoraInicio = txtHoraInicio.Text;
-            empleado.HoraFin = txtHoraFin.Text;            
+            empleado.HoraFin = txtHoraFin.Text;*/
+            //Empleado empleado = new Empleado(logueo, contrasena, nombre, horaInicio, horaFin);
 
-            FabricaLogica.GetLogicaUsuario().ModificarUsuario(empleado, usuarioLogueado);
+            // podriamos manejar un objeto empleado para toda la pantalla y consultar aqui si anteriormente se busco un usuario.
+            if (objEmpleado != null)
+            {
+                objEmpleado.Contrasena = txtContrasena.Text;
+                objEmpleado.NombreCompleto = txtNombre.Text;
+                objEmpleado.HoraInicio = txtHoraInicio.Text;
+                objEmpleado.HoraFin = txtHoraFin.Text;
 
-            LimpiarFormulario();
-            lblMensaje.Text = "Empleado modificado con éxito";
+                ServiceClient wcf = new ServiceClient();
+                wcf.ModificarUsuario(objEmpleado, usuarioLogueado);
+
+                //FabricaLogica.GetLogicaUsuario().ModificarUsuario(empleado, usuarioLogueado);
+
+                LimpiarFormulario();
+                lblMensaje.Text = "Empleado modificado con éxito";
+            }
+            else
+            {
+                lblMensaje.Text = "Debe buscar empleado para dar de baja";
+            }
         }
         catch (Exception ex)
         {
-            lblMensaje.Text = "Ocurrió un error al modificar el empleado";
+            lblMensaje.Text = ex.Message;
 
             return;
         }
@@ -134,17 +154,23 @@ public partial class MantenimientoEmpleado : System.Web.UI.Page
     {
         try
         {
-            string logueo = txtLogueo.Text;
-            Empleado empleado = (Empleado)FabricaLogica.GetLogicaUsuario().BuscarUsuario(logueo, usuarioLogueado);
+            if (objEmpleado != null)
+            {
+                ServiceClient wcf = new ServiceClient();
+                wcf.BajaUsuario(objEmpleado, usuarioLogueado);
 
-            FabricaLogica.GetLogicaUsuario().BajaUsuario(empleado, usuarioLogueado);
+                LimpiarFormulario();
+                lblMensaje.Text = "Empleado eliminado con éxito";
+            }
+            else
+            {
+                lblMensaje.Text = "Debe buscar empleado para dar de baja";
+            }
 
-            LimpiarFormulario();
-            lblMensaje.Text = "Empleado eliminado con éxito";
         }
         catch (Exception ex)
         {
-            lblMensaje.Text = "Ocurrió un error al eliminar el empleado.";
+            lblMensaje.Text = ex.Message;
         }
     }
 
