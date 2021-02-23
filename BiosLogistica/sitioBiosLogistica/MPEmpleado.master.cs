@@ -10,10 +10,20 @@ public partial class MasterPage : System.Web.UI.MasterPage
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        Usuario us = (Usuario)Session["Usuario"];
-        if (us != null)
+        try
         {
-            lblMensaje.Text = us.Logueo;
+            if (Session["Usuario"] is Empleado)
+            {
+                lblMensaje.Text = ((Empleado)Session["Usuario"]).Logueo;
+            }
+            else
+            {
+                Response.Redirect("~/Login.aspx");
+            }
+        }
+        catch (Exception)
+        {
+            Response.Redirect("~/Login.aspx");
         }
     }
 
