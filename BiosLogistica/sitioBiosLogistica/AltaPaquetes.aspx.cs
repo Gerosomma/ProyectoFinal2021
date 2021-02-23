@@ -4,9 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-
-using EntidadesCompartidas;
-using Logica;
+using wcfLogistica;
 
 public partial class AltaPaquetes : System.Web.UI.Page
 {
@@ -22,7 +20,9 @@ public partial class AltaPaquetes : System.Web.UI.Page
 
         try
         {
-            empresas = FabricaLogica.GetLogicaUsuario().ListarEmpresas(usuarioLogueado);
+            //empresas = FabricaLogica.GetLogicaUsuario().ListarEmpresas(usuarioLogueado);
+            ServiceClient wcf = new ServiceClient();
+            empresas = wcf.ListarEmpresas(usuarioLogueado).ToList<Empresa>();
 
             foreach (Empresa emp in empresas)
             {
@@ -74,17 +74,32 @@ public partial class AltaPaquetes : System.Web.UI.Page
         {
             peso = Convert.ToDouble(txtPeso.Text);
         }
-        catch (Exception)
+        catch (FormatException)
         {
             lblMensaje.Text = "Ingrese un peso válido.";
 
             return;
         }
 
-        empresa = (Empresa)FabricaLogica.GetLogicaUsuario().BuscarUsuario(lbxEmpresa.SelectedValue, usuarioLogueado);
+        try
+        {
+            //empresa = (Empresa)FabricaLogica.GetLogicaUsuario().BuscarUsuario(lbxEmpresa.SelectedValue, usuarioLogueado);
+            ServiceClient wcf = new ServiceClient();
+            empresa = (Empresa)wcf.BuscarUsuario(lbxEmpresa.SelectedValue, usuarioLogueado);
 
-        paquete = new Paquete(codigo, tipo, descripcion, peso, empresa);
+            paquete = new Paquete();
+            paquete.Codigo = codigo;
+            paquete.Tipo = tipo;
+            paquete.Descripcion = descripcion;
+            paquete.Peso = peso;
+            paquete.EmpresaOrigen = empresa;
 
-        FabricaLogica.GetLogicaPaquete().AltaPaquete(paquete, usuarioLogueado);
+            //FabricaLogica.GetLogicaPaquete().AltaPaquete(paquete, usuarioLogueado);
+            wcf.AltaPaquete(paquete, usuarioLogueado);
+        }
+        catch (Exception ex)
+        {
+            lblMensaje.Text = ex.Message;
+        }
     }
 }

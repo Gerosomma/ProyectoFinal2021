@@ -1,11 +1,10 @@
-﻿using EntidadesCompartidas;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using Logica;
+using wcfLogistica;
 
 public partial class Login : System.Web.UI.Page
 {
@@ -31,8 +30,11 @@ public partial class Login : System.Web.UI.Page
         {
             string _usuario = txtUsuario.Text;
             string _contrasenia = txtContrasena.Text;
+            // como diferenciamos si se logeo un usuario empresa o empleado para redirigirlo a su sitio correcto?
 
-            Usuario usLog = FabricaLogica.GetLogicaUsuario().LogueoUsuario(_usuario, _contrasenia);
+            ServiceClient wcf = new ServiceClient();
+            Usuario usLog = wcf.LogueoUsuario(_usuario, _contrasenia);
+            //Usuario usLog = FabricaLogica.GetLogicaUsuario().LogueoUsuario(_usuario, _contrasenia);
             if (usLog == null)
             {
                 lblError.Text = "Usuario o Pass Invalidos";
@@ -40,7 +42,7 @@ public partial class Login : System.Web.UI.Page
             else
             {
                 Session["Usuario"] = usLog;
-                Response.Redirect("~/Default.aspx");
+                Response.Redirect("~/BienvenidaEmpleado.aspx");
             }
         }
         catch (FormatException)

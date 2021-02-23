@@ -63,8 +63,6 @@ CREATE TABLE PaquetesSolicitud (
 GO
 
 
-select * from Empresa;
-
 CREATE ROLE db_rol_empleado
 CREATE ROLE db_rol_empresa
 CREATE ROLE db_rol_publico
@@ -131,7 +129,7 @@ END
 
 GO
 
-create PROCEDURE AltaEmpleado
+alter PROCEDURE AltaEmpleado
 @logueo VARCHAR(12),
 @contrasena VARCHAR(6),
 @nombreCompleto VARCHAR(50),
@@ -198,6 +196,14 @@ BEGIN
 		EXEC sp_addrolemember @rolename='db_rol_empleado' , @membername=@logueo
 		IF (@@ERROR <> 0)
 			RETURN -8
+
+		GRANT ALTER ANY USER ON DATABASE::ProyectoSegundo2020 TO [@logueo]
+		IF (@@ERROR <> 0)
+			RETURN -9
+
+		GRANT ALTER ANY ROLE ON DATABASE::ProyectoSegundo2020 TO [@logueo]
+		IF (@@ERROR <> 0)
+			RETURN -10
 	END
 	ELSE
 	BEGIN
@@ -245,6 +251,14 @@ BEGIN
 		EXEC sp_addrolemember @rolename='db_rol_empleado' , @membername=@logueo
 		IF (@@ERROR <> 0)
 			RETURN -8
+
+		GRANT ALTER ANY USER ON DATABASE::ProyectoSegundo2020 TO [@logueo]
+		IF (@@ERROR <> 0)
+			RETURN -9
+
+		GRANT ALTER ANY ROLE ON DATABASE::ProyectoSegundo2020 TO [@logueo]
+		IF (@@ERROR <> 0)
+			RETURN -10
 
 	END
 END
@@ -858,7 +872,7 @@ GRANT EXECUTE ON dbo.LogueoEmpresa TO [db_rol_publico]
 GRANT EXECUTE ON dbo.listadoSolicitudesEnCamino TO [db_rol_publico]
 GRANT EXECUTE ON dbo.interBuscarEmpleado TO [db_rol_publico]
 GRANT EXECUTE ON dbo.interBuscarEmpresa TO [db_rol_publico]
-GRANT EXECUTE ON dbo.listadoPaquetesSolicitud TO [db_rol_publico]
+GRANT EXECUTE ON dbo.ListarPaquetesSolicitud TO [db_rol_publico]
 
 
 --empleado
@@ -872,7 +886,7 @@ GRANT EXECUTE ON dbo.AltaPaquete TO [db_rol_empleado]
 GRANT EXECUTE ON dbo.AltaSolicitud TO [db_rol_empleado]
 GRANT EXECUTE ON dbo.AltaPaqueteSolicitud TO [db_rol_empleado]
 GRANT EXECUTE ON dbo.ModificarEstadoSolicitud TO [db_rol_empleado]
-GRANT EXECUTE ON dbo.ListarPaquetesLibres TO [db_rol_empleado]
+GRANT EXECUTE ON dbo.ListarPaquetesSinSolicitud TO [db_rol_empleado]
 GRANT EXECUTE ON dbo.BuscarEmpleado TO [db_rol_empleado]
 GRANT EXECUTE ON dbo.BuscarEmpresa TO [db_rol_empleado]
 GRANT EXECUTE ON dbo.BuscarPaquete TO [db_rol_empleado]
