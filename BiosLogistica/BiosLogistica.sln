@@ -35,8 +35,6 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "sitioBiosLogistica", "sitio
 		{F143D413-D5B9-44E6-BE57-15D70144EC7E} = {F143D413-D5B9-44E6-BE57-15D70144EC7E}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServicioWCF", "ServicioWCF\ServicioWCF.csproj", "{47ADFC18-EDB0-49BD-ABB0-7032F43C3153}"
-EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "wcfLogistica", "wcfLogistica\", "{F143D413-D5B9-44E6-BE57-15D70144EC7E}"
 	ProjectSection(WebsiteProperties) = preProject
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5"
@@ -80,10 +78,6 @@ Global
 		{C690CF72-7216-4713-95C1-980A03B952FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C690CF72-7216-4713-95C1-980A03B952FD}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{C690CF72-7216-4713-95C1-980A03B952FD}.Release|Any CPU.Build.0 = Debug|Any CPU
-		{47ADFC18-EDB0-49BD-ABB0-7032F43C3153}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{47ADFC18-EDB0-49BD-ABB0-7032F43C3153}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{47ADFC18-EDB0-49BD-ABB0-7032F43C3153}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{47ADFC18-EDB0-49BD-ABB0-7032F43C3153}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F143D413-D5B9-44E6-BE57-15D70144EC7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F143D413-D5B9-44E6-BE57-15D70144EC7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F143D413-D5B9-44E6-BE57-15D70144EC7E}.Release|Any CPU.ActiveCfg = Debug|Any CPU
