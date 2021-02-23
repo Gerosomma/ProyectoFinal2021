@@ -5,7 +5,7 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
     <div class="general">
         <h2>Login</h2>
-        <table class="tabLogin">
+        <table class="tabLogin" style="position: relative; z-index: auto; text-align: center; vertical-align: middle; top: -10px; left: 517px;">
             <tr class="tabTr">
                 <th>Usuario: </th>
                 <th><asp:TextBox ID="txtUsuario" runat="server"></asp:TextBox></th>

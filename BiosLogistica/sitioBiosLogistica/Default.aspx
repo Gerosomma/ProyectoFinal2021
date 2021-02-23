@@ -4,13 +4,15 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
     <div class="general">
-        <table style="width: 70%;">
+        <table style="text-align: center; position: relative; z-index: auto; width: 100%">
             <tr>
-                <td style="font-size: xx-large;"><asp:Label ID="lblUsuario" runat="server" Text="¡BIENVENIDO! "></asp:Label>
+                <td style="font-size: xx-large;"><asp:Label ID="lblUsuario" runat="server" Text="¡BIENVENIDO! "></asp:Label></td>
+                <td>
+                    <asp:Button ID="btnLogin" runat="server" Text="Login" OnClick="btnLogin_Click" />
                 </td>
             </tr>
             <tr>
-                <asp:GridView ID="gvSolicitudes" runat="server" AutoGenerateSelectButton="True" PageSize="100"></asp:GridView>
+                <asp:GridView ID="gvSolicitudes" runat="server" AutoGenerateSelectButton="True" PageSize="100" HorizontalAlign="Center"></asp:GridView>
                 <td>&nbsp;&nbsp;&nbsp; </td>
             </tr>
             <tr>

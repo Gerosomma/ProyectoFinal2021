@@ -30,7 +30,7 @@ public partial class Login : System.Web.UI.Page
         {
             string _usuario = txtUsuario.Text;
             string _contrasenia = txtContrasena.Text;
-
+            // como diferenciamos si se logeo un usuario empresa o empleado para redirigirlo a su sitio correcto?
 
             ServiceClient wcf = new ServiceClient();
             Usuario usLog = wcf.LogueoUsuario(_usuario, _contrasenia);
@@ -42,7 +42,7 @@ public partial class Login : System.Web.UI.Page
             else
             {
                 Session["Usuario"] = usLog;
-                Response.Redirect("~/Default.aspx");
+                Response.Redirect("~/BienvenidaEmpleado.aspx");
             }
         }
         catch (FormatException)

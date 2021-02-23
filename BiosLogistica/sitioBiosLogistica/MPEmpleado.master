@@ -24,18 +24,17 @@
         <asp:TreeView ID="TreeView1" runat="server" Width="100%" HoverNodeStyle-BorderStyle="Outset" BackColor="#E69D45" Font-Bold="True" ShowExpandCollapse="False">
             <HoverNodeStyle BorderColor="ActiveBorder" BorderStyle="Outset" Font-Bold="True" />
             <Nodes>
-                <asp:TreeNode NavigateUrl="~/default.aspx" Text="Inicio" 
-                    Value="Inicio" ImageUrl="~/img/casa2.png"></asp:TreeNode>
-                <asp:TreeNode ImageUrl="~/img/mas.png" NavigateUrl="~/AltaPaquetes.aspx" Text="Alta de Paquete" Value="Alta de Paquete"></asp:TreeNode>
-                <asp:TreeNode ImageUrl="~/img/calendario.png" NavigateUrl="~/AltaSolicitud.aspx" Text="Generar solicitud de Entrega" Value="Generar solicitud de Entrega"></asp:TreeNode>
-                <asp:TreeNode ImageUrl="~/img/garrapata.png" NavigateUrl="~/CambioEstadoSolicitud.aspx" Text="Cambiar estado solicitud" Value="Cambiar estado solicitud"></asp:TreeNode>
+                <asp:TreeNode NavigateUrl="~/BienvenidaEmpleado.aspx" Text="Inicio" 
+                    Value="Inicio" ImageUrl="~/img/casa2.png">
+                </asp:TreeNode>
                 <asp:TreeNode ImageUrl="~/img/mantenimiento2.png" Text="Mantenimiento" Value="Mantenimiento">
                     <asp:TreeNode ImageUrl="~/img/empresav1.png" NavigateUrl="~/MantenimientoEmpresa.aspx" Text="Mantenimiento de Empresa" Value="Mantenimiento de Empresa"></asp:TreeNode>
                     <asp:TreeNode ImageUrl="~/img/empleadov1.png" NavigateUrl="~/MantenimientoEmpleado.aspx" Text="Mantenimiento de Empleado" Value="Mantenimiento de Empleado"></asp:TreeNode>
                 </asp:TreeNode>
-                <asp:TreeNode NavigateUrl="~/Login.aspx" Text="Login" 
-                    Value="Inicio" ImageUrl="~/img/usuario.png"></asp:TreeNode>
-                
+                <asp:TreeNode ImageUrl="~/img/mas.png" NavigateUrl="~/AltaPaquetes.aspx" Text="Alta de Paquete" Value="Alta de Paquete"></asp:TreeNode>
+                <asp:TreeNode ImageUrl="~/img/buscar.png" NavigateUrl="~/ListadoDePaquetes.aspx" Text="Listado de Paquetes" Value="Listado de Paquetes"></asp:TreeNode>
+                <asp:TreeNode ImageUrl="~/img/calendario.png" NavigateUrl="~/AltaSolicitud.aspx" Text="Generar solicitud de Entrega" Value="Generar solicitud de Entrega"></asp:TreeNode>
+                <asp:TreeNode ImageUrl="~/img/garrapata.png" NavigateUrl="~/CambioEstadoSolicitud.aspx" Text="Cambiar estado solicitud" Value="Cambiar estado solicitud"></asp:TreeNode>
             </Nodes>
             <NodeStyle BorderStyle="None" Font-Bold="True" NodeSpacing="1px" VerticalPadding="9px" Width="100%" />
             <SelectedNodeStyle BackColor="#3F5BCD" />
