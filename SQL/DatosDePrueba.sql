@@ -1,7 +1,7 @@
 
 ---------------DATOS-DE-PRUEBA----------------------------------------------------
 
-EXEC AltaEmpleado 'lu', 'asd12?', 'luquitas rodriguez', '09:00:00', '18:00:00';
+EXEC AltaEmpleado 'emi', 'asd12?', 'luquitas rodriguez', '09:00:00', '18:00:00';
 
 EXEC AltaEmpleado 'ge', 'asd12?', 'Gero 1', '09:00:00', '18:00:00';
 EXEC AltaEmpleado 'ajajaj', '123456', 'Gero 1', '09:00:00.0000', '18:00:0.0000';

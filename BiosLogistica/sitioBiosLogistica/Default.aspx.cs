@@ -15,6 +15,14 @@ public partial class _Default : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
+        try
+        {
+            Session["Usuario"] = null;
+        }
+        catch (Exception ex)
+        {
+            lblMensaje.Text = "Error: " + ex.Message;
+        }
         if (!IsPostBack)
         {
             try

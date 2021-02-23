@@ -10,17 +10,14 @@ public partial class Login : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        Usuario us = (Usuario)Session["Usuario"];
-        ((Label)this.Master.FindControl("lblPagina")).Text = "Acceso de usuario";
-        if (us != null)
+        try
         {
-            lblError.Text = "Usted ya esta logueado con el usuario: " + us.Logueo;
-            btnLog.Enabled = false;
+            ((Label)this.Master.FindControl("lblPagina")).Text = "Acceso de usuario";
+            Session["Usuario"] = null;
         }
-        else
+        catch (Exception ex)
         {
-            lblError.Text = (String)Session["Mensaje"];
-            btnLog.Enabled = true;
+            lblError.Text = "Error: " + ex.Message;
         }
     }
 
@@ -41,8 +38,17 @@ public partial class Login : System.Web.UI.Page
             }
             else
             {
-                Session["Usuario"] = usLog;
-                Response.Redirect("~/BienvenidaEmpleado.aspx");
+                if (usLog is Empleado)
+                {
+                    Session["Usuario"] = usLog;
+                    Response.Redirect("~/BienvenidaEmpleado.aspx");
+                }
+                else
+                {
+                    Session["Usuario"] = usLog;
+                    Response.Redirect("~/BienvenidaEmpresa.aspx");
+                }
+                
             }
         }
         catch (FormatException)

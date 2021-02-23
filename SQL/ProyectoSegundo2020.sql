@@ -28,8 +28,7 @@ CREATE TABLE Empresa (
 	direccion VARCHAR(50) NOT NULL CHECK (direccion <> ''),
 	email VARCHAR(50) NOT NULL CHECK (CHARINDEX('@',email,1)>0 AND CHARINDEX('.', email, CHARINDEX( '@', email))>0 ) -- check formato email
 )
--- borro columna activo
--- check hora fin > hora inicio????ahora no lo entiendo
+
 CREATE TABLE Empleado (
 	logueo VARCHAR(12) NOT NULL PRIMARY KEY FOREIGN KEY REFERENCES Usuario(logueo), -- 12 caracteres
 	horaInicio TIME NOT NULL, 
@@ -38,7 +37,7 @@ CREATE TABLE Empleado (
 
 CREATE TABLE Paquete (
 	codigo INT NOT NULL PRIMARY KEY,
-	tipo VARCHAR(6) NOT NULL CHECK (tipo in ('fragil', 'comun', 'bulto')), -- cambio
+	tipo VARCHAR(6) NOT NULL CHECK (tipo in ('fragil', 'comun', 'bulto')), 
 	descripcion VARCHAR(100) DEFAULT 'N/A' NOT NULL CHECK (descripcion <> ''),
 	peso DECIMAL NOT NULL CHECK (peso > 0), -- check
 	empresa VARCHAR(12) NOT NULL FOREIGN KEY REFERENCES Empresa(logueo)
@@ -49,7 +48,7 @@ CREATE TABLE Solicitud (
 	fechaEntrega DATETIME NOT NULL CHECK (fechaEntrega > GETDATE()),  
 	nombreDestinatario VARCHAR(50) DEFAULT 'N/A' NOT NULL CHECK (nombreDestinatario <> ''), 
 	direccionDestinatario VARCHAR(50) DEFAULT 'N/A' NOT NULL CHECK (direccionDestinatario <> ''),
-	estado VARCHAR(11) NOT NULL  DEFAULT 'en deposito' CHECK (estado in ('en deposito', 'en camino', 'entregado')), -- cambio
+	estado VARCHAR(11) NOT NULL  DEFAULT 'en deposito' CHECK (estado in ('en deposito', 'en camino', 'entregado')), 
 	empleado VARCHAR(12) NOT NULL FOREIGN KEY REFERENCES Empleado(logueo)
 )
 
@@ -120,12 +119,6 @@ BEGIN
 	ON Usuario.logueo = Empleado.logueo
 	WHERE Usuario.logueo = @logueo
 END
--- un buscar activos y un buscar todos.
--- todos para mapear objetos dependientes.
-
--- mismo caso para los buscar empresa
-
-
 
 GO
 
@@ -143,14 +136,14 @@ BEGIN
 	END
 	IF EXISTS (SELECT * FROM Usuario a  
 			inner join Empleado b on a.logueo = b.logueo
-			WHERE a.logueo = @logueo AND a.activo = 0) -- buscar con join a Empleado inactivo
+			WHERE a.logueo = @logueo AND a.activo = 0)
 	BEGIN
 		BEGIN TRANSACTION;
 		UPDATE Usuario 
 		SET activo = 1,
 			contrasena = @contrasena,
 			nombreCompleto = @nombreCompleto
-		WHERE logueo = @logueo -- aparte de activar actualizar datos
+		WHERE logueo = @logueo 
 		IF (@@ERROR <> 0)
 		BEGIN
 			ROLLBACK TRANSACTION;
@@ -159,7 +152,7 @@ BEGIN
 		UPDATE Empleado 
 		SET horaInicio = @horaInicio,
 			horaFin = @horaFin
-		WHERE logueo = @logueo -- aca ya no existe activo, aparte de activar actualizar datos
+		WHERE logueo = @logueo 
 		IF (@@ERROR <> 0)
 		BEGIN
 			ROLLBACK TRANSACTION;
@@ -188,22 +181,11 @@ BEGIN
 		EXEC sp_addsrvrolemember @loginame=@logueo, @rolename='securityadmin'	
 		IF (@@ERROR <> 0)
 			RETURN -6
-
-		EXEC sp_addrolemember @rolename='db_securityadmin', @membername=@logueo
-		IF (@@ERROR <> 0)
-			RETURN -7
 		
 		EXEC sp_addrolemember @rolename='db_rol_empleado' , @membername=@logueo
 		IF (@@ERROR <> 0)
 			RETURN -8
 
-		GRANT ALTER ANY USER ON DATABASE::ProyectoSegundo2020 TO [@logueo]
-		IF (@@ERROR <> 0)
-			RETURN -9
-
-		GRANT ALTER ANY ROLE ON DATABASE::ProyectoSegundo2020 TO [@logueo]
-		IF (@@ERROR <> 0)
-			RETURN -10
 	END
 	ELSE
 	BEGIN
@@ -243,38 +225,19 @@ BEGIN
 		EXEC sp_addsrvrolemember @loginame=@logueo, @rolename='securityadmin'	
 		IF (@@ERROR <> 0)
 			RETURN -6
-
-		EXEC sp_addrolemember @rolename='db_securityadmin', @membername=@logueo
-		IF (@@ERROR <> 0)
-			RETURN -7
 		
 		EXEC sp_addrolemember @rolename='db_rol_empleado' , @membername=@logueo
 		IF (@@ERROR <> 0)
 			RETURN -8
 
-		GRANT ALTER ANY USER ON DATABASE::ProyectoSegundo2020 TO [@logueo]
-		IF (@@ERROR <> 0)
-			RETURN -9
 
-		GRANT ALTER ANY ROLE ON DATABASE::ProyectoSegundo2020 TO [@logueo]
-		IF (@@ERROR <> 0)
-			RETURN -10
 
 	END
 END
--- aca deberiamos crear un rol con los sp que puede ejecutar un empleado y que permisos necesita para poder administrar usuarios de base de datos
-
--- todos los grant necesarios van en un rol, y debemos ver cuales sp puede ejecutar el empleados
--- puedo crear un rol con todos los permisos y revokar los que no sean necesarios.
--- tambien se debe crear un tercer rol para el IIS publico, que se seteara cuando se creae dicho usuario
--- pasos 1 crear roles go 2 crear sp 3 asignar permisos a roles
-
-
 
 GO
 
 CREATE PROCEDURE ModificarEmpleado
-@usLog VARCHAR(12),
 @logueo VARCHAR(12),
 @contrasena VARCHAR(6),
 @nombreCompleto VARCHAR(50),
@@ -282,10 +245,6 @@ CREATE PROCEDURE ModificarEmpleado
 @horaFin TIME
 AS
 BEGIN
-	IF (@usLog <> @logueo) -- ES OTRA LA FORMA DE VALIDAR QUE EL USUARIO LOGUEADO SE AEL MISMO QUE ESTA QUERIENDO MODIFICAR EL EMPLEADO?.
-	BEGIN
-		RETURN -1
-	END
 	IF NOT EXISTS (SELECT * 
 				FROM Usuario a
 				inner join Empleado b on a.logueo = b.logueo
@@ -294,34 +253,57 @@ BEGIN
 		RETURN -2
 	END
 
-	BEGIN TRANSACTION;
-	UPDATE Usuario
-	SET contrasena = @contrasena, 
-		nombreCompleto = @nombreCompleto -- solo se puede cambiar la contrase�a del propio usuario logueado
-	WHERE logueo = @logueo
-	IF (@@ERROR <> 0)
-		BEGIN
-			ROLLBACK TRANSACTION;
-			RETURN -3
-		END
-	UPDATE Empleado
-	SET horaInicio = @horaInicio, horaFin = @horaFin
-	WHERE logueo = @logueo
-	IF (@@ERROR <> 0)
-		BEGIN
-			ROLLBACK TRANSACTION;
-			RETURN -4
-		END
-	COMMIT TRANSACTION;
-	
-	DECLARE @VarSentencia VARCHAR(50);
-	SET @VarSentencia = 'EXEC sp_PASSWORD NULL, [' + @contrasena + '], ' + convert(varchar(MAX),@logueo) + ';'
-	EXEC (@VarSentencia)
-	IF (@@ERROR <> 0)
+	IF (@logueo <> CURRENT_USER) 
 	BEGIN
-		RETURN -5
+		BEGIN TRANSACTION;
+		UPDATE Usuario
+		SET nombreCompleto = @nombreCompleto 
+		WHERE logueo = @logueo
+		IF (@@ERROR <> 0)
+			BEGIN
+				ROLLBACK TRANSACTION;
+				RETURN -3
+			END
+		UPDATE Empleado
+		SET horaInicio = @horaInicio, horaFin = @horaFin
+		WHERE logueo = @logueo
+		IF (@@ERROR <> 0)
+			BEGIN
+				ROLLBACK TRANSACTION;
+				RETURN -4
+			END
+		COMMIT TRANSACTION;
 	END
-	-- faltaria cambiar contrase�a sql, usar sp_password para no tener que modificar permisos
+	ELSE
+	BEGIN
+		BEGIN TRANSACTION;
+		UPDATE Usuario
+		SET contrasena = @contrasena, 
+			nombreCompleto = @nombreCompleto -- solo se puede cambiar la contrase�a del propio usuario logueado
+		WHERE logueo = @logueo
+		IF (@@ERROR <> 0)
+			BEGIN
+				ROLLBACK TRANSACTION;
+				RETURN -3
+			END
+		UPDATE Empleado
+		SET horaInicio = @horaInicio, horaFin = @horaFin
+		WHERE logueo = @logueo
+		IF (@@ERROR <> 0)
+			BEGIN
+				ROLLBACK TRANSACTION;
+				RETURN -4
+			END
+		COMMIT TRANSACTION;
+	
+		DECLARE @VarSentencia VARCHAR(50);
+		SET @VarSentencia = 'EXEC sp_PASSWORD NULL, [' + @contrasena + '], ' + convert(varchar(MAX),@logueo) + ';'
+		EXEC (@VarSentencia)
+		IF (@@ERROR <> 0)
+		BEGIN
+			RETURN -5
+		END
+	END
 END
 
 GO
@@ -551,8 +533,7 @@ END
 
 GO
 
-CREATE PROCEDURE ModificarEmpresa
-@usLog VARCHAR(12),
+create PROCEDURE ModificarEmpresa
 @logueo VARCHAR(12),
 @contrasena VARCHAR(6),
 @nombreCompleto VARCHAR(50),
@@ -561,10 +542,6 @@ CREATE PROCEDURE ModificarEmpresa
 @email VARCHAR(50)
 AS
 BEGIN
-	IF (@usLog <> @logueo)
-	BEGIN
-		RETURN -1
-	END
 	IF NOT EXISTS (SELECT * 
 					FROM Usuario a
 					inner join Empresa b on a.logueo = b.logueo
@@ -573,34 +550,61 @@ BEGIN
 		RETURN -2
 	END
 
-	BEGIN TRANSACTION;
-	UPDATE Usuario
-	SET contrasena = @contrasena, 
-		nombreCompleto = @nombreCompleto -- solo el propio usuario empresa puede modificar la contrase�a
-	WHERE logueo = @logueo
-	IF (@@ERROR <> 0)
+	IF (@logueo <> CURRENT_USER)
 	BEGIN
-		ROLLBACK TRANSACTION;
-		RETURN -3
+		BEGIN TRANSACTION;
+		UPDATE Usuario
+		SET contrasena = @contrasena, 
+			nombreCompleto = @nombreCompleto -- solo el propio usuario empresa puede modificar la contrase�a
+		WHERE logueo = @logueo
+		IF (@@ERROR <> 0)
+		BEGIN
+			ROLLBACK TRANSACTION;
+			RETURN -3
+		END
+		UPDATE Empresa
+		SET telefono = @telefono, 
+			direccion = @direccion, 
+			email = @email
+		WHERE logueo = @logueo
+		IF (@@ERROR <> 0)
+		BEGIN
+			ROLLBACK TRANSACTION;
+			RETURN -4
+		END
+		COMMIT TRANSACTION;
 	END
-	UPDATE Empresa
-	SET telefono = @telefono, 
-		direccion = @direccion, 
-		email = @email
-	WHERE logueo = @logueo
-	IF (@@ERROR <> 0)
-	BEGIN
-		ROLLBACK TRANSACTION;
-		RETURN -4
-	END
-	COMMIT TRANSACTION;
+	ELSE
+	BEGIN 
+		BEGIN TRANSACTION;
+		UPDATE Usuario
+		SET contrasena = @contrasena, 
+			nombreCompleto = @nombreCompleto -- solo el propio usuario empresa puede modificar la contrase�a
+		WHERE logueo = @logueo
+		IF (@@ERROR <> 0)
+		BEGIN
+			ROLLBACK TRANSACTION;
+			RETURN -3
+		END
+		UPDATE Empresa
+		SET telefono = @telefono, 
+			direccion = @direccion, 
+			email = @email
+		WHERE logueo = @logueo
+		IF (@@ERROR <> 0)
+		BEGIN
+			ROLLBACK TRANSACTION;
+			RETURN -4
+		END
+		COMMIT TRANSACTION;
 
-	DECLARE @VarSentencia VARCHAR(50);
-	SET @VarSentencia = 'EXEC sp_PASSWORD NULL, [' + @contrasena + '], ' + convert(varchar(MAX),@logueo) + ';'
-	EXEC (@VarSentencia)
-	IF (@@ERROR <> 0)
-	BEGIN
-		RETURN -5
+		DECLARE @VarSentencia VARCHAR(50);
+		SET @VarSentencia = 'EXEC sp_PASSWORD NULL, [' + @contrasena + '], ' + convert(varchar(MAX),@logueo) + ';'
+		EXEC (@VarSentencia)
+		IF (@@ERROR <> 0)
+		BEGIN
+			RETURN -5
+		END
 	END
 END
 
@@ -891,6 +895,9 @@ GRANT EXECUTE ON dbo.BuscarEmpleado TO [db_rol_empleado]
 GRANT EXECUTE ON dbo.BuscarEmpresa TO [db_rol_empleado]
 GRANT EXECUTE ON dbo.BuscarPaquete TO [db_rol_empleado]
 GRANT EXECUTE ON dbo.listarEmpresas TO [db_rol_empleado]
+GRANT ALTER ANY USER TO [db_rol_empleado]
+GRANT ALTER ANY ROLE TO [db_rol_empleado]
+
 
 --empresa
 GRANT EXECUTE ON dbo.ListadoSolicitudesEmpresa TO [db_rol_empresa]

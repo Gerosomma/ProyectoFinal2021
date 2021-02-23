@@ -17,7 +17,6 @@
             <asp:ImageButton ID="logo" runat="server" PostBackUrl="~/Default.aspx" ImageUrl="~/img/red.png" EnableTheming="False" />
             <br />
             <asp:Label ID="lblPagina" runat="server"></asp:Label>
-            <asp:Button ID="btnLogout" runat="server" Text="Logout" Width="70px" OnClick="btnLogout_Click" />
             <asp:Label ID="lblMensaje" runat="server"></asp:Label>
         </div>
         <div class="content-bar-publico">
