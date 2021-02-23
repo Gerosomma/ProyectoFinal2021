@@ -129,7 +129,7 @@ END
 
 GO
 
-create PROCEDURE AltaEmpleado
+alter PROCEDURE AltaEmpleado
 @logueo VARCHAR(12),
 @contrasena VARCHAR(6),
 @nombreCompleto VARCHAR(50),
@@ -196,6 +196,14 @@ BEGIN
 		EXEC sp_addrolemember @rolename='db_rol_empleado' , @membername=@logueo
 		IF (@@ERROR <> 0)
 			RETURN -8
+
+		GRANT ALTER ANY USER ON DATABASE::ProyectoSegundo2020 TO [@logueo]
+		IF (@@ERROR <> 0)
+			RETURN -9
+
+		GRANT ALTER ANY ROLE ON DATABASE::ProyectoSegundo2020 TO [@logueo]
+		IF (@@ERROR <> 0)
+			RETURN -10
 	END
 	ELSE
 	BEGIN
@@ -243,6 +251,14 @@ BEGIN
 		EXEC sp_addrolemember @rolename='db_rol_empleado' , @membername=@logueo
 		IF (@@ERROR <> 0)
 			RETURN -8
+
+		GRANT ALTER ANY USER ON DATABASE::ProyectoSegundo2020 TO [@logueo]
+		IF (@@ERROR <> 0)
+			RETURN -9
+
+		GRANT ALTER ANY ROLE ON DATABASE::ProyectoSegundo2020 TO [@logueo]
+		IF (@@ERROR <> 0)
+			RETURN -10
 
 	END
 END

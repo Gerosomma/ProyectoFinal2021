@@ -9,7 +9,6 @@ using wcfLogistica;
 public partial class MantenimientoEmpleado : System.Web.UI.Page
 {
     private Empleado usuarioLogueado = null;
-    private Empleado objEmpleado = null;
     protected void Page_Load(object sender, EventArgs e)
     {
         ((Label)this.Master.FindControl("lblPagina")).Text = "ABM de Empleado";
@@ -18,7 +17,7 @@ public partial class MantenimientoEmpleado : System.Web.UI.Page
         if (usuarioLogueado == null)
         {
             lblMensaje.Text = "Logeese para modificar ";
-            btnBuscar.Enabled = false;
+            Response.Redirect("~/Login.aspx");
         }
     }
 
@@ -33,7 +32,7 @@ public partial class MantenimientoEmpleado : System.Web.UI.Page
                 logueo = txtLogueo.Text;
 
                 ServiceClient wcf = new ServiceClient();
-                objEmpleado = (Empleado)wcf.BuscarUsuario(logueo, usuarioLogueado);
+                Empleado objEmpleado = (Empleado)wcf.BuscarUsuario(logueo, usuarioLogueado);
                 //empleadoEncontrado = (Empleado)FabricaLogica.GetLogicaUsuario().BuscarUsuario(logueo, usuarioLogueado);
 
                 btnBuscar.Enabled = false;
@@ -90,8 +89,8 @@ public partial class MantenimientoEmpleado : System.Web.UI.Page
             empleado.Logueo = txtLogueo.Text;
             empleado.Contrasena = txtContrasena.Text;
             empleado.NombreCompleto = txtNombre.Text;
-            empleado.HoraInicio = txtHoraInicio.Text;
-            empleado.HoraFin = txtHoraFin.Text;
+            empleado.HoraInicio = txtHoraInicio.Text + ":00";
+            empleado.HoraFin = txtHoraFin.Text + ":00";
 
             ServiceClient wcf = new ServiceClient();
             wcf.AltaUsuario(empleado, usuarioLogueado);
@@ -122,25 +121,21 @@ public partial class MantenimientoEmpleado : System.Web.UI.Page
             //Empleado empleado = new Empleado(logueo, contrasena, nombre, horaInicio, horaFin);
 
             // podriamos manejar un objeto empleado para toda la pantalla y consultar aqui si anteriormente se busco un usuario.
-            if (objEmpleado != null)
-            {
-                objEmpleado.Contrasena = txtContrasena.Text;
-                objEmpleado.NombreCompleto = txtNombre.Text;
-                objEmpleado.HoraInicio = txtHoraInicio.Text;
-                objEmpleado.HoraFin = txtHoraFin.Text;
+            Empleado objEmpleado = new Empleado();
+            objEmpleado.Logueo = txtLogueo.Text;
+            objEmpleado.Contrasena = txtContrasena.Text;
+            objEmpleado.NombreCompleto = txtNombre.Text;
+            objEmpleado.HoraInicio = txtHoraInicio.Text;
+            objEmpleado.HoraFin = txtHoraFin.Text;
 
-                ServiceClient wcf = new ServiceClient();
-                wcf.ModificarUsuario(objEmpleado, usuarioLogueado);
+            ServiceClient wcf = new ServiceClient();
+            wcf.ModificarUsuario(objEmpleado, usuarioLogueado);
 
-                //FabricaLogica.GetLogicaUsuario().ModificarUsuario(empleado, usuarioLogueado);
+            //FabricaLogica.GetLogicaUsuario().ModificarUsuario(empleado, usuarioLogueado);
 
-                LimpiarFormulario();
-                lblMensaje.Text = "Empleado modificado con éxito";
-            }
-            else
-            {
-                lblMensaje.Text = "Debe buscar empleado para dar de baja";
-            }
+            LimpiarFormulario();
+            lblMensaje.Text = "Empleado modificado con éxito";
+            
         }
         catch (Exception ex)
         {
@@ -154,18 +149,18 @@ public partial class MantenimientoEmpleado : System.Web.UI.Page
     {
         try
         {
-            if (objEmpleado != null)
-            {
-                ServiceClient wcf = new ServiceClient();
-                wcf.BajaUsuario(objEmpleado, usuarioLogueado);
+            Empleado objEmpleado = new Empleado();
+            objEmpleado.Logueo = txtLogueo.Text;
+            objEmpleado.Contrasena = txtContrasena.Text;
+            objEmpleado.NombreCompleto = txtNombre.Text;
+            objEmpleado.HoraInicio = txtHoraInicio.Text;
+            objEmpleado.HoraFin = txtHoraFin.Text;
+            ServiceClient wcf = new ServiceClient();
+            wcf.BajaUsuario(objEmpleado, usuarioLogueado);
 
-                LimpiarFormulario();
-                lblMensaje.Text = "Empleado eliminado con éxito";
-            }
-            else
-            {
-                lblMensaje.Text = "Debe buscar empleado para dar de baja";
-            }
+            LimpiarFormulario();
+            lblMensaje.Text = "Empleado eliminado con éxito";
+            
 
         }
         catch (Exception ex)

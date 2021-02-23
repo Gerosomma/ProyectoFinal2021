@@ -9,7 +9,6 @@ using wcfLogistica;
 public partial class MantenimientoEmpresa : System.Web.UI.Page
 {
     private Empleado usuarioLogueado = null;
-    private Empresa objEmpresa = null;
 
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -27,7 +26,7 @@ public partial class MantenimientoEmpresa : System.Web.UI.Page
             {
                 logueo = txtLogueo.Text;
                 ServiceClient wcf = new ServiceClient();
-                objEmpresa = (Empresa)wcf.BuscarUsuario(logueo, usuarioLogueado);
+                Empresa objEmpresa = (Empresa)wcf.BuscarUsuario(logueo, usuarioLogueado);
 
                 btnBuscar.Enabled = false;
 
@@ -105,25 +104,21 @@ public partial class MantenimientoEmpresa : System.Web.UI.Page
     {
         try
         {
-            if (objEmpresa != null)
-            {
-                objEmpresa.Contrasena = txtContrasena.Text;
-                objEmpresa.NombreCompleto = txtNombre.Text;
-                objEmpresa.Telefono = txtTelefono.Text;
-                objEmpresa.Direccion = txtDireccion.Text;
-                objEmpresa.Email = txtEmail.Text;
+            Empresa objEmpresa = new Empresa();
+            objEmpresa.Logueo = txtLogueo.Text;
+            objEmpresa.Contrasena = txtContrasena.Text;
+            objEmpresa.NombreCompleto = txtNombre.Text;
+            objEmpresa.Telefono = txtTelefono.Text;
+            objEmpresa.Direccion = txtDireccion.Text;
+            objEmpresa.Email = txtEmail.Text;
 
-                //FabricaLogica.GetLogicaUsuario().ModificarUsuario(empresa, usuarioLogueado);
-                ServiceClient wcf = new ServiceClient();
-                wcf.ModificarUsuario(objEmpresa, usuarioLogueado);
+            //FabricaLogica.GetLogicaUsuario().ModificarUsuario(empresa, usuarioLogueado);
+            ServiceClient wcf = new ServiceClient();
+            wcf.ModificarUsuario(objEmpresa, usuarioLogueado);
 
-                LimpiarFormulario();
-                lblMensaje.Text = "Empresa modificada con éxito";
-            }
-            else
-            {
-                lblMensaje.Text = "Debe buscar la empresa primero.";
-            }
+            LimpiarFormulario();
+            lblMensaje.Text = "Empresa modificada con éxito";
+            
         }
         catch (Exception ex)
         {
@@ -136,18 +131,20 @@ public partial class MantenimientoEmpresa : System.Web.UI.Page
     {
         try
         {
-            if (objEmpresa != null)
-            {
-                ServiceClient wcf = new ServiceClient();
-                wcf.BajaUsuario(objEmpresa, usuarioLogueado);
+            Empresa objEmpresa = new Empresa();
+            objEmpresa.Logueo = txtLogueo.Text;
+            objEmpresa.Contrasena = txtContrasena.Text;
+            objEmpresa.NombreCompleto = txtNombre.Text;
+            objEmpresa.Telefono = txtTelefono.Text;
+            objEmpresa.Direccion = txtDireccion.Text;
+            objEmpresa.Email = txtEmail.Text;
 
-                LimpiarFormulario();
-                lblMensaje.Text = "Empresa eliminada con éxito";
-            }
-            else
-            {
-                lblMensaje.Text = "Debe buscar empresa primero";
-            }
+            ServiceClient wcf = new ServiceClient();
+            wcf.BajaUsuario(objEmpresa, usuarioLogueado);
+
+            LimpiarFormulario();
+            lblMensaje.Text = "Empresa eliminada con éxito";
+            
 
         }
         catch (Exception ex)
