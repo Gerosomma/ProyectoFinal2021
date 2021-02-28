@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntidadesCompartidas", "EntidadesCompartidas\EntidadesCompartidas.csproj", "{7454440D-870D-4DCF-91B4-DA2F7B6EC3D7}"
 EndProject
@@ -38,6 +38,7 @@ EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "wcfLogistica", "wcfLogistica\", "{F143D413-D5B9-44E6-BE57-15D70144EC7E}"
 	ProjectSection(WebsiteProperties) = preProject
 		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5"
+		ProjectReferences = "{7454440d-870d-4dcf-91b4-da2f7b6ec3d7}|EntidadesCompartidas.dll;{5a2e40ac-d31e-4ddd-9268-69efd90a2460}|Logica.dll;{ADEFB852-9291-4C92-ACFF-98CD42C01572}|Persistencia.dll;"
 		Debug.AspNetCompiler.VirtualPath = "/localhost_7379"
 		Debug.AspNetCompiler.PhysicalPath = "wcfLogistica\"
 		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_7379\"

@@ -11,7 +11,7 @@
         <asp:DropDownList ID="ddlTipo" runat="server">
             <asp:ListItem Selected="True" Value="comun">Común</asp:ListItem>
             <asp:ListItem Value="fragil">Frágil</asp:ListItem>
-            <asp:ListItem>Bulto</asp:ListItem>
+            <asp:ListItem Value="bulto">Bulto</asp:ListItem>
         </asp:DropDownList>
         <br />
         <asp:Label ID="lblPeso" runat="server" Text="Peso: "></asp:Label>
