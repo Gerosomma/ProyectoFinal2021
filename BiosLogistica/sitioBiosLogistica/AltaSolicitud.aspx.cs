@@ -45,6 +45,8 @@ public partial class AltaSolicitud : System.Web.UI.Page
                 CheckBox ck = ((CheckBox)row.FindControl("Sel"));
                 if (ck.Checked)
                 {
+                    Paquete p = paquetes.ElementAt(row.RowIndex);
+                    // si el de arriba funciona se queda.
                     Paquete paq = wcf2.BuscarPaquete(Convert.ToInt32(row.Cells[1].ToString()), usuarioLogueado);
                     paqSolicitud.Add(paq);
                 }

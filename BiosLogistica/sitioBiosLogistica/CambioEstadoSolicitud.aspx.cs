@@ -33,15 +33,9 @@ public partial class CambioEstadoSolicitud : System.Web.UI.Page
     {
         try
         {
-            foreach (Solicitud sol in solicitudes)
-            {
-                if (sol.Numero == Convert.ToInt32(gvSolicitudes.SelectedRow.Cells[0].ToString()))
-                {
-                    ServiceClient wcf = new ServiceClient();
-                    wcf.ModificarEstadoSolicitud(sol, usuarioLogueado);
-                }
-            }
-            
+            Solicitud sol = solicitudes.ElementAt(gvSolicitudes.SelectedIndex);
+            ServiceClient wcf = new ServiceClient();
+            wcf.ModificarEstadoSolicitud(sol, usuarioLogueado);
         }
         catch (Exception ex)
         {
