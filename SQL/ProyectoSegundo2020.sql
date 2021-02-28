@@ -846,6 +846,16 @@ GO
 
 -- todas no, faltan listadoSolicitudeEnCamino y ListadoSolicitudesEmpresa
 
+CREATE PROCEDURE listadoSolicitudes
+AS
+BEGIN
+	SELECT *
+	FROM Solicitud
+	WHERE estado in ('en camino', 'en deposito')
+END
+
+GO
+
 CREATE PROCEDURE listadoSolicitudesEnCamino
 AS
 BEGIN
@@ -895,6 +905,7 @@ GRANT EXECUTE ON dbo.BuscarEmpleado TO [db_rol_empleado]
 GRANT EXECUTE ON dbo.BuscarEmpresa TO [db_rol_empleado]
 GRANT EXECUTE ON dbo.BuscarPaquete TO [db_rol_empleado]
 GRANT EXECUTE ON dbo.listarEmpresas TO [db_rol_empleado]
+GRANT EXECUTE ON dbo.listadoSolicitudes TO [db_rol_empleado]
 GRANT ALTER ANY USER TO [db_rol_empleado]
 GRANT ALTER ANY ROLE TO [db_rol_empleado]
 

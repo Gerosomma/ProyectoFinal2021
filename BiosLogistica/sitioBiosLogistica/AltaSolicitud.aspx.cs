@@ -17,7 +17,6 @@ public partial class AltaSolicitud : System.Web.UI.Page
             ((Label)this.Master.FindControl("lblPagina")).Text = "Alta solicitud";
             usuarioLogueado = (Empleado)Session["Usuario"];
             
-            //empresas = FabricaLogica.GetLogicaUsuario().ListarEmpresas(usuarioLogueado);
             ServiceClient wcf = new ServiceClient();
             paquetes = wcf.ListadoPaquetesSinSolicitud(usuarioLogueado).ToList<Paquete>();
             gvPaquetes.DataSource = paquetes;

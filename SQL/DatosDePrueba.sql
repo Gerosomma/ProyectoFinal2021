@@ -87,3 +87,8 @@ IF (@@ERROR <> 0)
 	RETURN -7
 		
 EXEC sp_addrolemember @rolename='db_rol_empleado' , @membername=@logueo
+
+
+
+exec ListarPaquetesSinSolicitud;
+exec listadoSolicitudes;

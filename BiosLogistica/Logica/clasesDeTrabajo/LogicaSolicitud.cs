@@ -47,6 +47,11 @@ namespace Logica.clasesDeTrabajo
             return FabricaPersistencia.GetPersistenciaSolicitud().listadoSolicitudesEmpresa(usLog);
         }
 
+        public List<Solicitud> listadoSolicitudes(Empresa usLog)
+        {
+            return FabricaPersistencia.GetPersistenciaSolicitud().listadoSolicitudes(usLog);
+        }
+
         internal static string generaXmlSolicitudes(List<Solicitud> listaSolicitudes)
         {
             XmlDocument doc = new XmlDocument();

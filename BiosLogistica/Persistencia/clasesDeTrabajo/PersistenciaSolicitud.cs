@@ -222,5 +222,51 @@ namespace Persistencia
                 }
             }
         }
+
+        public List<Solicitud> listadoSolicitudes(Empresa usLog)
+        {
+            SqlConnection conexion = null;
+            SqlDataReader drSolicitud = null;
+            Solicitud solicitud = null;
+            List<Solicitud> listaSolicitudes = new List<Solicitud>();
+            List<Paquete> listaPaquetes = new List<Paquete>();
+            Empleado empleado = null;
+
+            try
+            {
+                conexion = new SqlConnection(Conexion.Cnn(usLog));
+                SqlCommand cmdListadoSolicitues = new SqlCommand("ListadoSolicitudes", conexion);
+                cmdListadoSolicitues.CommandType = CommandType.StoredProcedure;
+
+                conexion.Open();
+                drSolicitud = cmdListadoSolicitues.ExecuteReader();
+
+                while (drSolicitud.Read())
+                {
+                    listaPaquetes = PersistenciaPaquete.getInstancia().listadoPaquetesSolicitud((int)drSolicitud["numero"]);
+                    empleado = PersistenciaEmpleado.getInstancia().interBuscarEmpleado((string)drSolicitud["empleado"]);
+                    solicitud = new Solicitud((int)drSolicitud["numero"], (DateTime)drSolicitud["fechaEntrega"], (string)drSolicitud["nombreDestinatario"],
+                        (string)drSolicitud["direccionDestinatario"], (string)drSolicitud["estado"], empleado, listaPaquetes);
+                    listaSolicitudes.Add(solicitud);
+                }
+
+                return listaSolicitudes;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                if (drSolicitud != null)
+                {
+                    drSolicitud.Close();
+                }
+                if (conexion != null)
+                {
+                    conexion.Close();
+                }
+            }
+        }
     }
 }
