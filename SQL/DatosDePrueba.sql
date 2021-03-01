@@ -41,7 +41,21 @@ exec AltaPaqueteSolicitud 1, 1;
 
 exec listadoSolicitudes
 
+EXEC AltaEmpleado 'gero', 'asd12?', 'Geronimo somma', '09:00:00', '18:00:00';
 
+EXEC AltaEmpresa 'jero', 'asd12?', 'Gero 2', '091654252', '18 de julio y rio negro', 'geronimo.somma@gsoft.com.uy';
+
+
+insert into Usuario
+values ('ursula', 'asd12?', 'ursula pinola', 1);
+
+insert into empresa
+values ('ursula', '091283234', 'asdasdasd 353', 'asda@asds.com');
+
+select * from Empresa
+select * from Usuario
+
+update empresa set telefono = '091283234'
 
 exec sp_who
 
@@ -89,6 +103,19 @@ IF (@@ERROR <> 0)
 EXEC sp_addrolemember @rolename='db_rol_empleado' , @membername=@logueo
 
 
-
 exec ListarPaquetesSinSolicitud;
 exec listadoSolicitudes;
+
+exec AltaSolicitud  '2021-05-08 12:35:29.123', 'jeremain', '18 de julio', 'gero';
+
+exec AltaPaqueteSolicitud 2, 2222
+
+select * from Solicitud
+select * from Empresa
+
+select * from Paquete
+
+exec listadoSolicitudes
+exec ListadoSolicitudesEmpresa 'nacho'
+
+exec listadoSolicitudesEnCamino

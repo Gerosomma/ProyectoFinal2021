@@ -6,6 +6,11 @@
     <div>
         <table style="width: 50%;">
             <tr>
+                <td colspan="5">
+                    <h2>Mantenimiento de Empleado</h2>
+                </td>
+            </tr>
+            <tr>
                 <td colspan="2">
                     <asp:Label ID="lblLogueo" runat="server" Text="Nombre de usuario: "></asp:Label>
                 </td>

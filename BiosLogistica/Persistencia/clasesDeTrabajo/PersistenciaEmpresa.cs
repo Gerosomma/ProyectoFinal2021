@@ -210,10 +210,7 @@ namespace Persistencia
 
                 SqlCommand cmdModificarEmpresa = new SqlCommand("ModificarEmpresa", conexion);
                 cmdModificarEmpresa.CommandType = CommandType.StoredProcedure;
-
-                //ACA TENEMOS QUE MODIFICAR LA LOGICA DEL SP, la empresa nunca hara ABM de empresa, solo podra cambiar su contraseña
-                //sinembargo supongo que el empleado si debe poder modificar los demas datos de la empresa.
-                cmdModificarEmpresa.Parameters.AddWithValue("@usLog", usLog.Logueo);
+                
                 cmdModificarEmpresa.Parameters.AddWithValue("@logueo", empresa.Logueo);
                 cmdModificarEmpresa.Parameters.AddWithValue("@contrasena", empresa.Contrasena);
                 cmdModificarEmpresa.Parameters.AddWithValue("@nombreCompleto", empresa.NombreCompleto);
@@ -230,8 +227,6 @@ namespace Persistencia
 
                 switch ((int)valorRetorno.Value)
                 {
-                    case -1:
-                        throw new Exception("Debe estar logueado como esta empresa para poder modificarla.");
                     case -2:
                         throw new Exception("No se encontro empresa activa.");
                     case -3:

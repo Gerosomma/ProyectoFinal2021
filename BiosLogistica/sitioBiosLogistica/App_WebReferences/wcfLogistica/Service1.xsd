@@ -42,7 +42,7 @@
       <xs:element minOccurs="0" name="Codigo" type="xs:int" />
       <xs:element minOccurs="0" name="Descripcion" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="EmpresaOrigen" nillable="true" type="tns:Empresa" />
-      <xs:element minOccurs="0" name="Peso" type="xs:double" />
+      <xs:element minOccurs="0" name="Peso" type="xs:decimal" />
       <xs:element minOccurs="0" name="Tipo" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>

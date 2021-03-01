@@ -29,11 +29,11 @@ public partial class CambioEstadoSolicitud : System.Web.UI.Page
         }
     }
 
-    protected void GridView1_SelectedIndexChanged(object sender, EventArgs e)
+    protected void gvSolicitudes_RowCommand(object sender, GridViewCommandEventArgs e)
     {
         try
         {
-            Solicitud sol = solicitudes.ElementAt(gvSolicitudes.SelectedIndex);
+            Solicitud sol = solicitudes.ElementAt(Convert.ToInt32(e.CommandArgument));
             ServiceClient wcf = new ServiceClient();
             wcf.ModificarEstadoSolicitud(sol, usuarioLogueado);
         }

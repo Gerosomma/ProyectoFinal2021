@@ -162,6 +162,7 @@ public partial class MantenimientoEmpresa : System.Web.UI.Page
     {
         txtLogueo.Text = string.Empty;
         txtLogueo.Focus();
+        txtLogueo.Enabled = true;
         txtContrasena.Text = string.Empty;
         txtContrasena.Enabled = false;
         txtNombre.Text = string.Empty;

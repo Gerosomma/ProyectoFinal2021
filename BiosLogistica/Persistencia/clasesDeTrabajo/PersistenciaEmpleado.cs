@@ -212,8 +212,7 @@ namespace Persistencia
 
                 SqlCommand cmdModificarEmpleado = new SqlCommand("ModificarEmpleado", conexion);
                 cmdModificarEmpleado.CommandType = CommandType.StoredProcedure;
-
-                cmdModificarEmpleado.Parameters.AddWithValue("@usLog", usLog.Logueo); //esta logica se podria validar aquí
+                
                 cmdModificarEmpleado.Parameters.AddWithValue("@logueo", empleado.Logueo);
                 cmdModificarEmpleado.Parameters.AddWithValue("@contrasena", empleado.Contrasena);
                 cmdModificarEmpleado.Parameters.AddWithValue("@nombreCompleto", empleado.NombreCompleto);

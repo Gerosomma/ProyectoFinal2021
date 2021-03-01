@@ -94,7 +94,7 @@ namespace Persistencia
                 {
                     empresa = PersistenciaEmpresa.getInstancia().interBuscarEmpresa((string)drPaquete["empresa"]);
                     paquete = new Paquete((int)drPaquete["codigo"], (string)drPaquete["tipo"],
-                        (string)drPaquete["descripcion"], (double)drPaquete["peso"], empresa);
+                        (string)drPaquete["descripcion"], (decimal)drPaquete["peso"], empresa);
                 }
 
                 return paquete;
@@ -166,7 +166,7 @@ namespace Persistencia
                 conexion = new SqlConnection(Conexion.Cnn());
                 SqlCommand cmdListadoSolicitues = new SqlCommand("ListarPaquetesSolicitud", conexion);
                 cmdListadoSolicitues.CommandType = CommandType.StoredProcedure;
-                cmdListadoSolicitues.Parameters.AddWithValue("@numeroSolicitud", solicitud);
+                cmdListadoSolicitues.Parameters.AddWithValue("@solicitud", solicitud);
                 
                 conexion.Open();
                 drPaquete = cmdListadoSolicitues.ExecuteReader();
@@ -174,7 +174,7 @@ namespace Persistencia
                 {
                     empresa = PersistenciaEmpresa.getInstancia().interBuscarEmpresa((string)drPaquete["empresa"]);
                     paquete = new Paquete((int)drPaquete["codigo"], (string)drPaquete["tipo"], (string)drPaquete["descripcion"],
-                        (double)drPaquete["peso"], empresa);
+                        (decimal)drPaquete["peso"], empresa);
                     listaPaquetes.Add(paquete);
                 }
 
@@ -217,7 +217,7 @@ namespace Persistencia
                 {
                     empresa = PersistenciaEmpresa.getInstancia().interBuscarEmpresa((string)drPaquete["empresa"]);
                     paquete = new Paquete((int)drPaquete["codigo"], (string)drPaquete["tipo"], (string)drPaquete["descripcion"],
-                        (double)drPaquete["peso"], empresa);
+                        (decimal)drPaquete["peso"], empresa);
                     listaPaquetes.Add(paquete);
                 }
 

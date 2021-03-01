@@ -190,6 +190,7 @@ namespace Persistencia
             {
                 conexion = new SqlConnection(Conexion.Cnn(usLog));
                 SqlCommand cmdListadoSolicitues = new SqlCommand("ListadoSolicitudesEmpresa", conexion);
+                cmdListadoSolicitues.Parameters.AddWithValue("@empresa", usLog.Logueo);
                 cmdListadoSolicitues.CommandType = CommandType.StoredProcedure;
 
                 conexion.Open();

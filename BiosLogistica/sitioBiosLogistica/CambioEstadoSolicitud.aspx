@@ -12,7 +12,7 @@
             </tr>
             <tr>
                 <td style="vertical-align: middle; position: absolute; z-index: auto;">
-                    <asp:GridView ID="gvSolicitudes" runat="server" AutoGenerateColumns="False" OnSelectedIndexChanged="GridView1_SelectedIndexChanged">
+                    <asp:GridView ID="gvSolicitudes" runat="server" AutoGenerateColumns="False" OnRowCommand="gvSolicitudes_RowCommand">
                         <Columns>
                             <asp:BoundField DataField="Numero" HeaderText="Numero" />
                             <asp:BoundField DataField="FechaEntrega" HeaderText="Fecha Entrega" />
@@ -20,7 +20,7 @@
                             <asp:BoundField DataField="DireccionDestinatario" HeaderText="Dirección destinatario" />
                             <asp:BoundField DataField="Estado" HeaderText="Estado" />
                             <asp:BoundField DataField="Empleado" HeaderText="Empleado" />
-                            <asp:ButtonField ButtonType="Button" Text="Avance" />
+                            <asp:ButtonField ButtonType="Button" Text="Avance" CommandName="Update" />
                         </Columns>
                     </asp:GridView>
                 </td>
