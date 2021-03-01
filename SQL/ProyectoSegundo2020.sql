@@ -122,7 +122,7 @@ END
 
 GO
 
-alter PROCEDURE AltaEmpleado
+CREATE PROCEDURE AltaEmpleado
 @logueo VARCHAR(12),
 @contrasena VARCHAR(6),
 @nombreCompleto VARCHAR(50),
@@ -913,7 +913,6 @@ GRANT ALTER ANY ROLE TO [db_rol_empleado]
 --empresa
 GRANT EXECUTE ON dbo.ListadoSolicitudesEmpresa TO [db_rol_empresa]
 
+EXEC AltaEmpleado 'emi', 'asd12?', 'luquitas rodriguez', '09:00:00', '18:00:00';
 
-
-
-
+EXEC AltaEmpresa 'jero', 'asd12?', 'Gero 2', '091654252', '18 de julio y rio negro', 'geronimo.somma@gsoft.com.uy';

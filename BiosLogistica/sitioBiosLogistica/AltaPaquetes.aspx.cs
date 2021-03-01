@@ -16,25 +16,27 @@ public partial class AltaPaquetes : System.Web.UI.Page
         ((Label)this.Master.FindControl("lblPagina")).Text = "Alta de paquetes";
         usuarioLogueado = (Empleado)Session["Usuario"];
 
-        lbxEmpresa.Items.Clear();
-
-        try
+        //lbxEmpresa.Items.Clear();
+        if (!IsPostBack)
         {
-            //empresas = FabricaLogica.GetLogicaUsuario().ListarEmpresas(usuarioLogueado);
-            ServiceClient wcf = new ServiceClient();
-            empresas = wcf.ListarEmpresas(usuarioLogueado).ToList<Empresa>();
-
-            foreach (Empresa emp in empresas)
+            try
             {
-                lbxEmpresa.Items.Add(new ListItem(emp.NombreCompleto, emp.Logueo));
-            }
-        }
-        catch (Exception)
-        {
-            lblMensaje.Text = "Ocurrió un error al listar las empresas";
+                //empresas = FabricaLogica.GetLogicaUsuario().ListarEmpresas(usuarioLogueado);
+                ServiceClient wcf = new ServiceClient();
+                empresas = wcf.ListarEmpresas(usuarioLogueado).ToList<Empresa>();
 
-            return;
-        }                
+                foreach (Empresa emp in empresas)
+                {
+                    lbxEmpresa.Items.Add(new ListItem(emp.NombreCompleto, emp.Logueo));
+                }
+            }
+            catch (Exception ex)
+            {
+                lblMensaje.Text = "Ocurrió un error al listar las empresas";
+
+                return;
+            }
+        }                        
     }
 
     protected void btnAlta_Click(object sender, EventArgs e)
@@ -96,10 +98,25 @@ public partial class AltaPaquetes : System.Web.UI.Page
 
             //FabricaLogica.GetLogicaPaquete().AltaPaquete(paquete, usuarioLogueado);
             wcf.AltaPaquete(paquete, usuarioLogueado);
+
+            LimpiarFormulario();
+            lblMensaje.Text = "Paquete agregado con éxito";
         }
         catch (Exception ex)
         {
             lblMensaje.Text = ex.Message;
+
+            return;
         }
+    }
+
+    protected void LimpiarFormulario()
+    {
+        txtCodigo.Text = string.Empty;
+        txtCodigo.Focus();
+        ddlTipo.SelectedIndex = 0;
+        txtPeso.Text = string.Empty;
+        txtDescripcion.Text = string.Empty;
+        lbxEmpresa.SelectedIndex = -1;
     }
 }

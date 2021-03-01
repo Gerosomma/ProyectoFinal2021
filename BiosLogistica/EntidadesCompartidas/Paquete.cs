@@ -34,7 +34,7 @@ namespace EntidadesCompartidas
             get { return _tipo; }
             set {
                 string[] arr = { "fragil", "comun", "bulto"};
-                if (arr.All(value.Contains))
+                if (arr.Contains(value))
                     _tipo = value;
                 else
                     throw new Exception("Tipo inválido");
