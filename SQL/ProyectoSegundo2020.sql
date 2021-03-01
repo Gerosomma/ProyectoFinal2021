@@ -39,7 +39,7 @@ CREATE TABLE Paquete (
 	codigo INT NOT NULL PRIMARY KEY,
 	tipo VARCHAR(6) NOT NULL CHECK (tipo in ('fragil', 'comun', 'bulto')), 
 	descripcion VARCHAR(100) DEFAULT 'N/A' NOT NULL CHECK (descripcion <> ''),
-	peso DECIMAL NOT NULL CHECK (peso > 0), -- check
+	peso DECIMAL(18,2) NOT NULL CHECK (peso > 0), -- check
 	empresa VARCHAR(12) NOT NULL FOREIGN KEY REFERENCES Empresa(logueo)
 )
 
@@ -533,11 +533,11 @@ END
 
 GO
 
-create PROCEDURE ModificarEmpresa
+CREATE PROCEDURE ModificarEmpresa
 @logueo VARCHAR(12),
 @contrasena VARCHAR(6),
 @nombreCompleto VARCHAR(50),
-@telefono INT,
+@telefono VARCHAR(9),
 @direccion VARCHAR(50),
 @email VARCHAR(50)
 AS
@@ -554,8 +554,7 @@ BEGIN
 	BEGIN
 		BEGIN TRANSACTION;
 		UPDATE Usuario
-		SET contrasena = @contrasena, 
-			nombreCompleto = @nombreCompleto -- solo el propio usuario empresa puede modificar la contrase�a
+		SET nombreCompleto = @nombreCompleto -- solo el propio usuario empresa puede modificar la contrase�a
 		WHERE logueo = @logueo
 		IF (@@ERROR <> 0)
 		BEGIN
@@ -912,7 +911,3 @@ GRANT ALTER ANY ROLE TO [db_rol_empleado]
 
 --empresa
 GRANT EXECUTE ON dbo.ListadoSolicitudesEmpresa TO [db_rol_empresa]
-
-EXEC AltaEmpleado 'emi', 'asd12?', 'luquitas rodriguez', '09:00:00', '18:00:00';
-
-EXEC AltaEmpresa 'jero', 'asd12?', 'Gero 2', '091654252', '18 de julio y rio negro', 'geronimo.somma@gsoft.com.uy';

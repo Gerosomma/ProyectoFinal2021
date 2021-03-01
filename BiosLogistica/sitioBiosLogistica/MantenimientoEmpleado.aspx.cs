@@ -111,28 +111,16 @@ public partial class MantenimientoEmpleado : System.Web.UI.Page
     {
         try
         {
-            /*string logueo = txtLogueo.Text;
-            Empleado empleado = (Empleado)FabricaLogica.GetLogicaUsuario().BuscarUsuario(logueo, usuarioLogueado);
-
-            empleado.Contrasena = txtContrasena.Text;
-            empleado.NombreCompleto = txtNombre.Text;
-            empleado.HoraInicio = txtHoraInicio.Text;
-            empleado.HoraFin = txtHoraFin.Text;*/
-            //Empleado empleado = new Empleado(logueo, contrasena, nombre, horaInicio, horaFin);
-
-            // podriamos manejar un objeto empleado para toda la pantalla y consultar aqui si anteriormente se busco un usuario.
             Empleado objEmpleado = new Empleado();
             objEmpleado.Logueo = txtLogueo.Text;
             objEmpleado.Contrasena = txtContrasena.Text;
             objEmpleado.NombreCompleto = txtNombre.Text;
-            objEmpleado.HoraInicio = txtHoraInicio.Text;
-            objEmpleado.HoraFin = txtHoraFin.Text;
+            objEmpleado.HoraInicio = txtHoraInicio.Text + ":00";
+            objEmpleado.HoraFin = txtHoraFin.Text + ":00";
 
             ServiceClient wcf = new ServiceClient();
             wcf.ModificarUsuario(objEmpleado, usuarioLogueado);
-
-            //FabricaLogica.GetLogicaUsuario().ModificarUsuario(empleado, usuarioLogueado);
-
+            
             LimpiarFormulario();
             lblMensaje.Text = "Empleado modificado con éxito";
             

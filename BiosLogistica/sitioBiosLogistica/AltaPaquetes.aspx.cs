@@ -44,7 +44,7 @@ public partial class AltaPaquetes : System.Web.UI.Page
         int codigo;
         string tipo;
         string descripcion;
-        double peso;
+        decimal peso;
         Empresa empresa;
         Paquete paquete;
 
@@ -74,7 +74,7 @@ public partial class AltaPaquetes : System.Web.UI.Page
 
         try
         {
-            peso = Convert.ToDouble(txtPeso.Text);
+            peso = Convert.ToDecimal(txtPeso.Text);
         }
         catch (FormatException)
         {
@@ -118,5 +118,10 @@ public partial class AltaPaquetes : System.Web.UI.Page
         txtPeso.Text = string.Empty;
         txtDescripcion.Text = string.Empty;
         lbxEmpresa.SelectedIndex = -1;
+    }
+
+    protected void Button1_Click(object sender, EventArgs e)
+    {
+        LimpiarFormulario();
     }
 }

@@ -70,7 +70,7 @@ namespace EntidadesCompartidas
             get { return _estado; }
             set {
                 string[] arr = { "en deposito", "en camino", "entregado" };
-                if (arr.All(value.Contains))
+                if (arr.Contains(value))
                     _estado = value;
                 else
                     throw new Exception("Estado inválido");

@@ -13,7 +13,7 @@ namespace EntidadesCompartidas
         private int _codigo;
         private string _tipo;
         private string _descripcion;
-        private double _peso;
+        private decimal _peso;
         private Empresa _empresaOrigen;
 
         [DataMember]
@@ -54,7 +54,7 @@ namespace EntidadesCompartidas
         }
 
         [DataMember]
-        public double Peso
+        public decimal Peso
         {
             get { return _peso; }
             set {
@@ -81,7 +81,7 @@ namespace EntidadesCompartidas
         {
         }
 
-        public Paquete(int codigo, string tipo, string descripcion, double peso, Empresa empresaOrigen)
+        public Paquete(int codigo, string tipo, string descripcion, decimal peso, Empresa empresaOrigen)
         {
             Codigo = codigo;
             Tipo = tipo;

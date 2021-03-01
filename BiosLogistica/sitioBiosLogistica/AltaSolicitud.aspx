@@ -34,12 +34,14 @@
                 <td colspan="2" rowspan="3" style="vertical-align: top">
                     <asp:GridView ID="gvPaquetes" runat="server" AutoGenerateColumns="False" EmptyDataText="No hay paquetes disponibles">
                         <Columns>
-                            <asp:CheckBoxField HeaderText="Sel" Text="Sel" />
+                            <asp:CheckBoxField HeaderText="Sel" >
+                            <ControlStyle BorderStyle="Solid" />
+                            </asp:CheckBoxField>
                             <asp:BoundField DataField="codigo" HeaderText="Codigo" />
                             <asp:BoundField DataField="tipo" HeaderText="Tipo" />
                             <asp:BoundField DataField="descripcion" HeaderText="Descripcion" />
                             <asp:BoundField DataField="peso" HeaderText="Peso" />
-                            <asp:BoundField DataField="empresa" HeaderText="Empresa" />
+                            <asp:BoundField DataField="EmpresaOrigen" HeaderText="Empresa" />
                         </Columns>
                     </asp:GridView>
                 </td>
