@@ -181,7 +181,7 @@
   <xs:element name="listadoSolicitudes">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q24="http://schemas.datacontract.org/2004/07/EntidadesCompartidas" minOccurs="0" name="usLog" nillable="true" type="q24:Empresa" />
+        <xs:element xmlns:q24="http://schemas.datacontract.org/2004/07/EntidadesCompartidas" minOccurs="0" name="usLog" nillable="true" type="q24:Empleado" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

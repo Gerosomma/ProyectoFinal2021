@@ -223,7 +223,7 @@ namespace Persistencia
             }
         }
 
-        public List<Solicitud> listadoSolicitudes(Empresa usLog)
+        public List<Solicitud> listadoSolicitudes(Empleado usLog)
         {
             SqlConnection conexion = null;
             SqlDataReader drSolicitud = null;

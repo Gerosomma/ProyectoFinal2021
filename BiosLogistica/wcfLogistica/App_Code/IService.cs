@@ -61,7 +61,7 @@ public interface IService
     List<Solicitud> listadoSolicitudesEmpresa(Empresa usLog);
 
     [OperationContract]
-    List<Solicitud> listadoSolicitudes(Empresa usLog);
+    List<Solicitud> listadoSolicitudes(Empleado usLog);
 
     #endregion
 }

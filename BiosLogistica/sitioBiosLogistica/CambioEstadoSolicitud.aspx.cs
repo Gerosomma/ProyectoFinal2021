@@ -18,14 +18,14 @@ public partial class CambioEstadoSolicitud : System.Web.UI.Page
             usuarioLogueado = (Empleado)Session["Usuario"];
             
             ServiceClient wcf = new ServiceClient();
-            solicitudes = wcf.listadoSolicitudes(new Empresa()).ToList<Solicitud>();
+            solicitudes = wcf.listadoSolicitudes(usuarioLogueado).ToList<Solicitud>();
             gvSolicitudes.DataSource = solicitudes;
             gvSolicitudes.DataBind();
 
         }
         catch (Exception)
         {
-            lblMensaje.Text = "Ocurrió un error al cargar paquetes";
+            lblMensaje.Text = "Ocurrió un error al cargar solicitudes";
         }
     }
 

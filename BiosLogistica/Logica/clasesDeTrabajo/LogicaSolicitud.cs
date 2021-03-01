@@ -47,7 +47,7 @@ namespace Logica.clasesDeTrabajo
             return FabricaPersistencia.GetPersistenciaSolicitud().listadoSolicitudesEmpresa(usLog);
         }
 
-        public List<Solicitud> listadoSolicitudes(Empresa usLog)
+        public List<Solicitud> listadoSolicitudes(Empleado usLog)
         {
             return FabricaPersistencia.GetPersistenciaSolicitud().listadoSolicitudes(usLog);
         }
