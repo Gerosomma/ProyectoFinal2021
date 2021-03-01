@@ -13,6 +13,7 @@ namespace Persistencia.interfaces
         void ModificarEstadoSolicitud(Solicitud solicitud, Empleado usLog);
         List<Solicitud> listadoSolicitudesEnCamino();
         List<Solicitud> listadoSolicitudesEmpresa(Empresa usLog);
+        List<Solicitud> listadoSolicitudes(Empleado usLog);
 
     }
 }

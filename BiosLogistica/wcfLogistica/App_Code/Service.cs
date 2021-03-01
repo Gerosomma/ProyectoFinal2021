@@ -85,5 +85,9 @@ public class Service : IService
         return FabricaLogica.GetLogicaSolicitud().listadoSolicitudesEmpresa(usLog);
     }
 
+    public List<Solicitud> listadoSolicitudes(Empleado usLog)
+    {
+        return FabricaLogica.GetLogicaSolicitud().listadoSolicitudes(usLog);
+    }
     #endregion
 }
