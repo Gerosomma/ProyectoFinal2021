@@ -24,12 +24,12 @@ namespace Logica.clasesDeTrabajo
         }
         
 
-        public void AltaSolicitud(Solicitud solicitud, Empleado usLog)
+        public int AltaSolicitud(Solicitud solicitud, Empleado usLog)
         {
-            if (solicitud.FechaEntrega > DateTime.Today)
+            if (solicitud.FechaEntrega < DateTime.Today)
                 throw new Exception("Fecha de entrega invalida.");
 
-            FabricaPersistencia.GetPersistenciaSolicitud().AltaSolicitud(solicitud, usLog);
+            return FabricaPersistencia.GetPersistenciaSolicitud().AltaSolicitud(solicitud, usLog);
         }
 
         public void ModificarEstadoSolicitud(Solicitud solicitud, Empleado usLog)

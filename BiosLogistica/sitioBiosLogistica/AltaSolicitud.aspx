@@ -32,16 +32,22 @@
                     <asp:TextBox ID="txtNombre" runat="server" Width="93%"></asp:TextBox>
                 </td>
                 <td colspan="2" rowspan="3" style="vertical-align: top">
-                    <asp:GridView ID="gvPaquetes" runat="server" AutoGenerateColumns="False" EmptyDataText="No hay paquetes disponibles">
+                    <asp:GridView ID="gvPaquetes2" runat="server" EmptyDataText="No hay paquetes disponibles" DataKeyNames="Codigo" EnablePersistedSelection="True">
                         <Columns>
-                            <asp:CheckBoxField HeaderText="Sel" >
-                            <ControlStyle BorderStyle="Solid" />
-                            </asp:CheckBoxField>
-                            <asp:BoundField DataField="codigo" HeaderText="Codigo" />
-                            <asp:BoundField DataField="tipo" HeaderText="Tipo" />
-                            <asp:BoundField DataField="descripcion" HeaderText="Descripcion" />
-                            <asp:BoundField DataField="peso" HeaderText="Peso" />
-                            <asp:BoundField DataField="EmpresaOrigen" HeaderText="Empresa" />
+                            <asp:CommandField ButtonType="Button" ShowSelectButton="True" />
+                        </Columns>
+                        <SelectedRowStyle BackColor="#FFFF99" BorderColor="Yellow" BorderStyle="Solid" BorderWidth="3px" />
+                    </asp:GridView>
+                    <asp:GridView ID="gvPaquetes"
+                        DataKeyNames="Codigo"
+                        OnRowCommand="CustomersGridView_RowCommand"
+                        runat="server"
+                        EmptyDataText="No hay paquetes disponibles">
+                        <Columns>
+                            <asp:ButtonField ButtonType="Button"
+                                CommandName="Select"
+                                HeaderText="Seleccion"
+                                Text="Select" />
                         </Columns>
                     </asp:GridView>
                 </td>
@@ -53,7 +59,7 @@
                 </td>
             </tr>
             <tr>
-                <td class="auto-style3" style="text-align: left">Fecha a entregar</td>
+                <td class="auto-style3" style="text-align: left; vertical-align: top;">Fecha a entregar</td>
                 <td>
                     <asp:Calendar ID="calFEntrega" runat="server"></asp:Calendar>
                 </td>

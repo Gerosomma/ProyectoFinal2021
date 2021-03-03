@@ -9,7 +9,7 @@ namespace Persistencia.interfaces
 {
     public interface IPersistenciaSolicitud
     {
-        void AltaSolicitud(Solicitud solicitud, Empleado usLog);
+        int AltaSolicitud(Solicitud solicitud, Empleado usLog);
         void ModificarEstadoSolicitud(Solicitud solicitud, Empleado usLog);
         List<Solicitud> listadoSolicitudesEnCamino();
         List<Solicitud> listadoSolicitudesEmpresa(Empresa usLog);

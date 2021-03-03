@@ -8,24 +8,41 @@ using wcfLogistica;
 public partial class AltaSolicitud : System.Web.UI.Page
 {
     Empleado usuarioLogueado;
-    List<Paquete> paquetes;
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        try
+        usuarioLogueado = (Empleado)Session["Usuario"];
+        if (!IsPostBack)
         {
-            ((Label)this.Master.FindControl("lblPagina")).Text = "Alta solicitud";
-            usuarioLogueado = (Empleado)Session["Usuario"];
-            
-            ServiceClient wcf = new ServiceClient();
-            paquetes = wcf.ListadoPaquetesSinSolicitud(usuarioLogueado).ToList<Paquete>();
-            gvPaquetes.DataSource = paquetes;
-            gvPaquetes.DataBind();
-            
+            try
+            {
+                ServiceClient wcf = new ServiceClient();
+                List<Paquete> paquetes = wcf.ListadoPaquetesSinSolicitud(usuarioLogueado).ToList<Paquete>();
+                Session["Paquetes"] = paquetes;
+                Session["PaquetesSeleccionados"] = new List<Paquete>();
+                gvPaquetes.DataSource = paquetes;
+                gvPaquetes.DataBind();
+                wcf.Close();
+            }
+            catch (Exception ex)
+            {
+                lblMensaje.Text = "Ocurrió un error al cargar paquetes";
+            }
         }
-        catch (Exception)
+    }
+
+    protected void CustomersGridView_RowCommand(object sender, GridViewCommandEventArgs e)
+    {
+        
+        if (e.CommandName == "Select")
         {
-            lblMensaje.Text = "Ocurrió un error al cargar paquetes";
+            int index = Convert.ToInt32(e.CommandArgument);
+            List<Paquete> paquetes = (List<Paquete>)Session["Paquetes"];
+            List<Paquete> paquetesSeleccionados = (List<Paquete>)Session["PaquetesSeleccionados"];
+            Paquete p = paquetes.ElementAt(index);
+            gvPaquetes.Rows[index].BackColor = System.Drawing.Color.Yellow;
+            paquetesSeleccionados.Add(p);
+            Session["PaquetesSeleccionados"] = paquetesSeleccionados;
         }
     }
 
@@ -33,42 +50,30 @@ public partial class AltaSolicitud : System.Web.UI.Page
     {
         try
         {
-            int nroSolitud = 0;
-            List<Paquete> paqSolicitud = new List<Paquete>();
+            List<Paquete> paquetesSeleccionados = (List<Paquete>)Session["PaquetesSeleccionados"];
             if (calFEntrega.SelectedDate.Date == null)
             {
                 throw new Exception("Debe seleccionar una fecha de entrega.");
             }
-            ServiceClient wcf2 = new ServiceClient();
-            foreach (GridViewRow row in gvPaquetes.Rows)
-            {
-                CheckBox ck = ((CheckBox)row.FindControl("Sel"));
-                if (ck.Checked)
-                {
-                    Paquete p = paquetes.ElementAt(row.RowIndex);
-                    // si el de arriba funciona se queda.
-                    Paquete paq = wcf2.BuscarPaquete(Convert.ToInt32(row.Cells[1].ToString()), usuarioLogueado);
-                    paqSolicitud.Add(paq);
-                }
-            }
-            wcf2.Close();
 
-            if (paqSolicitud.Count == 0)
+            if (paquetesSeleccionados.Count == 0)
             {
                 throw new Exception("Debe seleccionar los paquetes a enviar.");
             }
 
             Solicitud solicitud = new Solicitud();
+            solicitud.Numero = 1;
             solicitud.Empleado = usuarioLogueado;
             solicitud.NombreDestinatario = txtNombre.Text;
             solicitud.DireccionDestinatario = txtDireccion.Text;
+            solicitud.Estado = "en deposito";
             solicitud.FechaEntrega = calFEntrega.SelectedDate;
-            solicitud.PaquetesSolicitud = paqSolicitud.ToArray();
+            solicitud.PaquetesSolicitud = paquetesSeleccionados.ToArray();
 
             ServiceClient wcf = new ServiceClient();
-            wcf.AltaSolicitud(solicitud, usuarioLogueado);
+            solicitud.Numero = wcf.AltaSolicitud(solicitud, usuarioLogueado);
             wcf.Close();
-            lblMensaje.Text = "Exito, el nro de solicitud generada es: " + nroSolitud;
+            lblMensaje.Text = "Exito, el nro de solicitud generada es: " + solicitud.Numero;
         }
         catch (Exception ex)
         {

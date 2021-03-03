@@ -49,7 +49,7 @@ public interface IService
     #region LogicaSolicitud
 
     [OperationContract]
-    void AltaSolicitud(Solicitud solicitud, Empleado usLog);
+    int AltaSolicitud(Solicitud solicitud, Empleado usLog);
 
     [OperationContract]
     void ModificarEstadoSolicitud(Solicitud solicitud, Empleado usLog);
