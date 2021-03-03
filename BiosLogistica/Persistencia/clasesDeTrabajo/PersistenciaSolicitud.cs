@@ -26,7 +26,7 @@ namespace Persistencia
             return _instancia;
         }
 
-        public void AltaSolicitud(Solicitud solicitud, Empleado usLog)
+        public int AltaSolicitud(Solicitud solicitud, Empleado usLog)
         {
             SqlConnection conexion = null;
             SqlTransaction trn = null;
@@ -41,23 +41,16 @@ namespace Persistencia
                 cmdAltaSolicitud.Parameters.AddWithValue("@fechaEntrega", solicitud.FechaEntrega);
                 cmdAltaSolicitud.Parameters.AddWithValue("@nombreDestinatario", solicitud.NombreDestinatario);
                 cmdAltaSolicitud.Parameters.AddWithValue("@direccionDestinatario", solicitud.DireccionDestinatario);
-                cmdAltaSolicitud.Parameters.AddWithValue("@estado", solicitud.Estado);
                 cmdAltaSolicitud.Parameters.AddWithValue("@empleado", solicitud.Empleado.Logueo);
 
                 SqlParameter valorRetorno = new SqlParameter("@valorRetorno", SqlDbType.Int);
                 valorRetorno.Direction = ParameterDirection.ReturnValue;
                 cmdAltaSolicitud.Parameters.Add(valorRetorno);
 
-                SqlParameter idSolicitud = new SqlParameter("@@IDENTITY", SqlDbType.Int);
-                idSolicitud.Direction = ParameterDirection.ReturnValue;
-                cmdAltaSolicitud.Parameters.Add(idSolicitud);
-
                 conexion.Open();
                 trn = conexion.BeginTransaction();
                 cmdAltaSolicitud.Transaction = trn;
                 cmdAltaSolicitud.ExecuteNonQuery();
-
-                solicitud.Numero = Convert.ToInt32(idSolicitud.Value);
 
                 switch ((int)valorRetorno.Value)
                 {
@@ -65,15 +58,18 @@ namespace Persistencia
                         throw new Exception("El empleado no esta activo.");
                     case -2:
                         throw new Exception("Error al insertar solicitud.");
+                    default:
+                        solicitud.Numero = Convert.ToInt32(valorRetorno.Value);
+                        break;
                 }
                 
                 foreach (Paquete paquete in solicitud.PaquetesSolicitud)
                 {
-                    PersistenciaPaquete.getInstancia().AltaPaqueteSolicitud(trn, solicitud, paquete); // pasar la transaccion no la conexion.
+                    PersistenciaPaquete.getInstancia().AltaPaqueteSolicitud(trn, solicitud, paquete); 
                 }
                 
                 trn.Commit();
-
+                return solicitud.Numero;
             }
             catch (Exception ex)
             {

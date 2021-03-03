@@ -66,9 +66,9 @@ public class Service : IService
 
     #region LogicaSolicitud
 
-    void IService.AltaSolicitud(Solicitud solicitud, Empleado usLog)
+    int IService.AltaSolicitud(Solicitud solicitud, Empleado usLog)
     {
-        FabricaLogica.GetLogicaSolicitud().AltaSolicitud(solicitud, usLog);
+        return FabricaLogica.GetLogicaSolicitud().AltaSolicitud(solicitud, usLog);
     }
 
     void IService.ModificarEstadoSolicitud(Solicitud solicitud, Empleado usLog)
