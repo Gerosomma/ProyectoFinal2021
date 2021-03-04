@@ -97,7 +97,7 @@ namespace Logica.clasesDeTrabajo
                     foreach (Paquete p in s.PaquetesSolicitud)
                     {
                         XmlElement ePaquete = doc.CreateElement(string.Empty, "paquete", string.Empty);
-                        eSolicitud.AppendChild(ePaquete);
+                        ePaquetesSolicitud.AppendChild(ePaquete);
 
                         XmlElement nodCodigo = doc.CreateElement(string.Empty, "codigo", string.Empty);
                         XmlText codDoc = doc.CreateTextNode(p.Codigo.ToString());

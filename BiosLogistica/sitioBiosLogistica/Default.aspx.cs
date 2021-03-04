@@ -63,4 +63,9 @@ public partial class _Default : System.Web.UI.Page
     {
         Response.Redirect("~/Login.aspx");
     }
+
+    protected void gvSolicitudes_SelectedIndexChanged(object sender, EventArgs e)
+    {
+
+    }
 }

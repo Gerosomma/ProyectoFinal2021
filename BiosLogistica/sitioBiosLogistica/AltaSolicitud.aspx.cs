@@ -40,9 +40,18 @@ public partial class AltaSolicitud : System.Web.UI.Page
             List<Paquete> paquetes = (List<Paquete>)Session["Paquetes"];
             List<Paquete> paquetesSeleccionados = (List<Paquete>)Session["PaquetesSeleccionados"];
             Paquete p = paquetes.ElementAt(index);
-            gvPaquetes.Rows[index].BackColor = System.Drawing.Color.Yellow;
-            paquetesSeleccionados.Add(p);
-            Session["PaquetesSeleccionados"] = paquetesSeleccionados;
+            if (paquetesSeleccionados.Contains(p))
+            {
+                gvPaquetes.Rows[index].BackColor = System.Drawing.Color.Empty;
+                paquetesSeleccionados.Remove(p);
+                Session["PaquetesSeleccionados"] = paquetesSeleccionados;
+            }
+            else
+            {
+                gvPaquetes.Rows[index].BackColor = System.Drawing.Color.Yellow;
+                paquetesSeleccionados.Add(p);
+                Session["PaquetesSeleccionados"] = paquetesSeleccionados;
+            }
         }
     }
 
@@ -79,5 +88,15 @@ public partial class AltaSolicitud : System.Web.UI.Page
         {
             lblMensaje.Text = ex.Message;
         }
+    }
+
+    protected void btnLimpiar_Click(object sender, EventArgs e)
+    {
+        txtNombre.Text = string.Empty;
+        txtDireccion.Text = string.Empty;
+        calFEntrega.SelectedDate = DateTime.Today;
+        List<Paquete> paquetes = (List<Paquete>)Session["Paquetes"];
+        gvPaquetes.DataSource = paquetes;
+        gvPaquetes.DataBind();
     }
 }

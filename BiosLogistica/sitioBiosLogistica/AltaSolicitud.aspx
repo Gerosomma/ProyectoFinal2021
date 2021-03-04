@@ -65,7 +65,9 @@
                 </tr>
             <tr>
                 <td class="auto-style3">&nbsp;</td>
-                <td>&nbsp;</td>
+                <td>
+                    <asp:Button ID="btnLimpiar" runat="server" OnClick="btnLimpiar_Click" Text="Limpiar formulario" />
+                </td>
                 <td colspan="2" style="text-align: left">
                     <asp:Button ID="btnGenerar" runat="server" Text="Generar" OnClick="btnGenerar_Click" Width="178px" />
                 </td>
