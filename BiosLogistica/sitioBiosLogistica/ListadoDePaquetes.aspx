@@ -8,14 +8,14 @@
             <tr>
                 <td>&nbsp;</td>
                 <td>
-                    <asp:Label ID="lblError" runat="server"></asp:Label>
+                    <h2>Listado de paquetes</h2>
                 </td>
                 <td>&nbsp;</td>
             </tr>
             <tr>
                 <td>&nbsp;</td>
                 <td>
-                    <asp:GridView ID="gvPaquetes" runat="server" AutoGenerateColumns="False">
+                    <asp:GridView ID="gvPaquetes" runat="server" AutoGenerateColumns="False" HorizontalAlign="Center">
                         <Columns>
                             <asp:BoundField DataField="Codigo" HeaderText="Codigo" />
                             <asp:BoundField DataField="Tipo" HeaderText="Tipo" />
@@ -29,7 +29,9 @@
             </tr>
             <tr>
                 <td>&nbsp;</td>
-                <td>&nbsp;</td>
+                <td>
+                    <asp:Label ID="lblError" runat="server"></asp:Label>
+                </td>
                 <td>&nbsp;</td>
             </tr>
         </table>

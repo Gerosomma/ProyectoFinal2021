@@ -63,4 +63,30 @@ public partial class _Default : System.Web.UI.Page
     {
         Response.Redirect("~/Login.aspx");
     }
+
+    protected void gvSolicitudes_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        try
+        {
+            string codigoTramite = gvSolicitudes.SelectedRow.Cells[1].Text;
+            doc.LoadXml(documento);
+
+            XElement element = XElement.Parse(doc.OuterXml);
+            var resultado = (from item in element.Elements("solicitud")
+                             where (string)item.Element("numero") == codigoTramite
+                             select item);
+
+            string _resultado = "";
+            foreach (var unNodo in resultado)
+            {
+                _resultado += unNodo.ToString();
+            }
+
+            Xml1.DocumentContent = _resultado;
+        }
+        catch (Exception ex)
+        {
+            lblMensaje.Text = ex.Message;
+        }
+    }
 }

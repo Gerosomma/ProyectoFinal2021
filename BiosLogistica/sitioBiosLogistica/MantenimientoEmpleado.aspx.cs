@@ -11,7 +11,6 @@ public partial class MantenimientoEmpleado : System.Web.UI.Page
     private Empleado usuarioLogueado = null;
     protected void Page_Load(object sender, EventArgs e)
     {
-        ((Label)this.Master.FindControl("lblPagina")).Text = "ABM de Empleado";
         usuarioLogueado = (Empleado)Session["Usuario"];
         
         if (usuarioLogueado == null)

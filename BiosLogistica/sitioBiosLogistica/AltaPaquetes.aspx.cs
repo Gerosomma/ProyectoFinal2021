@@ -13,7 +13,6 @@ public partial class AltaPaquetes : System.Web.UI.Page
     List<Empresa> empresas;
     protected void Page_Load(object sender, EventArgs e)
     {
-        ((Label)this.Master.FindControl("lblPagina")).Text = "Alta de paquetes";
         usuarioLogueado = (Empleado)Session["Usuario"];
 
         //lbxEmpresa.Items.Clear();

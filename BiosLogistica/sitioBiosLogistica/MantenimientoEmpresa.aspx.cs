@@ -12,7 +12,6 @@ public partial class MantenimientoEmpresa : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        ((Label)this.Master.FindControl("lblPagina")).Text = "ABM de Empresa";
         usuarioLogueado = (Empleado)Session["Usuario"];
     }
 
