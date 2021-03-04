@@ -9,21 +9,37 @@
           <title>Detalle Tramite</title>
         </head>
         <body>
-          <h3>Solicitud</h3>
-          Número: <xsl:value-of select="/Solicitud/numero"/>
+          <h2>Solicitud</h2>
+          Número: <xsl:value-of select="/solicitud/numero"/>
           <br />
-          Fecha de entrega: <xsl:value-of select="/Solicitud/numero"/>
+          Fecha de entrega: <xsl:value-of select="/solicitud/fechaEntrega"/>
           <br />
-          Nombre destinatario: <xsl:value-of select="/Solicitud/numero"/>
+          Nombre destinatario: <xsl:value-of select="/solicitud/nombreDestinatario"/>
           <br />
-          Dirección: <xsl:value-of select="/Solicitud/numero"/>
+          Dirección: <xsl:value-of select="/solicitud/direccionDestinatario"/>
           <br />
-          Estado: <xsl:value-of select="/Solicitud/numero"/>
+          Estado: <xsl:value-of select="/solicitud/estado"/>
           <br />
-          <h3>Paquetes</h3>
+          <xsl:for-each select="/solicitud/paquetesSolicitud/paquete">
+            <h3>Paquete código <xsl:value-of select="codigo"/></h3>
+            Tipo: <xsl:value-of select="tipo"/>
+            <br />
+            Descripción: <xsl:value-of select="descripcion"/>
+            <br />
+            Peso: <xsl:value-of select="peso"/> grs.
+            <br />
 
-          <xsl:for-each select="/Solicitud/paquetesSolicitud/paquete">
-            
+            <h4>Empresa origen</h4>
+            Usuario: <xsl:value-of select="empresa/logueo"/>
+            <br />
+            Nombre: <xsl:value-of select="empresa/nombreCompleto"/>
+            <br />
+            Teléfono: <xsl:value-of select="empresa/telefono"/>
+            <br />
+            Dirección: <xsl:value-of select="empresa/direccion"/>
+            <br />
+            Email: <xsl:value-of select="empresa/email"/>
+            <br />
           </xsl:for-each>
         </body>
       </html>

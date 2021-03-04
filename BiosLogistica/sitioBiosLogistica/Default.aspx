@@ -12,13 +12,13 @@
                 </td>
             </tr>
             <tr>
-                <td>
+                <td style="vertical-align: top">
                     <asp:GridView ID="gvSolicitudes" 
                         runat="server" 
                         AutoGenerateSelectButton="True" 
                         PageSize="100" 
                         HorizontalAlign="Center" 
-                        OnSelectedIndexChanged="gvSolicitudes_SelectedIndexChanged"></asp:GridView>
+                        OnSelectedIndexChanged="gvSolicitudes_SelectedIndexChanged" EmptyDataText="No existen solicitudes en camino"></asp:GridView>
                 </td>
                 <td style="vertical-align: top; text-align: left">
                     <asp:Xml ID="Xml1" runat="server" TransformSource="~/XSLT/detalleSolicitud.xslt"></asp:Xml>

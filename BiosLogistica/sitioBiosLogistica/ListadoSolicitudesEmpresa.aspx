@@ -12,7 +12,7 @@
             </tr>
             <tr>
                 <td rowspan="4" style="vertical-align: top; text-align: left">
-                    <asp:GridView ID="gvSolicitudes" runat="server">
+                    <asp:GridView ID="gvSolicitudes" runat="server" EmptyDataText="No existen solicitudes para la empresa logueada">
                     </asp:GridView>
                 </td>
                 <td>
