@@ -19,7 +19,7 @@
                             <asp:BoundField DataField="NombreDestinatario" HeaderText="Nombre destinatario" />
                             <asp:BoundField DataField="DireccionDestinatario" HeaderText="Dirección destinatario" />
                             <asp:BoundField DataField="Estado" HeaderText="Estado" />
-                            <asp:BoundField DataField="Empleado" HeaderText="Empleado" />
+                            <asp:BoundField DataField="Empleado.NombreCompleto" HeaderText="Empleado" />
                             <asp:ButtonField ButtonType="Button" Text="Avance" CommandName="Update" />
                         </Columns>
                     </asp:GridView>

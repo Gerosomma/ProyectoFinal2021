@@ -14,7 +14,6 @@ public partial class CambioEstadoSolicitud : System.Web.UI.Page
     {
         try
         {
-            ((Label)this.Master.FindControl("lblPagina")).Text = "Alta solicitud";
             usuarioLogueado = (Empleado)Session["Usuario"];
             
             ServiceClient wcf = new ServiceClient();

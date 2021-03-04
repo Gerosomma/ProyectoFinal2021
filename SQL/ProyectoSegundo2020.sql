@@ -785,6 +785,7 @@ BEGIN
 	RETURN @@IDENTITY
 END
 
+select * from Solicitud
 
 GO
 

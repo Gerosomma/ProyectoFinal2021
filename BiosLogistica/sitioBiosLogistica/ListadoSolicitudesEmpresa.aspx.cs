@@ -13,7 +13,6 @@ public partial class ListadoSolicitudesEmpresa : System.Web.UI.Page
     {
         try
         {
-            ((Label)this.Master.FindControl("lblPagina")).Text = "Alta solicitud";
             usuarioLogueado = (Empresa)Session["Usuario"];
 
             ServiceClient wcf = new ServiceClient();

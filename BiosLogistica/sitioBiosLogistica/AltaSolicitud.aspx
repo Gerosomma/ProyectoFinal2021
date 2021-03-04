@@ -32,22 +32,21 @@
                     <asp:TextBox ID="txtNombre" runat="server" Width="93%"></asp:TextBox>
                 </td>
                 <td colspan="2" rowspan="3" style="vertical-align: top">
-                    <asp:GridView ID="gvPaquetes2" runat="server" EmptyDataText="No hay paquetes disponibles" DataKeyNames="Codigo" EnablePersistedSelection="True">
-                        <Columns>
-                            <asp:CommandField ButtonType="Button" ShowSelectButton="True" />
-                        </Columns>
-                        <SelectedRowStyle BackColor="#FFFF99" BorderColor="Yellow" BorderStyle="Solid" BorderWidth="3px" />
-                    </asp:GridView>
                     <asp:GridView ID="gvPaquetes"
                         DataKeyNames="Codigo"
                         OnRowCommand="CustomersGridView_RowCommand"
                         runat="server"
-                        EmptyDataText="No hay paquetes disponibles">
+                        EmptyDataText="No hay paquetes disponibles" AutoGenerateColumns="False">
                         <Columns>
                             <asp:ButtonField ButtonType="Button"
                                 CommandName="Select"
                                 HeaderText="Seleccion"
                                 Text="Select" />
+                            <asp:BoundField DataField="Codigo" HeaderText="Codigo" />
+                            <asp:BoundField DataField="Tipo" HeaderText="Tipo" />
+                            <asp:BoundField DataField="Descripcion" HeaderText="Descripción" />
+                            <asp:BoundField DataField="Peso" HeaderText="Peso" />
+                            <asp:BoundField DataField="EmpresaOrigen.NombreCompleto" HeaderText="Empresa de origen" />
                         </Columns>
                     </asp:GridView>
                 </td>

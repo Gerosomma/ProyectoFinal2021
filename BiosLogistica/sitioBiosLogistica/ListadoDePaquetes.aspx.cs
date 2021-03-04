@@ -12,7 +12,6 @@ public partial class ListadoDePaquetes : System.Web.UI.Page
     private Empleado usuarioLogueado = null;
     protected void Page_Load(object sender, EventArgs e)
     {
-        ((Label)this.Master.FindControl("lblPagina")).Text = "Listado de paquetes";
 
         usuarioLogueado = (Empleado)Session["Usuario"];
 
