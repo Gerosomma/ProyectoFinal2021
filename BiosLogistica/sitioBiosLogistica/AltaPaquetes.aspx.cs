@@ -84,7 +84,6 @@ public partial class AltaPaquetes : System.Web.UI.Page
 
         try
         {
-            //empresa = (Empresa)FabricaLogica.GetLogicaUsuario().BuscarUsuario(lbxEmpresa.SelectedValue, usuarioLogueado);
             ServiceClient wcf = new ServiceClient();
             empresa = (Empresa)wcf.BuscarUsuario(lbxEmpresa.SelectedValue, usuarioLogueado);
 
@@ -94,8 +93,7 @@ public partial class AltaPaquetes : System.Web.UI.Page
             paquete.Descripcion = descripcion;
             paquete.Peso = peso;
             paquete.EmpresaOrigen = empresa;
-
-            //FabricaLogica.GetLogicaPaquete().AltaPaquete(paquete, usuarioLogueado);
+            
             wcf.AltaPaquete(paquete, usuarioLogueado);
 
             LimpiarFormulario();

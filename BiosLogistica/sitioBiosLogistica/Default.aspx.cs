@@ -89,4 +89,67 @@ public partial class _Default : System.Web.UI.Page
             lblMensaje.Text = ex.Message;
         }
     }
+
+    protected void btnFiltrar_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            doc.LoadXml(documento);
+
+            XElement element = XElement.Parse(doc.OuterXml);
+            var res = (from node in element.Elements("solicitud")
+                       where (string)node.Element("fechaEntrega") == calFechaEntrega.SelectedDate.Date.ToShortDateString()
+                       select new
+                       {
+                           Numero = node.Elements("numero").First().Value,
+                           FechaEntrega = node.Elements("fechaEntrega").First().Value,
+                           NombreDestinatario = node.Elements("nombreDestinatario").First().Value,
+                           direccionDestinatario = node.Elements("direccionDestinatario").First().Value,
+                           Estado = node.Elements("estado").First().Value
+                       }).ToList();
+
+            gvSolicitudes.DataSource = res;
+            gvSolicitudes.DataBind();
+
+            if (doc == null)
+            {
+                lblMensaje.Text = "No hay solicitudes pendientes de entrega";
+            }
+        }
+        catch (Exception ex)
+        {
+            lblMensaje.Text = "Ocurrio un error al aplicar filtro";
+        }
+    }
+
+    protected void btnQuitar_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            doc.LoadXml(documento);
+
+            XElement element = XElement.Parse(doc.OuterXml);
+            var res = (from node in element.Elements("solicitud")
+                       select new
+                       {
+                           Numero = node.Elements("numero").First().Value,
+                           FechaEntrega = node.Elements("fechaEntrega").First().Value,
+                           NombreDestinatario = node.Elements("nombreDestinatario").First().Value,
+                           direccionDestinatario = node.Elements("direccionDestinatario").First().Value,
+                           Estado = node.Elements("estado").First().Value
+                       }).ToList();
+
+            gvSolicitudes.DataSource = res;
+            gvSolicitudes.DataBind();
+
+            if (doc == null)
+            {
+                lblMensaje.Text = "No hay solicitudes pendientes de entrega";
+            }
+        }
+        catch (Exception ex)
+        {
+            lblMensaje.Text = "Ocurrio un error al aplicar filtro";
+        }
+    }
 }
