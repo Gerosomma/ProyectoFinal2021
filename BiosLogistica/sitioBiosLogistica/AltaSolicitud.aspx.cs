@@ -65,7 +65,7 @@ public partial class AltaSolicitud : System.Web.UI.Page
                 throw new Exception("Debe seleccionar una fecha de entrega.");
             }
 
-            if (paquetesSeleccionados.Count == 0)
+            if (paquetesSeleccionados == null || paquetesSeleccionados.Count == 0)
             {
                 throw new Exception("Debe seleccionar los paquetes a enviar.");
             }
@@ -83,6 +83,8 @@ public partial class AltaSolicitud : System.Web.UI.Page
             solicitud.Numero = wcf.AltaSolicitud(solicitud, usuarioLogueado);
             wcf.Close();
             lblMensaje.Text = "Exito, el nro de solicitud generada es: " + solicitud.Numero;
+
+            limpiarFormulario();
         }
         catch (Exception ex)
         {
@@ -92,11 +94,27 @@ public partial class AltaSolicitud : System.Web.UI.Page
 
     protected void btnLimpiar_Click(object sender, EventArgs e)
     {
-        txtNombre.Text = string.Empty;
-        txtDireccion.Text = string.Empty;
-        calFEntrega.SelectedDate = DateTime.Today;
-        List<Paquete> paquetes = (List<Paquete>)Session["Paquetes"];
-        gvPaquetes.DataSource = paquetes;
-        gvPaquetes.DataBind();
+        limpiarFormulario();
+    }
+
+    private void limpiarFormulario()
+    {
+        try
+        {
+            Session["Paquetes"] = null;
+            Session["PaquetesSeleccionados"] = null;
+            txtNombre.Text = string.Empty;
+            txtDireccion.Text = string.Empty;
+            calFEntrega.SelectedDate = DateTime.Today;
+            ServiceClient wcf = new ServiceClient();
+            List<Paquete> paquetes = wcf.ListadoPaquetesSinSolicitud(usuarioLogueado).ToList<Paquete>();
+            Session["Paquetes"] = paquetes;
+            gvPaquetes.DataSource = paquetes;
+            gvPaquetes.DataBind();
+        }
+        catch (Exception ex)
+        {
+            lblMensaje.Text = ex.Message;
+        }
     }
 }
