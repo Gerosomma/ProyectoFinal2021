@@ -119,3 +119,8 @@ exec listadoSolicitudes
 exec ListadoSolicitudesEmpresa 'nacho'
 
 exec listadoSolicitudesEnCamino
+
+
+
+select * from solicitud
+select * from PaquetesSolicitud

@@ -34,18 +34,23 @@
             <tr>
                 <td class="auto-style3" style="text-align: left">
 
+                    &nbsp;</td>
+                <td class="auto-style1" style="text-align: left">
+
                     <asp:Label ID="lblCodigo" runat="server" Text="Código de Barras: "></asp:Label>
                 </td>
-                <td class="auto-style1" style="text-align: left" colspan="2">
+                <td class="auto-style1" style="text-align: left">
                     <asp:TextBox ID="txtCodigo" runat="server"></asp:TextBox>
                 </td>
                 <td class="auto-style1"></td>
             </tr>
             <tr>
                 <td style="text-align: left" class="auto-style4">
+                    &nbsp;</td>
+                <td style="text-align: left" class="auto-style2">
                     <asp:Label ID="lblTipo" runat="server" Text="Tipo de paquete: "></asp:Label>
                 </td>
-                <td style="text-align: left" class="auto-style2" colspan="2">
+                <td style="text-align: left" class="auto-style2">
                     <asp:DropDownList ID="ddlTipo" runat="server">
                         <asp:ListItem Selected="True" Value="comun">Común</asp:ListItem>
                         <asp:ListItem Value="fragil">Frágil</asp:ListItem>
@@ -56,36 +61,44 @@
             </tr>
             <tr>
                 <td style="text-align: left" class="auto-style5">
+                    &nbsp;</td>
+                <td style="text-align: left">
                     <asp:Label ID="lblPeso" runat="server" Text="Peso gr.: "></asp:Label>
                 </td>
-                <td style="text-align: left" colspan="2">
+                <td style="text-align: left">
                     <asp:TextBox ID="txtPeso" runat="server"></asp:TextBox>
                 </td>
                 <td>&nbsp;</td>
             </tr>
             <tr>
                 <td style="text-align: left; vertical-align: top;" class="auto-style5">
+                    &nbsp;</td>
+                <td style="text-align: left">
                     <asp:Label ID="lblDescripcion" runat="server" Text="Descripción: "></asp:Label>
                 </td>
-                <td style="text-align: left" colspan="2">
+                <td style="text-align: left">
                     <asp:TextBox ID="txtDescripcion" runat="server" TextMode="MultiLine"></asp:TextBox>
                 </td>
                 <td>&nbsp;</td>
             </tr>
             <tr>
                 <td style="text-align: left; vertical-align: top;" class="auto-style5">
+                    &nbsp;</td>
+                <td style="text-align: left; vertical-align: top;">
                     <asp:Label ID="lblEmpresa" runat="server" Text="Empresa proveniente: "></asp:Label>
                 </td>
-                <td style="text-align: left" colspan="2">
+                <td style="text-align: left">
                     <asp:ListBox ID="lbxEmpresa" runat="server"></asp:ListBox>
                 </td>
                 <td>&nbsp;</td>
             </tr>
             <tr>
                 <td class="auto-style5" style="text-align: right">
+                    &nbsp;</td>
+                <td style="text-align: left">
                     <asp:Button ID="Button1" runat="server" Text="Limpiar formulario" OnClick="Button1_Click" />
                 </td>
-                <td style="text-align: left" colspan="2">
+                <td style="text-align: left">
                     <asp:Button ID="btnAlta" runat="server" Text="Agregar Paquete" OnClick="btnAlta_Click" />
                 </td>
                 <td>&nbsp;</td>

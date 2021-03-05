@@ -26,7 +26,7 @@
                     <asp:Label ID="lblContrasena" runat="server" Text="Contraseña: "></asp:Label>
                 </td>
                 <td colspan="2">
-                    <asp:TextBox ID="txtContrasena" runat="server" Enabled="False"></asp:TextBox>
+                    <asp:TextBox ID="txtContrasena" runat="server" Enabled="False" TextMode="Password"></asp:TextBox>
                 </td>
                 <td>&nbsp;</td>
             </tr>
