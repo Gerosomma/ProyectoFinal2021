@@ -29,7 +29,7 @@ public partial class AltaPaquetes : System.Web.UI.Page
                     lbxEmpresa.Items.Add(new ListItem(emp.NombreCompleto, emp.Logueo));
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 lblMensaje.Text = "Ocurrió un error al listar las empresas";
 

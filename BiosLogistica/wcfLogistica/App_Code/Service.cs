@@ -38,6 +38,11 @@ public class Service : IService
         FabricaLogica.GetLogicaUsuario().ModificarUsuario(usuario, usLog);
     }
 
+    void IService.ModificarContrasenaUsuario(Usuario usuario, Usuario usLog)
+    {
+        FabricaLogica.GetLogicaUsuario().ModificarContrasenaUsuario(usuario, usLog);
+    }
+
     List<Empresa> IService.ListarEmpresas(Empleado usuarioLogueado)
     {
         return FabricaLogica.GetLogicaUsuario().ListarEmpresas(usuarioLogueado);

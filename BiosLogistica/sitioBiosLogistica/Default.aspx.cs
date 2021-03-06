@@ -116,7 +116,7 @@ public partial class _Default : System.Web.UI.Page
                 lblMensaje.Text = "No hay solicitudes pendientes de entrega";
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             lblMensaje.Text = "Ocurrio un error al aplicar filtro";
         }
@@ -147,7 +147,7 @@ public partial class _Default : System.Web.UI.Page
                 lblMensaje.Text = "No hay solicitudes pendientes de entrega";
             }
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             lblMensaje.Text = "Ocurrio un error al aplicar filtro";
         }

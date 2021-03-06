@@ -28,6 +28,10 @@ public interface IService
     [OperationContract]
     void ModificarUsuario(Usuario usuario, Empleado usLog);
 
+
+    [OperationContract]
+    void ModificarContrasenaUsuario(Usuario usuario, Usuario usLog);
+
     [OperationContract]
     List<Empresa> ListarEmpresas(Empleado usuarioLogueado);
 

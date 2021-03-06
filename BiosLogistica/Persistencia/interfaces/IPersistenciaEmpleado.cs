@@ -14,5 +14,6 @@ namespace Persistencia.interfaces
         void AltaEmpleado(Empleado empleado, Empleado usLog);
         void ModificarEmpleado(Empleado empleado, Empleado usLog);
         void BajaEmpleado(Empleado empleado, Empleado usLog);
+        void ModificarContrasenaEmpleado(Empleado empleado, Usuario usuarioLogueado);
     }
 }

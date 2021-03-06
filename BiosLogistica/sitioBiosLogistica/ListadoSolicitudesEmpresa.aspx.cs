@@ -62,7 +62,7 @@ public partial class ListadoSolicitudesEmpresa : System.Web.UI.Page
             gvSolicitudes.DataSource = res;
             gvSolicitudes.DataBind();
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             lblMensaje.Text = "Error al filtrar ultimo mes.";
         }
@@ -86,7 +86,7 @@ public partial class ListadoSolicitudesEmpresa : System.Web.UI.Page
             gvSolicitudes.DataSource = res;
             gvSolicitudes.DataBind();
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             lblMensaje.Text = "Error al filtrar resumen mensual.";
         }
@@ -121,7 +121,7 @@ public partial class ListadoSolicitudesEmpresa : System.Web.UI.Page
             gvSolicitudes.DataBind();
             lblMensaje.Text = "Solicitudes filtradas por fecha " + fechaSeleccionada.ToShortDateString() + ".";
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             lblMensaje.Text = "Error al filtrar solicitudes a la fecha.";
         }
@@ -147,7 +147,7 @@ public partial class ListadoSolicitudesEmpresa : System.Web.UI.Page
             gvSolicitudes.DataSource = res;
             gvSolicitudes.DataBind();
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             lblMensaje.Text = "Error al limpiar fomulario.";
         }
