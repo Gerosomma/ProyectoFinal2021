@@ -230,8 +230,6 @@ BEGIN
 		IF (@@ERROR <> 0)
 			RETURN -8
 
-
-
 	END
 END
 
@@ -419,9 +417,6 @@ BEGIN
 	WHERE Usuario.logueo = @logueo
 END
 
--- son los mismos cambios que tenemos apra Empleado
-
-
 GO
 
 CREATE PROCEDURE AltaEmpresa
@@ -520,7 +515,7 @@ BEGIN
 				ROLLBACK TRANSACTION;
 				RETURN -5
 			END
-		
+
 		COMMIT TRANSACTION;
 
 		EXEC sp_addrolemember @rolename='db_rol_empresa' , @membername=@logueo
@@ -603,6 +598,44 @@ BEGIN
 		IF (@@ERROR <> 0)
 		BEGIN
 			RETURN -5
+		END
+	END
+END
+
+GO
+
+CREATE PROCEDURE ModificarConstrasenaUsuario
+@logueo VARCHAR(12),
+@contrasena VARCHAR(6)
+AS
+BEGIN
+	IF NOT EXISTS (SELECT * 
+					FROM Usuario 
+					WHERE logueo = @logueo AND activo = 1) 
+	BEGIN
+		RETURN -1
+	END
+
+	IF (@logueo <> CURRENT_USER)
+	BEGIN
+		RETURN -2
+	END
+	ELSE
+	BEGIN 
+		UPDATE Usuario
+		SET contrasena = @contrasena
+		WHERE logueo = @logueo
+		IF (@@ERROR <> 0)
+		BEGIN
+			RETURN -3
+		END
+		
+		DECLARE @VarSentencia VARCHAR(50);
+		SET @VarSentencia = 'EXEC sp_PASSWORD NULL, [' + @contrasena + '], ' + convert(varchar(MAX),@logueo) + ';'
+		EXEC (@VarSentencia)
+		IF (@@ERROR <> 0)
+		BEGIN
+			RETURN -4
 		END
 	END
 END
@@ -906,9 +939,13 @@ GRANT EXECUTE ON dbo.BuscarEmpresa TO [db_rol_empleado]
 GRANT EXECUTE ON dbo.BuscarPaquete TO [db_rol_empleado]
 GRANT EXECUTE ON dbo.listarEmpresas TO [db_rol_empleado]
 GRANT EXECUTE ON dbo.listadoSolicitudes TO [db_rol_empleado]
+GRANT EXECUTE ON dbo.ModificarConstrasenaUsuario TO [db_rol_empleado]
 GRANT ALTER ANY USER TO [db_rol_empleado]
 GRANT ALTER ANY ROLE TO [db_rol_empleado]
 
 
 --empresa
 GRANT EXECUTE ON dbo.ListadoSolicitudesEmpresa TO [db_rol_empresa]
+GRANT EXECUTE ON dbo.ModificarConstrasenaUsuario TO [db_rol_empresa]
+GRANT ALTER ANY LOGIN TO [public]
+

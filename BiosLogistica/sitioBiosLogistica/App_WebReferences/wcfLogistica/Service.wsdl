@@ -37,6 +37,12 @@
   <wsdl:message name="IService_ModificarUsuario_OutputMessage">
     <wsdl:part name="parameters" element="tns:ModificarUsuarioResponse" />
   </wsdl:message>
+  <wsdl:message name="IService_ModificarContrasenaUsuario_InputMessage">
+    <wsdl:part name="parameters" element="tns:ModificarContrasenaUsuario" />
+  </wsdl:message>
+  <wsdl:message name="IService_ModificarContrasenaUsuario_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ModificarContrasenaUsuarioResponse" />
+  </wsdl:message>
   <wsdl:message name="IService_ListarEmpresas_InputMessage">
     <wsdl:part name="parameters" element="tns:ListarEmpresas" />
   </wsdl:message>
@@ -111,6 +117,10 @@
     <wsdl:operation name="ModificarUsuario">
       <wsdl:input wsaw:Action="http://tempuri.org/IService/ModificarUsuario" message="tns:IService_ModificarUsuario_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IService/ModificarUsuarioResponse" message="tns:IService_ModificarUsuario_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ModificarContrasenaUsuario">
+      <wsdl:input wsaw:Action="http://tempuri.org/IService/ModificarContrasenaUsuario" message="tns:IService_ModificarContrasenaUsuario_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IService/ModificarContrasenaUsuarioResponse" message="tns:IService_ModificarContrasenaUsuario_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="ListarEmpresas">
       <wsdl:input wsaw:Action="http://tempuri.org/IService/ListarEmpresas" message="tns:IService_ListarEmpresas_InputMessage" />
@@ -189,6 +199,15 @@
     </wsdl:operation>
     <wsdl:operation name="ModificarUsuario">
       <soap:operation soapAction="http://tempuri.org/IService/ModificarUsuario" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ModificarContrasenaUsuario">
+      <soap:operation soapAction="http://tempuri.org/IService/ModificarContrasenaUsuario" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>

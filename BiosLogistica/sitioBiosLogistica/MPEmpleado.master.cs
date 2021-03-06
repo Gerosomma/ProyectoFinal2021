@@ -15,9 +15,11 @@ public partial class MasterPage : System.Web.UI.MasterPage
             if (Session["Usuario"] is Empleado)
             {
                 lblMensaje.Text = ((Empleado)Session["Usuario"]).Logueo;
+                btnCambioContrasena.Visible = true;
             }
             else
             {
+                btnCambioContrasena.Visible = false;
                 Response.Redirect("~/Login.aspx");
             }
         }
@@ -33,5 +35,10 @@ public partial class MasterPage : System.Web.UI.MasterPage
         Session.Remove("Mensaje");
         lblMensaje.Text = "Usuario desconectado";
         Response.Redirect("~/Default.aspx");
+    }
+
+    protected void btnCambioContrasena_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("~/CambioContrasenaEmpleado.aspx");
     }
 }

@@ -97,6 +97,19 @@ namespace Logica.clasesDeTrabajo
             }
         }
 
+        public void ModificarContrasenaUsuario(Usuario usuario, Usuario usLog)
+        {
+            validarUsuario(usuario);
+            if (usuario is Empleado)
+            {
+                FabricaPersistencia.GetPersistenciaEmpleado().ModificarContrasenaEmpleado((Empleado)usuario, usLog);
+            }
+            else if (usuario is Empresa)
+            {
+                FabricaPersistencia.GetPersistenciaEmpresa().ModificarContrasenaEmpresa((Empresa)usuario, usLog);
+            }
+        }
+
         public List<Empresa> ListarEmpresas(Empleado usLog)
         {
             return FabricaPersistencia.GetPersistenciaEmpresa().ListarEmpresas(usLog);

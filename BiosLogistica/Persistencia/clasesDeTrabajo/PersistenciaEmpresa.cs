@@ -339,5 +339,49 @@ namespace Persistencia
                 }
             }
         }
+
+        public void ModificarContrasenaEmpresa(Empresa empresa, Usuario usuarioLogueado)
+        {
+            SqlConnection conexion = null;
+
+            try
+            {
+                conexion = new SqlConnection(Conexion.Cnn(usuarioLogueado));
+
+                SqlCommand cmdModificarEmpresa = new SqlCommand("ModificarConstrasenaUsuario", conexion);
+                cmdModificarEmpresa.CommandType = CommandType.StoredProcedure;
+
+                cmdModificarEmpresa.Parameters.AddWithValue("@logueo", empresa.Logueo);
+                cmdModificarEmpresa.Parameters.AddWithValue("@contrasena", empresa.Contrasena);
+
+                SqlParameter valorRetorno = new SqlParameter("@valorRetorno", SqlDbType.Int);
+                valorRetorno.Direction = ParameterDirection.ReturnValue;
+                cmdModificarEmpresa.Parameters.Add(valorRetorno);
+
+                conexion.Open();
+                cmdModificarEmpresa.ExecuteNonQuery();
+
+                switch ((int)valorRetorno.Value)
+                {
+                    case -2:
+                        throw new Exception("No se encontro empresa activa.");
+                    case -3:
+                        throw new Exception("Ocurrió un error al modificar el usuario.");
+                    case -5:
+                        throw new Exception("Ocurrió un error al modificar contraseña de usuario.");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                if (conexion != null)
+                {
+                    conexion.Close();
+                }
+            }
+        }
     }
 }

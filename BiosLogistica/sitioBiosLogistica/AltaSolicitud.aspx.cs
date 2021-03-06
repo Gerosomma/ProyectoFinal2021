@@ -24,7 +24,7 @@ public partial class AltaSolicitud : System.Web.UI.Page
                 gvPaquetes.DataBind();
                 wcf.Close();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 lblMensaje.Text = "Ocurrió un error al cargar paquetes";
             }

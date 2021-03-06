@@ -14,10 +14,12 @@ public partial class MPEmpresa : System.Web.UI.MasterPage
         {
             if (Session["Usuario"] is Empresa)
             {
-                lblMensaje.Text = ((Empresa)Session["Usuario"]).Logueo;
+                lblMensaje.Text = ((Empresa)Session["Usuario"]).NombreCompleto;
+                btnCambioContrasena.Visible = true;
             }
             else
             {
+                btnCambioContrasena.Visible = false;
                 Response.Redirect("~/Login.aspx");
             }
         }
@@ -34,5 +36,10 @@ public partial class MPEmpresa : System.Web.UI.MasterPage
         Session.Remove("Mensaje");
         lblMensaje.Text = "Usuario desconectado";
         Response.Redirect("~/Default.aspx");
+    }
+
+    protected void btnCambioContrasena_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("~/CambioContrasenaEmpresa.aspx");
     }
 }

@@ -12,7 +12,6 @@ public partial class Login : System.Web.UI.Page
     {
         try
         {
-            ((Label)this.Master.FindControl("lblPagina")).Text = "Acceso de usuario";
             Session["Usuario"] = null;
         }
         catch (Exception ex)
