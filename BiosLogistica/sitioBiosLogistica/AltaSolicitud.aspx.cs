@@ -102,7 +102,7 @@ public partial class AltaSolicitud : System.Web.UI.Page
         try
         {
             Session["Paquetes"] = null;
-            Session["PaquetesSeleccionados"] = null;
+            Session["PaquetesSeleccionados"] = new List<Paquete>();
             txtNombre.Text = string.Empty;
             txtDireccion.Text = string.Empty;
             calFEntrega.SelectedDate = DateTime.Today;

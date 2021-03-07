@@ -11,32 +11,36 @@ public partial class ListadoSolicitudesEmpresa : System.Web.UI.Page
     Empresa usuarioLogueado;
     protected void Page_Load(object sender, EventArgs e)
     {
-        try
+        if (!IsPostBack)
         {
-            usuarioLogueado = (Empresa)Session["Usuario"];
+            try
+            {
+                calFecha.SelectedDate = DateTime.Today;
+                usuarioLogueado = (Empresa)Session["Usuario"];
 
-            ServiceClient wcf = new ServiceClient();
-            List<Solicitud> solicitudes = wcf.listadoSolicitudesEmpresa(usuarioLogueado).ToList<Solicitud>();
-            Session["SolicitudesEmpresa"] = solicitudes;
+                ServiceClient wcf = new ServiceClient();
+                List<Solicitud> solicitudes = wcf.listadoSolicitudesEmpresa(usuarioLogueado).ToList<Solicitud>();
+                Session["SolicitudesEmpresa"] = solicitudes;
 
-            var res = (from sol in solicitudes
-                       select new
-                       {
-                           Numero = sol.Numero.ToString(),
-                           FechaEntrega = sol.FechaEntrega.ToShortDateString(),
-                           Destinatario = sol.NombreDestinatario,
-                           Direccion = sol.DireccionDestinatario,
-                           Estado = sol.Estado,
-                           Empleado = sol.Empleado.NombreCompleto
-                       }
-                ).ToList();
+                var res = (from sol in solicitudes
+                           select new
+                           {
+                               Numero = sol.Numero.ToString(),
+                               FechaEntrega = sol.FechaEntrega.ToShortDateString(),
+                               Destinatario = sol.NombreDestinatario,
+                               Direccion = sol.DireccionDestinatario,
+                               Estado = sol.Estado,
+                               Empleado = sol.Empleado.NombreCompleto
+                           }
+                    ).ToList();
 
-            gvSolicitudes.DataSource = res;
-            gvSolicitudes.DataBind();
-        }
-        catch (Exception)
-        {
-            lblMensaje.Text = "Ocurrió un error al cargar solicitudes";
+                gvSolicitudes.DataSource = res;
+                gvSolicitudes.DataBind();
+            }
+            catch (Exception)
+            {
+                lblMensaje.Text = "Ocurrió un error al cargar solicitudes";
+            }
         }
     }
 
@@ -46,21 +50,24 @@ public partial class ListadoSolicitudesEmpresa : System.Web.UI.Page
         {
             List<Solicitud> solicitudes = (List<Solicitud>)Session["SolicitudesEmpresa"];
             var res = (from sol in solicitudes
-                       orderby sol.FechaEntrega.Date
                        where sol.FechaEntrega.Date.Month == DateTime.Today.Date.Month
+                       orderby sol.FechaEntrega
+                       group sol by new
+                       {
+                           sol.FechaEntrega.Date.Month,
+                           sol.Estado
+                       } into mes
                        select new
                        {
-                           Numero = sol.Numero.ToString(),
-                           FechaEntrega = sol.FechaEntrega.ToShortDateString(),
-                           Destinatario = sol.NombreDestinatario,
-                           Direccion = sol.DireccionDestinatario,
-                           Estado = sol.Estado,
-                           Empleado = sol.Empleado.NombreCompleto
+                           Mes = obtenerNombreMesNumero(DateTime.Today.Date.Month),
+                           Estado = mes.Key.Estado,
+                           Cantidad = mes.Count()
                        }
                 ).ToList();
 
             gvSolicitudes.DataSource = res;
             gvSolicitudes.DataBind();
+            lblMensaje.Text = "Solicitudes del mes actual por estado.";
         }
         catch (Exception)
         {
@@ -74,17 +81,23 @@ public partial class ListadoSolicitudesEmpresa : System.Web.UI.Page
         {
             List<Solicitud> solicitudes = (List<Solicitud>)Session["SolicitudesEmpresa"];
             var res = (from sol in solicitudes
-                       group sol by sol.FechaEntrega.Date.Year & sol.FechaEntrega.Date.Month  into y
-                       join s in solicitudes on y.Key equals s.Numero
+                       orderby sol.FechaEntrega
+                       group sol by new
+                       {
+                           sol.FechaEntrega.Date.Year,
+                           sol.FechaEntrega.Date.Month
+                       } into aniomes
                        select new
                        {
-                            Anio = s.FechaEntrega.Date.Year + " / " + s.FechaEntrega.Date.Month,
-                            Cantidad = y.Count()
+                            Año = aniomes.Key.Year,
+                            Mes = obtenerNombreMesNumero(aniomes.Key.Month),
+                            Cantidad = aniomes.Count()
                        }
                 ).ToList();
 
             gvSolicitudes.DataSource = res;
             gvSolicitudes.DataBind();
+            lblMensaje.Text = "Solicitudes por año y mes";
         }
         catch (Exception)
         {
@@ -94,6 +107,9 @@ public partial class ListadoSolicitudesEmpresa : System.Web.UI.Page
 
     protected void btnFecha_Click(object sender, EventArgs e)
     {
+        if (calFecha.SelectedDate == null)
+            throw new Exception("Debe seleccionar una fecha.");
+
         DateTime fechaSeleccionada = new DateTime();
         try
         {
@@ -113,8 +129,11 @@ public partial class ListadoSolicitudesEmpresa : System.Web.UI.Page
                              select new
                              {
                                  Numero = sol.Numero.ToString(),
+                                 FechaEntrega = sol.FechaEntrega.ToShortDateString(),
+                                 Destinatario = sol.NombreDestinatario,
+                                 Direccion = sol.DireccionDestinatario,
                                  Estado = sol.Estado,
-                                 Fecha = sol.FechaEntrega.ToShortDateString()
+                                 Empleado = sol.Empleado.NombreCompleto
                              }
                             ).ToList();
             gvSolicitudes.DataSource = res;
@@ -131,6 +150,7 @@ public partial class ListadoSolicitudesEmpresa : System.Web.UI.Page
     {
         try
         {
+            lblMensaje.Text = "";
             List<Solicitud> solicitudes = (List<Solicitud>)Session["SolicitudesEmpresa"];
             var res = (from sol in solicitudes
                        select new
@@ -146,10 +166,26 @@ public partial class ListadoSolicitudesEmpresa : System.Web.UI.Page
 
             gvSolicitudes.DataSource = res;
             gvSolicitudes.DataBind();
+
+            calFecha.SelectedDate = DateTime.Today;
         }
         catch (Exception)
         {
             lblMensaje.Text = "Error al limpiar fomulario.";
+        }
+    }
+
+    private string obtenerNombreMesNumero(int numeroMes)
+    {
+        try
+        {
+            System.Globalization.DateTimeFormatInfo formatoFecha = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat;
+            string nombreMes = formatoFecha.GetMonthName(numeroMes);
+            return nombreMes;
+        }
+        catch
+        {
+            return "Desconocido";
         }
     }
 }
