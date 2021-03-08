@@ -36,6 +36,7 @@ public partial class CambioContrasenaEmpleado : System.Web.UI.Page
             ServiceClient wcf = new ServiceClient();
             wcf.ModificarContrasenaUsuario(emp, usuarioLogueado);
             lblMensaje.Text = "Contraseña modficada correctamente.";
+            Session["Usuario"] = emp;
         }
         catch (Exception ex)
         {
