@@ -246,7 +246,7 @@ BEGIN
 	IF NOT EXISTS (SELECT * 
 				FROM Usuario a
 				inner join Empleado b on a.logueo = b.logueo
-				WHERE a.logueo = @logueo AND a.activo = 1) -- join empleado
+				WHERE a.logueo = @logueo AND a.activo = 1) 
 	BEGIN
 		RETURN -2
 	END
@@ -277,7 +277,7 @@ BEGIN
 		BEGIN TRANSACTION;
 		UPDATE Usuario
 		SET contrasena = @contrasena, 
-			nombreCompleto = @nombreCompleto -- solo se puede cambiar la contrase�a del propio usuario logueado
+			nombreCompleto = @nombreCompleto 
 		WHERE logueo = @logueo
 		IF (@@ERROR <> 0)
 			BEGIN
@@ -340,7 +340,7 @@ BEGIN
 			   ROLLBACK TRANSACTION;
 			   RETURN -5
 			END
-			-- borrar usuarios sql y BD
+
 		COMMIT TRANSACTION;
 	END
 	ELSE
@@ -357,8 +357,8 @@ BEGIN
 			BEGIN
 				ROLLBACK TRANSACTION;
 				RETURN -3
-			END
-			-- borrar usuarios sql y BD
+			END 
+
 			DECLARE @VarSentencia2 VARCHAR(200)
 			SET @VarSentencia2 = 'DROP USER [' + convert(varchar(MAX),@logueo) + ']'
 			EXEC (@VarSentencia2)
@@ -540,7 +540,7 @@ BEGIN
 	IF NOT EXISTS (SELECT * 
 					FROM Usuario a
 					inner join Empresa b on a.logueo = b.logueo
-					WHERE a.logueo = @logueo AND a.activo = 1) -- join a empresa 
+					WHERE a.logueo = @logueo AND a.activo = 1) 
 	BEGIN
 		RETURN -2
 	END
@@ -549,7 +549,7 @@ BEGIN
 	BEGIN
 		BEGIN TRANSACTION;
 		UPDATE Usuario
-		SET nombreCompleto = @nombreCompleto -- solo el propio usuario empresa puede modificar la contrase�a
+		SET nombreCompleto = @nombreCompleto 
 		WHERE logueo = @logueo
 		IF (@@ERROR <> 0)
 		BEGIN
@@ -573,7 +573,7 @@ BEGIN
 		BEGIN TRANSACTION;
 		UPDATE Usuario
 		SET contrasena = @contrasena, 
-			nombreCompleto = @nombreCompleto -- solo el propio usuario empresa puede modificar la contrase�a
+			nombreCompleto = @nombreCompleto 
 		WHERE logueo = @logueo
 		IF (@@ERROR <> 0)
 		BEGIN
@@ -750,7 +750,7 @@ BEGIN
 	IF NOT EXISTS (SELECT * 
 					FROM Usuario a 
 					inner join Empresa b on a.logueo = b.logueo
-					WHERE a.logueo = @empresa AND a.activo = 1)	-- joiniar tiene que estar  activa la empresa
+					WHERE a.logueo = @empresa AND a.activo = 1)	
 	BEGIN
 		RETURN -1
 	END
@@ -766,11 +766,8 @@ BEGIN
 END
 
 GO
--- listado de paquetes asi no sirve, 
--- es necesario listar paquetes sin solicitud 
--- y listar paquetes de una solicitud en particular.
 
-CREATE PROCEDURE ListarPaquetesSinSolicitud -- falta en persistencia interno?
+CREATE PROCEDURE ListarPaquetesSinSolicitud 
 AS
 BEGIN
 	SELECT * 
@@ -818,8 +815,6 @@ BEGIN
 	RETURN @@IDENTITY
 END
 
-select * from Solicitud
-
 GO
 
 CREATE PROCEDURE AltaPaqueteSolicitud
@@ -854,7 +849,7 @@ END
 
 GO 
 
-CREATE PROCEDURE ModificarEstadoSolicitud -- seria modificarEstadoSolicitud con la logica necesaria.
+CREATE PROCEDURE ModificarEstadoSolicitud 
 @numero INT
 AS
 BEGIN
@@ -877,7 +872,6 @@ END
 
 GO
 
--- todas no, faltan listadoSolicitudeEnCamino y ListadoSolicitudesEmpresa
 
 CREATE PROCEDURE listadoSolicitudes
 AS
