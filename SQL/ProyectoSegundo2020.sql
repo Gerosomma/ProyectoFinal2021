@@ -947,5 +947,25 @@ GRANT ALTER ANY ROLE TO [db_rol_empleado]
 --empresa
 GRANT EXECUTE ON dbo.ListadoSolicitudesEmpresa TO [db_rol_empresa]
 GRANT EXECUTE ON dbo.ModificarConstrasenaUsuario TO [db_rol_empresa]
-GRANT ALTER ANY LOGIN TO [public]
 
+use master
+GRANT ALTER ANY LOGIN TO [public]
+use ProyectoSegundo2020
+
+
+
+
+EXEC AltaEmpleado 'gero', 'asd12?', 'Geronimo Somma', '09:00:00', '18:00:00';
+EXEC AltaEmpleado 'emi', 'asd12?', 'Emiliano Rogel', '09:00:00', '18:00:00';
+
+EXEC AltaEmpresa 'dac', 'asd12?', 'Grupo agencia', '091654252', '18 de julio y rio negro', 'grupoagencia@gmail.com';
+EXEC AltaEmpresa 'cgn', 'asd12?', 'cgn', '091654252', '18 de julio y ejido', 'cgn@gmail.com';
+EXEC AltaEmpresa 'bios', 'asd12?', 'Bios sistemas', '091654252', '18 de julio y yi', 'bios@gmail.com';
+
+
+exec AltaPaquete 1, 'fragil', 'pc', 205, 'dac'; 
+exec AltaPaquete 2, 'comun', 'paquete sospechoso', 200, 'dac'; 
+exec AltaPaquete 3, 'comun', 'fotos', 25, 'cgn'; 
+exec AltaPaquete 4, 'fragil', 'cristal', 500, 'cgn'; 
+exec AltaPaquete 5, 'bulto', 'caja de herramientas', 2500, 'bios'; 
+exec AltaPaquete 1, 'bulto', 'caja con cosas', 700, 'bios'; 
