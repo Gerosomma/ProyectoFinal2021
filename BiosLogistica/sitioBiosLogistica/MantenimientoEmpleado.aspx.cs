@@ -32,7 +32,6 @@ public partial class MantenimientoEmpleado : System.Web.UI.Page
 
                 ServiceClient wcf = new ServiceClient();
                 Empleado objEmpleado = (Empleado)wcf.BuscarUsuario(logueo, usuarioLogueado);
-                //empleadoEncontrado = (Empleado)FabricaLogica.GetLogicaUsuario().BuscarUsuario(logueo, usuarioLogueado);
 
                 btnBuscar.Enabled = false;
 
@@ -83,7 +82,6 @@ public partial class MantenimientoEmpleado : System.Web.UI.Page
     {
         try
         {
-            //Empleado empleado = new Empleado(logueo, contrasena, nombre, horaInicio, horaFin);
             Empleado empleado = new Empleado();
             empleado.Logueo = txtLogueo.Text;
             empleado.Contrasena = txtContrasena.Text;
@@ -93,7 +91,6 @@ public partial class MantenimientoEmpleado : System.Web.UI.Page
 
             ServiceClient wcf = new ServiceClient();
             wcf.AltaUsuario(empleado, usuarioLogueado);
-            //FabricaLogica.GetLogicaUsuario().AltaUsuario(empleado, usuarioLogueado);
 
             LimpiarFormulario();
             lblMensaje.Text = "Empleado agregado con éxito";

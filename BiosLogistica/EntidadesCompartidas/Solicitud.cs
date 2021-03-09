@@ -35,9 +35,7 @@ namespace EntidadesCompartidas
         public DateTime FechaEntrega
         {
             get { return _fechaEntrega; }
-            set {
-                _fechaEntrega = value;
-            }
+            set { _fechaEntrega = value; }
         }
 
         [DataMember]

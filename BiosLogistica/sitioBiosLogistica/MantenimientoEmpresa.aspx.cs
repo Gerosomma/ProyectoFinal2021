@@ -87,8 +87,6 @@ public partial class MantenimientoEmpresa : System.Web.UI.Page
             
             ServiceClient wcf = new ServiceClient();
             wcf.AltaUsuario(emp, usuarioLogueado);
-            //Empresa empresa = new Empresa(logueo, contrasena, nombre, telefono, direccion, email);
-            //FabricaLogica.GetLogicaUsuario().AltaUsuario(empresa, usuarioLogueado);
 
             LimpiarFormulario();
             lblMensaje.Text = "Empresa agregada con éxito";
@@ -110,8 +108,7 @@ public partial class MantenimientoEmpresa : System.Web.UI.Page
             objEmpresa.Telefono = txtTelefono.Text;
             objEmpresa.Direccion = txtDireccion.Text;
             objEmpresa.Email = txtEmail.Text;
-
-            //FabricaLogica.GetLogicaUsuario().ModificarUsuario(empresa, usuarioLogueado);
+            
             ServiceClient wcf = new ServiceClient();
             wcf.ModificarUsuario(objEmpresa, usuarioLogueado);
 

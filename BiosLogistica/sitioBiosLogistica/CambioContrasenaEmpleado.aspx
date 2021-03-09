@@ -15,21 +15,21 @@
             <tr>
                 <td style="text-align: left">Contraseña actual:</td>
                 <td style="text-align: left">
-                    <asp:TextBox ID="txtCnnActual" runat="server" Width="203px"></asp:TextBox>
+                    <asp:TextBox ID="txtCnnActual" runat="server" Width="203px" TextMode="Password"></asp:TextBox>
                 </td>
                 <td>&nbsp;</td>
             </tr>
             <tr>
                 <td style="text-align: left">Nueva contraseña:</td>
                 <td style="text-align: left">
-                    <asp:TextBox ID="txtCnnNueva" runat="server" Width="204px"></asp:TextBox>
+                    <asp:TextBox ID="txtCnnNueva" runat="server" Width="204px" TextMode="Password"></asp:TextBox>
                 </td>
                 <td>&nbsp;</td>
             </tr>
             <tr>
                 <td style="text-align: left">Repetir contraseña:</td>
                 <td style="text-align: left">
-                    <asp:TextBox ID="txtCnnNuevaRep" runat="server" Width="204px"></asp:TextBox>
+                    <asp:TextBox ID="txtCnnNuevaRep" runat="server" Width="204px" TextMode="Password"></asp:TextBox>
                 </td>
                 <td>&nbsp;</td>
             </tr>
