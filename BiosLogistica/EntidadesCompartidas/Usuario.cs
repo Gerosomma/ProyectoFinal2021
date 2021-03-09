@@ -37,7 +37,11 @@ namespace EntidadesCompartidas
             get { return _contrasenia; }
             set {
                 Regex _expresion = new Regex("[a-zA-ZñÑ]{3}[0-9]{2}[|°¬¡!#$%&/=()¿?'_´{},;.:`+*~^<>@]");
-                if (!_expresion.IsMatch(value))
+                if (value.Length != 6)
+                {
+                    throw new Exception("La contraseña debe contener 6 caracteres");
+                }
+                else if (!_expresion.IsMatch(value))
                 {
                     throw new Exception("El formato de la contraseña no es válido.");
                 }
