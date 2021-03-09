@@ -30,7 +30,6 @@ public partial class CambioEstadoSolicitud : System.Web.UI.Page
             Solicitud sol = solicitudes.ElementAt(Convert.ToInt32(e.CommandArgument));
             ServiceClient wcf = new ServiceClient();
             wcf.ModificarEstadoSolicitud(sol, usuarioLogueado);
-            wcf.Close();
             listarSolicitudes();
         }
         catch (Exception ex)
@@ -47,7 +46,6 @@ public partial class CambioEstadoSolicitud : System.Web.UI.Page
             solicitudes = wcf.listadoSolicitudes(usuarioLogueado).ToList<Solicitud>();
             gvSolicitudes.DataSource = solicitudes;
             gvSolicitudes.DataBind();
-            wcf.Close();
         }
         catch (Exception ex)
         {

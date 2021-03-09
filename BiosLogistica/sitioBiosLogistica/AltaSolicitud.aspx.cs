@@ -22,7 +22,6 @@ public partial class AltaSolicitud : System.Web.UI.Page
                 Session["PaquetesSeleccionados"] = new List<Paquete>();
                 gvPaquetes.DataSource = paquetes;
                 gvPaquetes.DataBind();
-                wcf.Close();
             }
             catch (Exception)
             {
@@ -81,7 +80,6 @@ public partial class AltaSolicitud : System.Web.UI.Page
 
             ServiceClient wcf = new ServiceClient();
             solicitud.Numero = wcf.AltaSolicitud(solicitud, usuarioLogueado);
-            wcf.Close();
             lblMensaje.Text = "Exito, el nro de solicitud generada es: " + solicitud.Numero;
 
             limpiarFormulario();

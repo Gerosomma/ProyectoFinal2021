@@ -27,10 +27,8 @@ public partial class _Default : System.Web.UI.Page
         {
             try
             {
-                //documento = FabricaLogica.GetLogicaSolicitud().listadoSolicitudesEnCamino();
                 ServiceClient wcf = new ServiceClient();
                 documento = wcf.listadoSolicitudesEnCamino();
-                wcf.Close();
                 doc.LoadXml(documento);
 
                 XElement element = XElement.Parse(doc.OuterXml);
