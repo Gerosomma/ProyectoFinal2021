@@ -947,8 +947,6 @@ GRANT ALTER ANY LOGIN TO [public]
 use ProyectoSegundo2020
 
 
-
-
 EXEC AltaEmpleado 'gero', 'asd12?', 'Geronimo Somma', '09:00:00', '18:00:00';
 EXEC AltaEmpleado 'emi', 'asd12?', 'Emiliano Rogel', '09:00:00', '18:00:00';
 
