@@ -34,6 +34,9 @@ public partial class MPEmpresa : System.Web.UI.MasterPage
 
         Session.Remove("Usuario");
         Session.Remove("Mensaje");
+        Session.Remove("SolicitudesEmpresa");
+        Session.Remove("Paquetes");
+        Session.Remove("PaquetesSeleccionados");
         lblMensaje.Text = "Usuario desconectado";
         Response.Redirect("~/Default.aspx");
     }

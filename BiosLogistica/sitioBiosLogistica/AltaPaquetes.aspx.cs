@@ -14,13 +14,11 @@ public partial class AltaPaquetes : System.Web.UI.Page
     protected void Page_Load(object sender, EventArgs e)
     {
         usuarioLogueado = (Empleado)Session["Usuario"];
-
-        //lbxEmpresa.Items.Clear();
+        
         if (!IsPostBack)
         {
             try
             {
-                //empresas = FabricaLogica.GetLogicaUsuario().ListarEmpresas(usuarioLogueado);
                 ServiceClient wcf = new ServiceClient();
                 empresas = wcf.ListarEmpresas(usuarioLogueado).ToList<Empresa>();
 

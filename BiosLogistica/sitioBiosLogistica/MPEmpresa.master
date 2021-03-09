@@ -13,10 +13,11 @@
 </head>
 <body>
     <form id="form1" runat="server">
-    <div class="title-bar" style="background-image: url('/img/red.png'); background-repeat: no-repeat;">
+    <div class="title-bar">
         <asp:Button ID="btnLogout" runat="server" Text="Logout" Width="70px" OnClick="btnLogout_Click" />
         <asp:Button ID="btnCambioContrasena" runat="server" Text="Cambiar contraseña" Visible="false" Width="156px" OnClick="btnCambioContrasena_Click" />
         <asp:Label ID="lblMensaje" runat="server"></asp:Label>
+        <asp:ImageButton ID="logo" runat="server" PostBackUrl="~/Default.aspx" ImageUrl="~/img/red.png" EnableTheming="False" />
     </div>
     <div class="side-bar">
         <asp:TreeView ID="TreeView1" runat="server" Width="100%" HoverNodeStyle-BorderStyle="Outset" BackColor="#E69D45" Font-Bold="True" ShowExpandCollapse="False">

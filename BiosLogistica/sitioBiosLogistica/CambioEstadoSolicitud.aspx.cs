@@ -41,10 +41,17 @@ public partial class CambioEstadoSolicitud : System.Web.UI.Page
 
     private void listarSolicitudes()
     {
-        ServiceClient wcf = new ServiceClient();
-        solicitudes = wcf.listadoSolicitudes(usuarioLogueado).ToList<Solicitud>();
-        gvSolicitudes.DataSource = solicitudes;
-        gvSolicitudes.DataBind();
-        wcf.Close();
+        try
+        {
+            ServiceClient wcf = new ServiceClient();
+            solicitudes = wcf.listadoSolicitudes(usuarioLogueado).ToList<Solicitud>();
+            gvSolicitudes.DataSource = solicitudes;
+            gvSolicitudes.DataBind();
+            wcf.Close();
+        }
+        catch (Exception ex)
+        {
+            lblMensaje.Text = ex.Message;
+        }
     }
 }
